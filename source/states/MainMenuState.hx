@@ -28,7 +28,7 @@ class MainMenuState extends FlxUIState {
 		bgColor = FlxColor.TRANSPARENT;
 		FlxG.camera.pixelPerfectRender = true;
 
-		_txtTitle = FlxTextFactory.make("Game Title", FlxG.width / 2, FlxG.height / 4, 40, FlxTextAlign.CENTER, FlxColor.WHITE);
+		_txtTitle = FlxTextFactory.make("GGJ2021 Title", FlxG.width / 2, FlxG.height / 4, 40, FlxTextAlign.CENTER, FlxColor.WHITE);
 		add(_txtTitle);
 
 		_btnPlay = UiHelpers.createMenuButton("Play", clickPlay);
