@@ -5,6 +5,7 @@ import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import cutscenes.actions.WaitAction;
 import cutscenes.actions.StartMusicAction;
+import cutscenes.actions.StopMusicAction;
 import cutscenes.actions.PlayAnimationAction;
 import cutscenes.actions.MoveAction;
 import cutscenes.actions.CameraFollowAction;
@@ -20,7 +21,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 		var majorTom:FlxSprite = new FlxSprite(100, 300);
 		majorTom.makeGraphic(30, 60, FlxColor.GREEN);
 		var teleBall:FlxSprite = new FlxSprite(100, 300);
-		teleBall.makeGraphic(20, 20, FlxColor.BLUE);
+		teleBall.makeGraphic(20, 20, FlxColor.LIME);
 
 		teleBall.visible = false;
 		state.add(majorTom);
@@ -35,7 +36,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 		add(new TriggerAction(() -> {
 			teleBall.visible = true;
 		}));
-		var teleballMoveAction = new MoveAction(teleBall, majorTom.getPosition(), majorTom.getPosition().add(400, -100), 6000);
+		var teleballMoveAction = new MoveAction(teleBall, majorTom.getPosition(), majorTom.getPosition().add(200, -100), 4000);
 		teleballMoveAction.add(new CameraFollowAction(teleBall, teleballMoveAction.milliseconds));
 		teleballMoveAction.add(new SpinAction(teleBall, 50, teleballMoveAction.milliseconds, false));
 		add(teleballMoveAction);
@@ -45,10 +46,11 @@ class GroundControlToMajorTomScene extends Cutscene {
 			majorTom.setPosition(teleBall.x, teleBall.y);
 
 			// having this inside another action trigger is sketchy, but maybe it won't be a problem?
-			var tomSpinAction = new MoveAction(majorTom, majorTom.getPosition(), majorTom.getPosition().add(400, -100), 10000);
+			var tomSpinAction = new MoveAction(majorTom, majorTom.getPosition(), majorTom.getPosition().add(200, -100), 5000);
 			tomSpinAction.add(new CameraFollowAction(majorTom, tomSpinAction.milliseconds));
 			tomSpinAction.add(new SpinAction(majorTom, 10, tomSpinAction.milliseconds, false));
 			add(tomSpinAction);
+			add(new StopMusicAction());
 		}));
 	}
 }

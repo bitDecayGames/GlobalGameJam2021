@@ -1,10 +1,11 @@
 package cutscenes.actions;
 
 import cutscenes.Action;
-import haxe.Timer;
 
 class WaitAction extends Action {
 	public var milliseconds:Int;
+
+	private var curMillis:Int;
 
 	/**
 	 * Waits for a given number of milliseconds then stops
@@ -18,9 +19,17 @@ class WaitAction extends Action {
 	override public function start() {
 		super.start();
 		if (milliseconds >= 0) {
-			Timer.delay(() -> {
+			curMillis = 0;
+		}
+	}
+
+	override function step(elapsed:Float) {
+		super.step(elapsed);
+		if (curMillis <= milliseconds) {
+			curMillis += Std.int(elapsed * 1000.0);
+			if (curMillis > milliseconds) {
 				stop();
-			}, milliseconds);
+			}
 		}
 	}
 

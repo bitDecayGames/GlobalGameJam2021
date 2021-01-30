@@ -21,6 +21,7 @@ class CameraFollowAction extends WaitAction {
 
 	override public function start() {
 		super.start();
+		camera.followLerp = 100.0;
 		camera.target = actor;
 		if (offset != null) {
 			camera.targetOffset.set(offset.x, offset.y);
