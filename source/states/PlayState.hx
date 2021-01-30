@@ -1,5 +1,6 @@
 package states;
 
+import levels.Level;
 import flixel.util.FlxColor;
 import nape.callbacks.CbType;
 import nape.phys.Material;
@@ -29,6 +30,10 @@ class PlayState extends FlxState {
 	}
 
 	function createTestObjs() {
+		var level = new Level(AssetPaths.jake_test_0__json);
+		add(level.testLayer);
+		add(level.walls);
+
 		var box = new Obstacle(280, 300);
 		add(box);
 
