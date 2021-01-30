@@ -1,5 +1,6 @@
 package levels;
 
+import constants.CbTypes;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
 import flixel.addons.nape.FlxNapeTilemap;
 
@@ -14,6 +15,7 @@ class Level {
         wallLayer = new FlxNapeTilemap();
         wallLayer.loadMapFromArray(ogmoWallLayer.getData(), ogmoWallLayer.heightInTiles, ogmoWallLayer.widthInTiles, AssetPaths.test__png, 32, 32);
         wallLayer.setupTileIndices([1, 2, 3]);
+        wallLayer.body.cbTypes.add(CbTypes.CB_GRABBABLE);
 
 
 		// loader.loadEntities((entityData) -> {
