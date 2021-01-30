@@ -29,10 +29,10 @@ class PlayState extends FlxState {
 	}
 
 	function createTestObjs() {
-		var box = new Obstacle(280, FlxG.height - 50);
+		var box = new Obstacle(280, 300);
 		add(box);
 
-		var spaceman = new Spaceman(300, 400);
+		var spaceman = new Spaceman(300, 200);
 		add(spaceman);
 	}
 

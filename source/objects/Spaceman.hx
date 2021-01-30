@@ -27,20 +27,32 @@ class Spaceman extends FlxGroup {
 	public var torso:Torso;
 	public var leftShoulder:PivotJoint;
 	public var rightShoulder:PivotJoint;
-	public var leftShoulderAnchor:Vec2;
-	public var rightShoulderAnchor:Vec2;
+	public var leftHip:PivotJoint;
+	public var rightHip:PivotJoint;
 
-	public var leftArmUpper:Arm;
-	public var leftArmLower:Arm;
+	public var leftArmUpper:LimbPiece;
+	public var leftArmLower:LimbPiece;
 	public var leftHand:Hand;
 	public var leftElbow:PivotJoint;
 	public var leftWrist:WeldJoint;
 
-	public var rightArmUpper:Arm;
-	public var rightArmLower:Arm;
+	public var leftLegUpper:LimbPiece;
+	public var leftLegLower:LimbPiece;
+	public var leftFoot:Hand;
+	public var leftKnee:PivotJoint;
+	public var leftAnkle:WeldJoint;
+
+	public var rightArmUpper:LimbPiece;
+	public var rightArmLower:LimbPiece;
 	public var rightHand:Hand;
 	public var rightElbow:PivotJoint;
 	public var rightWrist:WeldJoint;
+
+	public var rightLegUpper:LimbPiece;
+	public var rightLegLower:LimbPiece;
+	public var rightFoot:Hand;
+	public var rightKnee:PivotJoint;
+	public var rightAnkle:WeldJoint;
 
 	// map of each hand to the things it COULD grab
 	var handGrabbables = new Map<Body, Array<Body>>();
@@ -48,7 +60,28 @@ class Spaceman extends FlxGroup {
 	var leftHandGrabJoint:PivotJoint = null;
 	var rightHandGrabJoint:PivotJoint = null;
 
-	var outliner = new Outline(FlxColor.PURPLE, 10, 10);
+	var torsoLeftShoulderAnchor = Vec2.get(-23, -28);
+	var torsoRightShoulderAnchor = Vec2.get(23, -28);
+	var torsoLeftHipAnchor = Vec2.get(-15, 36);
+	var torsoRightHipAnchor = Vec2.get(15, 36);
+
+	var upperShoulderAnchor = Vec2.get(0, -17);
+	var upperElbowAnchor = Vec2.get(0, 18);
+
+	var lowerElbowAnchor = Vec2.get(0, -17);
+	var lowerWristAnchor = Vec2.get(0, 18);
+
+	var upperHipAnchor = Vec2.get(0, -23);
+	var upperKneeAnchor = Vec2.get(0, 25);
+
+	var lowerKneeAnchor = Vec2.get(0, -22);
+	var lowerAnkleAnchor = Vec2.get(0, 26);
+
+	var ankleAnchor = Vec2.get(0, 0);
+
+	var wristAnchor = Vec2.get(0,0);
+
+	var outliner = new Outline(FlxColor.PURPLE, 1, 1);
 
 	public function new(x:Int, y:Int) {
 		super();
@@ -59,54 +92,96 @@ class Spaceman extends FlxGroup {
 		torso.shader = outliner;
 		add(torso);
 
-		leftArmUpper = new Arm(x - 20, y);
+		leftArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_L__png);
 		leftArmUpper.shader = outliner;
 		add(leftArmUpper);
 
-		leftArmLower = new Arm(x - 40, y);
+		leftArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_L__png);
 		add(leftArmLower);
 
-		leftHand = new Hand(x - 60, y);
+		leftHand = new Hand(x, y);
 		add(leftHand);
 
 		handGrabbables.set(leftHand.body, new Array<Body>());
 
-		leftWrist = new WeldJoint(leftHand.body, leftArmLower.body, Vec2.get(), Vec2.get(-10, 0));
+		leftWrist = new WeldJoint(leftHand.body, leftArmLower.body, wristAnchor.copy(), lowerWristAnchor.copy());
 		leftWrist.active = true;
 		leftWrist.space = FlxNapeSpace.space;
 
-		leftElbow = new PivotJoint(leftArmUpper.body, leftArmLower.body, Vec2.get(-10, 0), Vec2.get(10, 0));
+		leftElbow = new PivotJoint(leftArmUpper.body, leftArmLower.body, upperElbowAnchor.copy(), lowerElbowAnchor.copy());
 		leftElbow.active = true;
 		leftElbow.space = FlxNapeSpace.space;
 
-		leftShoulderAnchor = Vec2.get(-10, -20);
-		leftShoulder = new PivotJoint(torso.body, leftArmUpper.body, leftShoulderAnchor, Vec2.get(10, 0));
-		leftShoulder.active = true;
-		leftShoulder.space = FlxNapeSpace.space;
+		leftHip = new PivotJoint(torso.body, leftArmUpper.body, torsoLeftShoulderAnchor.copy(), upperShoulderAnchor.copy());
+		leftHip.active = true;
+		leftHip.space = FlxNapeSpace.space;
 
-		rightArmUpper = new Arm(x + 20, y);
+		rightArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_R__png);
 		add(rightArmUpper);
 
-		rightArmLower = new Arm(x + 40, y);
+		rightArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_R__png);
 		add(rightArmLower);
 
-		rightHand = new Hand(x + 60, y);
+		rightHand = new Hand(x, y);
 		add(rightHand);
 
 		handGrabbables.set(rightHand.body, new Array<Body>());
 
-		rightWrist = new WeldJoint(rightHand.body, rightArmLower.body, Vec2.get(), Vec2.get(10, 0));
+		rightWrist = new WeldJoint(rightHand.body, rightArmLower.body, wristAnchor.copy(), lowerWristAnchor.copy());
 		rightWrist.active = true;
 		rightWrist.space = FlxNapeSpace.space;
 
-		rightElbow = new PivotJoint(rightArmUpper.body, rightArmLower.body, Vec2.get(10, 0), Vec2.get(-10, 0));
+		rightElbow = new PivotJoint(rightArmUpper.body, rightArmLower.body, upperElbowAnchor.copy(), lowerElbowAnchor.copy());
 		rightElbow.active = true;
 		rightElbow.space = FlxNapeSpace.space;
 
-		rightShoulderAnchor = Vec2.get(10, -20);
-		rightShoulder = new PivotJoint(torso.body, rightArmUpper.body, rightShoulderAnchor, Vec2.get(-10, 0));
+		rightShoulder = new PivotJoint(torso.body, rightArmUpper.body, torsoRightShoulderAnchor.copy(), upperShoulderAnchor.copy());
 		rightShoulder.active = true;
 		rightShoulder.space = FlxNapeSpace.space;
+
+		leftLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_L__png);
+		leftLegUpper.shader = outliner;
+		add(leftLegUpper);
+
+		leftLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_L__png);
+		add(leftLegLower);
+
+		leftFoot = new Hand(x, y);
+		add(leftFoot);
+
+		leftAnkle = new WeldJoint(leftFoot.body, leftLegLower.body, ankleAnchor.copy(), lowerAnkleAnchor.copy());
+		leftAnkle.active = true;
+		leftAnkle.space = FlxNapeSpace.space;
+
+		leftKnee = new PivotJoint(leftLegUpper.body, leftLegLower.body, upperKneeAnchor.copy(), lowerKneeAnchor.copy());
+		leftKnee.active = true;
+		leftKnee.space = FlxNapeSpace.space;
+
+		leftHip = new PivotJoint(torso.body, leftLegUpper.body, torsoLeftHipAnchor.copy(), upperHipAnchor.copy());
+		leftHip.active = true;
+		leftHip.space = FlxNapeSpace.space;
+
+		rightLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_R__png);
+		rightLegUpper.shader = outliner;
+		add(rightLegUpper);
+
+		rightLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_R__png);
+		add(rightLegLower);
+
+		rightFoot = new Hand(x, y);
+		add(rightFoot);
+
+		rightAnkle = new WeldJoint(rightFoot.body, rightLegLower.body, ankleAnchor.copy(), lowerAnkleAnchor.copy());
+		rightAnkle.active = true;
+		rightAnkle.space = FlxNapeSpace.space;
+
+		rightKnee = new PivotJoint(rightLegUpper.body, rightLegLower.body, upperKneeAnchor.copy(), lowerKneeAnchor.copy());
+		rightKnee.active = true;
+		rightKnee.space = FlxNapeSpace.space;
+
+		rightHip = new PivotJoint(torso.body, rightLegUpper.body, torsoRightHipAnchor.copy(), upperHipAnchor.copy());
+		rightHip.active = true;
+		rightHip.space = FlxNapeSpace.space;
 
 		initListeners();
 	}
@@ -131,7 +206,7 @@ class Spaceman extends FlxGroup {
 			handImp = handImp.mul(30);
 			FlxG.watch.addQuick("Left Hand: ", handImp);
 			leftHand.body.applyImpulse(handImp);
-			torso.body.applyImpulse(handImp.mul(-1), torso.body.localPointToWorld(leftShoulderAnchor));
+			torso.body.applyImpulse(handImp.mul(-1), torso.body.localPointToWorld(torsoLeftShoulderAnchor));
 		}
 
 		handImp = Vec2.get(controls.rightHand.x, controls.rightHand.y, true);
@@ -139,7 +214,7 @@ class Spaceman extends FlxGroup {
 			handImp = handImp.mul(30);
 			FlxG.watch.addQuick("Right Hand: ", handImp);
 			rightHand.body.applyImpulse(handImp);
-			torso.body.applyImpulse(handImp.mul(-1), torso.body.localPointToWorld(rightShoulderAnchor));
+			torso.body.applyImpulse(handImp.mul(-1), torso.body.localPointToWorld(torsoRightShoulderAnchor));
 		}
 
 		if (controls.leftGrab.check()) {
@@ -188,6 +263,9 @@ class Spaceman extends FlxGroup {
 	}
 
 	private function handToGrabbable(callback:InteractionCallback) {
+		if (handGrabbables.get(callback.int1.castShape.body) == null) {
+			return;
+		}
 		if (callback.int2.isShape()) {
 			handGrabbables.get(callback.int1.castShape.body).push(callback.int2.castShape.body);
 		} else if (callback.int2.isBody()) {
@@ -196,6 +274,9 @@ class Spaceman extends FlxGroup {
 	}
 
 	private function handNotGrabbable(callback:InteractionCallback) {
+		if (handGrabbables.get(callback.int1.castShape.body) == null) {
+			return;
+		}
 		if (callback.int2.isShape()) {
 			handGrabbables.get(callback.int1.castShape.body).remove(callback.int2.castShape.body);
 		} else if (callback.int2.isBody()) {

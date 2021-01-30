@@ -8,17 +8,16 @@ import nape.shape.Polygon;
 import nape.phys.BodyType;
 import nape.phys.Body;
 
-class Arm extends SelfAssigningFlxNapeSprite {
-	public function new(x:Int, y:Int) {
+class LimbPiece extends SelfAssigningFlxNapeSprite {
+	public function new(x:Int, y:Int, asset:String) {
 		super();
 		setPosition(x, y);
-		makeGraphic(30, 10, FlxColor.RED);
+		loadGraphic(asset);
 
 		var body = new Body(BodyType.DYNAMIC);
 		body.isBullet = true;
 
-		var poly = new Polygon([Vec2.get(-15, 5), Vec2.get(-15, -5), Vec2.get(15, -5), Vec2.get(15, 5)]);
-		trace(poly.localVerts);
+		var poly = new Polygon([Vec2.get(-width/2, -height/2), Vec2.get(width/2, -height/2), Vec2.get(width/2, height/2), Vec2.get(-width/2, height/2)]);
 		body.shapes.add(poly);
 
 		var shipFilter = new InteractionFilter(CGroups.BODY, ~(CGroups.BODY));
