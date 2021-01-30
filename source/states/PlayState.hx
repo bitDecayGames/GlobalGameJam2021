@@ -32,6 +32,7 @@ class PlayState extends FlxState {
 	function createTestObjs() {
 		var level = new Level(AssetPaths.jake_test_0__json);
 		add(level.testLayer);
+		add(level.walls);
 
 		var box = new Obstacle(280, 300);
 		add(box);

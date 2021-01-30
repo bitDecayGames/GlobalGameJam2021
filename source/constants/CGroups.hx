@@ -6,6 +6,7 @@ class CGroups {
 
 	public static inline var BODY:Int = 0x1 << 1;
 	public static inline var OBSTACLE:Int = 0x1 << 2;
+	public static inline var WALL:Int = 0x1 << 3;
 
 	public static inline var OTHER_SENSOR:Int = 0x1 << 31;
 

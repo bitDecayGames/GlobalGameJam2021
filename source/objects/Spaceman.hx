@@ -244,6 +244,7 @@ class Spaceman extends FlxGroup {
 			var grabbable = handGrabbables.get(hand)[0];
 			if (joint == null) {
 				joint = new PivotJoint(hand, grabbable, Vec2.get(), grabbable.worldPointToLocal(hand.localPointToWorld(Vec2.get())));
+				FmodManager.PlaySoundOneShot(FmodSFX.Grab);
 				joint.active = true;
 				joint.space = FlxNapeSpace.space;
 				if (left) {
@@ -258,6 +259,7 @@ class Spaceman extends FlxGroup {
 				joint.anchor1 = Vec2.get();
 				joint.anchor2 = grabbable.worldPointToLocal(hand.position);
 				joint.active = true;
+				FmodManager.PlaySoundOneShot(FmodSFX.Grab);
 			}
 		}
 	}
