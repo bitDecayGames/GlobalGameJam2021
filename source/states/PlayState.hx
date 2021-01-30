@@ -1,5 +1,6 @@
 package states;
 
+import flixel.FlxSprite;
 import levels.Level;
 import flixel.util.FlxColor;
 import nape.callbacks.CbType;
@@ -14,6 +15,9 @@ import objects.Spaceman;
 using extensions.FlxStateExt;
 
 class PlayState extends FlxState {
+
+	var spaceman:Spaceman;
+
 	override public function create() {
 		super.create();
 		FlxG.camera.pixelPerfectRender = true;
@@ -26,6 +30,10 @@ class PlayState extends FlxState {
 		walls.cbTypes.add(CbTypes.CB_GRABBABLE);
 		FlxNapeSpace.space.gravity.setxy(0, 0);
 
+		var bg = new FlxSprite(AssetPaths.nebula0__png);
+		bg.scale.set(3, 3);
+		add(bg);
+
 		createTestObjs();
 	}
 
@@ -37,12 +45,20 @@ class PlayState extends FlxState {
 		var box = new Obstacle(280, 300);
 		add(box);
 
-		var spaceman = new Spaceman(300, 200);
+		spaceman = new Spaceman(300, 200);
 		add(spaceman);
+
+		#if spin
+		camera.follow(spaceman.head);
+		#end
 	}
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+
+		#if spin
+		camera.angle = -spaceman.head.angle;
+		#end
 	}
 
 	override public function onFocusLost() {

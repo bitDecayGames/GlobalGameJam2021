@@ -1,5 +1,7 @@
 package objects;
 
+import nape.dynamics.InteractionFilter;
+import flixel.math.FlxAngle;
 import nape.constraint.AngleJoint;
 import flixel.FlxSprite;
 import haxe.Json;
@@ -30,8 +32,8 @@ class Spaceman extends FlxGroup {
 
 	public static inline var HIP_FREEDOM = 0.5;
 	public static inline var KNEE_FREEDOM = 2.5;
-	public static inline var NECK_FREEDOM = 0.5;
-	public static inline var HEAD_FREEDOM = 0.5;
+	public static inline var NECK_FREEDOM = 0.2;
+	public static inline var HEAD_FREEDOM = 0.1;
 
 	var controls:BasicControls;
 
@@ -296,6 +298,7 @@ class Spaceman extends FlxGroup {
 		}
 
 		var handImp = Vec2.get(controls.leftHand.x, controls.leftHand.y, true);
+		handImp.rotate(-camera.angle * FlxAngle.TO_RAD);
 		if (handImp.length > 0.1) {
 			handImp = handImp.mul(30);
 			FlxG.watch.addQuick("Left Hand: ", handImp);
@@ -304,6 +307,7 @@ class Spaceman extends FlxGroup {
 		}
 
 		handImp = Vec2.get(controls.rightHand.x, controls.rightHand.y, true);
+		handImp.rotate(-camera.angle * FlxAngle.TO_RAD);
 		if (handImp.length > 0.1) {
 			handImp = handImp.mul(30);
 			FlxG.watch.addQuick("Right Hand: ", handImp);
@@ -324,10 +328,15 @@ class Spaceman extends FlxGroup {
 		if (controls.rightGrab.check()) {
 			rightHand.color = FlxColor.GRAY;
 			attemptGrab(rightHand.body, false);
+			// Should we decide to manipulate collision groups when the player grabs things, this is a very buggy start to that
+			// if (rightHandGrabJoint != null && rightHandGrabJoint.active) {
+			// 	rightHandGrabJoint.body2.setShapeFilters(new InteractionFilter(CGroups.BODY, ~(CGroups.OBSTACLE & CGroups.BODY)));
+			// }
 		} else {
 			rightHand.color = FlxColor.WHITE;
 			if (rightHandGrabJoint != null) {
 				rightHandGrabJoint.active = false;
+				// rightHandGrabJoint.body2.setShapeFilters(new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE)));
 			}
 		}
 	}
