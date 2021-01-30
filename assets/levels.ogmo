@@ -1,0 +1,34 @@
+{
+  "name": "GlobalGameJam2021",
+  "ogmoVersion": "3.4.0",
+  "levelPaths": ["."],
+  "backgroundColor": "#282c34ff",
+  "gridColor": "#3c4049cc",
+  "anglesRadians": true,
+  "directoryDepth": 5,
+  "layerGridDefaultSize": {"x": 8, "y": 8},
+  "levelDefaultSize": {"x": 320, "y": 240},
+  "levelMinSize": {"x": 128, "y": 128},
+  "levelMaxSize": {"x": 4096, "y": 4096},
+  "levelValues": [],
+  "defaultExportMode": ".json",
+  "compactExport": false,
+  "externalScript": "",
+  "playCommand": "",
+  "entityTags": [],
+  "layers": [
+    {
+      "definition": "tile",
+      "name": "test",
+      "gridSize": {"x": 8, "y": 8},
+      "exportID": "02860925",
+      "exportMode": 0,
+      "arrayMode": 0,
+      "defaultTileset": "New Tileset"
+    }
+  ],
+  "entities": [],
+  "tilesets": [
+    {"label": "test", "path": "../../../../Downloads/filler.png", "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAAcklEQVR42u3YMQ2AQBBE0XVAaJFAiQZEnAt0XJCAAkjwdE7AAwtU7yVj4JcTkbSX/spsm7rU5jqk1pY1tXgj4HGOjyaggAIKKKCAAgoooIACCiiggAIKKKA76+eAAAAAAAAAAAAAAAAAAAAAAAAAAMDnbh3mAIQpE5xRAAAAAElFTkSuQmCC", "tileWidth": 16, "tileHeight": 16, "tileSeparationX": 0, "tileSeparationY": 0, "tileMarginX": 0, "tileMarginY": 0}
+  ]
+}

@@ -1,5 +1,6 @@
 package states;
 
+import levels.Level;
 import constants.CbTypes;
 import objects.Obstacle;
 import flixel.addons.nape.FlxNapeSpace;
@@ -22,6 +23,9 @@ class PlayState extends FlxState {
 	}
 
 	function createTestObjs() {
+		var level = new Level(AssetPaths.jake_test_0__json);
+		add(level.testLayer);
+
 		var box = new Obstacle(280, FlxG.height - 50);
 		add(box);
 
