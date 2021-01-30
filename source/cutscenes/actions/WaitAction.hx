@@ -1,19 +1,20 @@
-package source.cutscenes.actions;
+package cutscenes.actions;
 
-import source.cutscenes.Action;
+import cutscenes.Action;
 import haxe.Timer;
 
 class WaitAction extends Action {
-	public var seconds:Float;
+	public var milliseconds:Int;
 
-	public function new(seconds:Float) {
-		this.seconds = seconds;
+	public function new(milliseconds:Int) {
+		super();
+		this.milliseconds = milliseconds;
 	}
 
 	override public function start() {
 		super.start();
 		Timer.delay(() -> {
 			stop();
-		}, seconds * 1000);
+		}, milliseconds);
 	}
 }

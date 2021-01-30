@@ -1,12 +1,13 @@
-package source.cutscenes;
+package cutscenes;
 
 interface ICutsceneControl {
-	public var isStarted:Bool = false;
-	public var isDone:Bool = false;
-	public var isPaused:Bool = false;
+	public var isStarted:Bool;
+	public var isDone:Bool;
+	public var isPaused:Bool;
 
-	public function start();
-	public function stop();
-	public function pause();
-	public function reset();
+	public function start():Void;
+	public function stop():Void;
+	public function pause():Void;
+	public function unpause():Void;
+	public function reset():Void;
 }

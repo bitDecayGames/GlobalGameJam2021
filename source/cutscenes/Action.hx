@@ -1,37 +1,59 @@
-package source.cutscenes;
+package cutscenes;
 
 import flixel.group.FlxGroup;
 
 /**
- * A single unit of movement in a cutscene
+ * A single unit of movement in a cutscene.  Any child actions will be started and stopped but not waited for.  Use ParallelAction to wait for child actions to finish.
  */
-class Action extends FlxGroup implements ICutsceneControl {
+class Action extends FlxTypedGroup<Action> implements ICutsceneControl {
 	public var isStarted:Bool = false;
 	public var isDone:Bool = false;
 	public var isPaused:Bool = false;
 
-	public var onStart:(Action) -> Void;
-	public var onDone:(Action) -> Void;
+	public var onStart:() -> Void;
+	public var onDone:() -> Void;
 
 	public function start() {
-		if (!isStarted && onStart != null) {
+		if (!isStarted) {
 			isStarted = true;
 			isPaused = false;
-			onStart(this);
+			if (onStart != null) {
+				onStart();
+			}
+			for (member in members) {
+				member.start();
+			}
 		}
 	}
 
 	public function stop() {
-		isDone = true;
-		isPaused = false;
-		if (onDone != null) {
-			onDone(this);
+		if (!isDone) {
+			isDone = true;
+			isPaused = false;
+			for (member in members) {
+				member.stop();
+			}
+			if (onDone != null) {
+				onDone();
+			}
 		}
 	}
 
 	public function pause() {
 		if (isStarted && !isDone) {
-			isPaused = !isPaused;
+			isPaused = true;
+		}
+		for (member in members) {
+			member.pause();
+		}
+	}
+
+	public function unpause() {
+		if (isStarted && !isDone) {
+			isPaused = false;
+		}
+		for (member in members) {
+			member.unpause();
 		}
 	}
 
@@ -42,17 +64,18 @@ class Action extends FlxGroup implements ICutsceneControl {
 		isStarted = false;
 		isDone = false;
 		isPaused = false;
+		for (member in members) {
+			member.reset();
+		}
 	}
 
 	public function step(elapsed:Float):Void {
 		// TODO: implement this method on children of this Action
 	}
 
-	override public function create():Void {}
-
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
-		if (!isPaused && !isDone && isStart) {
+		if (!isPaused && !isDone && isStarted) {
 			step(elapsed);
 		}
 	}

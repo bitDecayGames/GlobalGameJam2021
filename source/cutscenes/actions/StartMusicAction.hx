@@ -1,14 +1,19 @@
-package source.cutscenes.actions;
+package cutscenes.actions;
 
-import source.cutscenes.Action;
+import cutscenes.Action;
 
 class StartMusicAction extends Action {
-	public var song:FmodSongs;
+	public var song:String;
 
-	public function new(song:FmodSongs) {
+	/**
+	 * On start, starts to play a song, then marks itself as done.  It does NOT wait for the song to finish.
+	 * @param song FmodSongs.SomeSongNameHere
+	 */
+	public function new(song:String) {
+		super();
 		this.song = song;
 		if (song == null)
-			throw new Exception("Cannot have a null song in the StartMusicAction");
+			throw "Cannot have a null song in the StartMusicAction";
 	}
 
 	override public function start() {

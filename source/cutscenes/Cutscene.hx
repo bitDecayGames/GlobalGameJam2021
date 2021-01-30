@@ -1,28 +1,27 @@
-package source.cutscenes;
+package cutscenes;
 
-import flixel.FlxGroup;
+import flixel.group.FlxGroup;
 
 /**
- * A manager class for handling and playing through cutscenes.
+ * A class for handling and playing through cutscenes sequentially.  Also implements Action so Cutscenes can be nested.
  */
-class CutsceneManager extends FlxTypedGroup<Action> implements ICutsceneControl {
+class Cutscene extends Action {
 	private var currentActionIndex:Int = -1;
 
-	public var isStarted:Bool = false;
-	public var isDone:Bool = false;
-	public var isPaused:Bool = false;
-
-	public function start() {
+	override public function start() {
 		if (!isStarted) {
 			isStarted = true;
 			isPaused = false;
 			currentActionIndex = -1;
 			startNext();
+			if (onStart != null) {
+				onStart();
+			}
 		}
 	}
 
-	public function stop() {
-		if (isStarted && !isDone) {
+	override public function stop() {
+		if (!isDone) {
 			isDone = true;
 			isPaused = false;
 			var cur = getCurrent();
@@ -30,20 +29,33 @@ class CutsceneManager extends FlxTypedGroup<Action> implements ICutsceneControl 
 				cur.onDone = null;
 				cur.stop();
 			}
+			if (onDone != null) {
+				onDone();
+			}
 		}
 	}
 
-	public function pause() {
+	override public function pause() {
 		if (isStarted && !isDone) {
-			isPaused = !isPaused;
+			isPaused = true;
 			var cur = getCurrent();
-			if (cur != null && cur.isPaused != isPaused) {
+			if (cur != null && !cur.isPaused) {
 				cur.pause();
 			}
 		}
 	}
 
-	public function reset() {
+	override public function unpause() {
+		if (isStarted && !isDone) {
+			isPaused = false;
+			var cur = getCurrent();
+			if (cur != null && cur.isPaused) {
+				cur.unpause();
+			}
+		}
+	}
+
+	override public function reset() {
 		if (isStarted && !isDone) {
 			stop();
 		}
@@ -56,8 +68,6 @@ class CutsceneManager extends FlxTypedGroup<Action> implements ICutsceneControl 
 			member.reset();
 		}
 	}
-
-	override public function create():Void {}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
@@ -72,7 +82,7 @@ class CutsceneManager extends FlxTypedGroup<Action> implements ICutsceneControl 
 
 	private function startNext():Void {
 		if (members != null && members.length > 0 && currentActionIndex + 1 < members.length) {
-			curentActionIndex = currentActionIndex + 1;
+			currentActionIndex = currentActionIndex + 1;
 			var action = members[currentActionIndex];
 			if (action != null) { // MW possibly need to check if the action is "alive"
 				action.onDone = () -> {
