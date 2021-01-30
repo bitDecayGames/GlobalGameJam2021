@@ -22,6 +22,28 @@
 				"y": 3
 			}
 		},
+		"neck": {
+			"body": {
+				"x": 0,
+				"y": 0
+			},
+			"head": {
+				"x": 0,
+				"y": 0
+			}
+		},
+		"head": {
+			"x": 0,
+			"y": 0
+		},
+		"chest": {
+			"x": 0,
+			"y": 0
+		},
+		"codpiece": {
+			"x": 0,
+			"y": 0
+		},
 		"leftArm": {
 			"upper": {
 				"shoulder": {
