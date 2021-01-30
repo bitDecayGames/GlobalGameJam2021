@@ -3,6 +3,8 @@ flixel-addons 2.9.0
 flixel-ui 2.3.3
 openfl 9.0.2
 
+nape-haxe4 2.0.22
+
 bitdecaybtree git https://github.com/bitDecayGames/BehaviorTree.git
 bitlytics git https://github.com/bitDecayGames/Bitlytics.git
 flixelutils git https://github.com/bitDecayGames/flixel-utils.git
