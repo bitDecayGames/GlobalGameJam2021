@@ -1,5 +1,9 @@
 package objects;
 
+import flixel.FlxSprite;
+import haxe.Json;
+import lime.utils.Assets;
+import config.Validator;
 import shader.Outline;
 import nape.phys.Body;
 import haxe.DynamicAccess;
@@ -60,126 +64,129 @@ class Spaceman extends FlxGroup {
 	var leftHandGrabJoint:PivotJoint = null;
 	var rightHandGrabJoint:PivotJoint = null;
 
-	var torsoLeftShoulderAnchor = Vec2.get(-23, -28);
-	var torsoRightShoulderAnchor = Vec2.get(23, -28);
-	var torsoLeftHipAnchor = Vec2.get(-15, 36);
-	var torsoRightHipAnchor = Vec2.get(15, 36);
-
-	var upperShoulderAnchor = Vec2.get(0, -17);
-	var upperElbowAnchor = Vec2.get(0, 18);
-
-	var lowerElbowAnchor = Vec2.get(0, -17);
-	var lowerWristAnchor = Vec2.get(0, 18);
-
-	var upperHipAnchor = Vec2.get(0, -23);
-	var upperKneeAnchor = Vec2.get(0, 25);
-
-	var lowerKneeAnchor = Vec2.get(0, -22);
-	var lowerAnkleAnchor = Vec2.get(0, 26);
-
-	var ankleAnchor = Vec2.get(0, 0);
-
-	var wristAnchor = Vec2.get(0,0);
+	// Needed for impulses
+	var torsoLeftShoulderAnchor:Vec2 = null;
+	var torsoRightShoulderAnchor:Vec2 = null;
 
 	var outliner = new Outline(FlxColor.PURPLE, 1, 1);
 
 	public function new(x:Int, y:Int) {
 		super();
 
+		#if !display
+		// Only run this validation if we aren't running in display mode (aka auto-complete)
+		Validator.validateJson("assets/data/joints.json");
+		#end
+
+		var configBytes = Assets.getBytes("assets/data/joints.json").toString();
+		var jointData = Json.parse(configBytes);
+
 		controls = new BasicControls();
 
+		/** START LOADING BODY PARTS IN CORRECT RENDER ORDER **/
 		torso = new Torso(x, y);
 		torso.shader = outliner;
 		add(torso);
 
-		leftArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_L__png);
-		leftArmUpper.shader = outliner;
-		add(leftArmUpper);
+		rightFoot = new Hand(x, y);
+		add(rightFoot);
 
-		leftArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_L__png);
-		add(leftArmLower);
+		leftFoot = new Hand(x, y);
+		add(leftFoot);
 
-		leftHand = new Hand(x, y);
-		add(leftHand);
+		leftLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_L__png);
+		add(leftLegLower);
 
-		handGrabbables.set(leftHand.body, new Array<Body>());
-
-		leftWrist = new WeldJoint(leftHand.body, leftArmLower.body, wristAnchor.copy(), lowerWristAnchor.copy());
-		leftWrist.active = true;
-		leftWrist.space = FlxNapeSpace.space;
-
-		leftElbow = new PivotJoint(leftArmUpper.body, leftArmLower.body, upperElbowAnchor.copy(), lowerElbowAnchor.copy());
-		leftElbow.active = true;
-		leftElbow.space = FlxNapeSpace.space;
-
-		leftHip = new PivotJoint(torso.body, leftArmUpper.body, torsoLeftShoulderAnchor.copy(), upperShoulderAnchor.copy());
-		leftHip.active = true;
-		leftHip.space = FlxNapeSpace.space;
-
-		rightArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_R__png);
-		add(rightArmUpper);
-
-		rightArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_R__png);
-		add(rightArmLower);
-
-		rightHand = new Hand(x, y);
-		add(rightHand);
-
-		handGrabbables.set(rightHand.body, new Array<Body>());
-
-		rightWrist = new WeldJoint(rightHand.body, rightArmLower.body, wristAnchor.copy(), lowerWristAnchor.copy());
-		rightWrist.active = true;
-		rightWrist.space = FlxNapeSpace.space;
-
-		rightElbow = new PivotJoint(rightArmUpper.body, rightArmLower.body, upperElbowAnchor.copy(), lowerElbowAnchor.copy());
-		rightElbow.active = true;
-		rightElbow.space = FlxNapeSpace.space;
-
-		rightShoulder = new PivotJoint(torso.body, rightArmUpper.body, torsoRightShoulderAnchor.copy(), upperShoulderAnchor.copy());
-		rightShoulder.active = true;
-		rightShoulder.space = FlxNapeSpace.space;
+		rightLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_R__png);
+		add(rightLegLower);
 
 		leftLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_L__png);
 		leftLegUpper.shader = outliner;
 		add(leftLegUpper);
 
-		leftLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_L__png);
-		add(leftLegLower);
-
-		leftFoot = new Hand(x, y);
-		add(leftFoot);
-
-		leftAnkle = new WeldJoint(leftFoot.body, leftLegLower.body, ankleAnchor.copy(), lowerAnkleAnchor.copy());
-		leftAnkle.active = true;
-		leftAnkle.space = FlxNapeSpace.space;
-
-		leftKnee = new PivotJoint(leftLegUpper.body, leftLegLower.body, upperKneeAnchor.copy(), lowerKneeAnchor.copy());
-		leftKnee.active = true;
-		leftKnee.space = FlxNapeSpace.space;
-
-		leftHip = new PivotJoint(torso.body, leftLegUpper.body, torsoLeftHipAnchor.copy(), upperHipAnchor.copy());
-		leftHip.active = true;
-		leftHip.space = FlxNapeSpace.space;
-
 		rightLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_R__png);
 		rightLegUpper.shader = outliner;
 		add(rightLegUpper);
 
-		rightLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_R__png);
-		add(rightLegLower);
+		// Load Neck here
 
-		rightFoot = new Hand(x, y);
-		add(rightFoot);
+		// Chest piece here
 
-		rightAnkle = new WeldJoint(rightFoot.body, rightLegLower.body, ankleAnchor.copy(), lowerAnkleAnchor.copy());
+		// Load Head here
+
+		// Cod piece here on top of legs
+
+		leftArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_L__png);
+		leftArmUpper.shader = outliner;
+		add(leftArmUpper);
+
+		rightArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_R__png);
+		add(rightArmUpper);
+
+		leftHand = new Hand(x, y);
+		add(leftHand);
+
+		rightHand = new Hand(x, y);
+		add(rightHand);
+
+		leftArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_L__png);
+		add(leftArmLower);
+
+		rightArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_R__png);
+		add(rightArmLower);
+		/** END LOADING BODY PARTS IN CORRECT RENDER ORDER **/
+
+		// allow grabbing with hands
+		handGrabbables.set(leftHand.body, new Array<Body>());
+		handGrabbables.set(rightHand.body, new Array<Body>());
+
+		leftWrist = new WeldJoint(leftHand.body, leftArmLower.body, getAnchor(leftHand, jointData.player.leftArm.hand), getAnchor(leftArmLower, jointData.player.leftArm.lower.wrist));
+		leftWrist.active = true;
+		leftWrist.space = FlxNapeSpace.space;
+
+		leftElbow = new PivotJoint(leftArmUpper.body, leftArmLower.body, getAnchor(leftArmUpper, jointData.player.leftArm.upper.elbow), getAnchor(leftArmLower, jointData.player.leftArm.lower.elbow));
+		leftElbow.active = true;
+		leftElbow.space = FlxNapeSpace.space;
+
+		torsoLeftShoulderAnchor = getAnchor(torso, jointData.player.torso.leftShoulder);
+		leftShoulder = new PivotJoint(torso.body, leftArmUpper.body, torsoLeftShoulderAnchor.copy(), getAnchor(leftArmUpper, jointData.player.leftArm.upper.shoulder));
+		leftShoulder.active = true;
+		leftShoulder.space = FlxNapeSpace.space;
+
+		rightWrist = new WeldJoint(rightHand.body, rightArmLower.body, getAnchor(rightHand, jointData.player.rightArm.hand), getAnchor(rightArmLower, jointData.player.rightArm.lower.wrist));
+		rightWrist.active = true;
+		rightWrist.space = FlxNapeSpace.space;
+
+		rightElbow = new PivotJoint(rightArmUpper.body, rightArmLower.body, getAnchor(rightArmUpper, jointData.player.rightArm.upper.elbow), getAnchor(rightArmLower, jointData.player.rightArm.lower.elbow));
+		rightElbow.active = true;
+		rightElbow.space = FlxNapeSpace.space;
+
+		torsoRightShoulderAnchor = getAnchor(torso, jointData.player.torso.rightShoulder);
+		rightShoulder = new PivotJoint(torso.body, rightArmUpper.body, torsoRightShoulderAnchor.copy(), getAnchor(rightArmUpper, jointData.player.rightArm.upper.shoulder));
+		rightShoulder.active = true;
+		rightShoulder.space = FlxNapeSpace.space;
+
+		leftAnkle = new WeldJoint(leftFoot.body, leftLegLower.body, getAnchor(leftFoot, jointData.player.leftLeg.foot), getAnchor(leftLegLower, jointData.player.leftLeg.lower.ankle));
+		leftAnkle.active = true;
+		leftAnkle.space = FlxNapeSpace.space;
+
+		leftKnee = new PivotJoint(leftLegUpper.body, leftLegLower.body, getAnchor(leftLegUpper, jointData.player.leftLeg.upper.knee), getAnchor(leftLegLower, jointData.player.leftLeg.lower.knee));
+		leftKnee.active = true;
+		leftKnee.space = FlxNapeSpace.space;
+
+		leftHip = new PivotJoint(torso.body, leftLegUpper.body, getAnchor(torso, jointData.player.torso.leftHip), getAnchor(leftLegUpper, jointData.player.leftLeg.upper.hip));
+		leftHip.active = true;
+		leftHip.space = FlxNapeSpace.space;
+
+		rightAnkle = new WeldJoint(rightFoot.body, rightLegLower.body, getAnchor(rightFoot, jointData.player.rightLeg.foot), getAnchor(rightLegLower, jointData.player.rightLeg.lower.ankle));
 		rightAnkle.active = true;
 		rightAnkle.space = FlxNapeSpace.space;
 
-		rightKnee = new PivotJoint(rightLegUpper.body, rightLegLower.body, upperKneeAnchor.copy(), lowerKneeAnchor.copy());
+		rightKnee = new PivotJoint(rightLegUpper.body, rightLegLower.body, getAnchor(rightLegUpper, jointData.player.rightLeg.upper.knee), getAnchor(rightLegLower, jointData.player.rightLeg.lower.knee));
 		rightKnee.active = true;
 		rightKnee.space = FlxNapeSpace.space;
 
-		rightHip = new PivotJoint(torso.body, rightLegUpper.body, torsoRightHipAnchor.copy(), upperHipAnchor.copy());
+		rightHip = new PivotJoint(torso.body, rightLegUpper.body, getAnchor(torso, jointData.player.torso.rightHip), getAnchor(rightLegUpper, jointData.player.rightLeg.upper.hip));
 		rightHip.active = true;
 		rightHip.space = FlxNapeSpace.space;
 
@@ -195,6 +202,19 @@ class Spaceman extends FlxGroup {
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+
+		if (FlxG.keys.pressed.W) {
+			torso.body.applyImpulse(Vec2.get(0, -5, true));
+		}
+		if (FlxG.keys.pressed.A) {
+			torso.body.applyImpulse(Vec2.get(-5, 0, true));
+		}
+		if (FlxG.keys.pressed.S) {
+			torso.body.applyImpulse(Vec2.get(0, 5, true));
+		}
+		if (FlxG.keys.pressed.D) {
+			torso.body.applyImpulse(Vec2.get(5, 0, true));
+		}
 
 		if (FlxG.mouse.justPressedRight) {
 			trace(Vec2.get(FlxG.mouse.x, FlxG.mouse.y));
@@ -282,5 +302,9 @@ class Spaceman extends FlxGroup {
 		} else if (callback.int2.isBody()) {
 			handGrabbables.get(callback.int1.castShape.body).remove(callback.int2.castBody);
 		}
+	}
+
+	private function getAnchor(spr:FlxSprite, data:Dynamic):Vec2 {
+		return Vec2.get(data.x - spr.width / 2, data.y - spr.height / 2);
 	}
 }
