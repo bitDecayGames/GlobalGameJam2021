@@ -1,5 +1,8 @@
 package states;
 
+import flixel.util.FlxColor;
+import nape.callbacks.CbType;
+import nape.phys.Material;
 import constants.CbTypes;
 import objects.Obstacle;
 import flixel.addons.nape.FlxNapeSpace;
@@ -14,9 +17,13 @@ class PlayState extends FlxState {
 	override public function create() {
 		super.create();
 		FlxG.camera.pixelPerfectRender = true;
+		camera.bgColor = FlxColor.GRAY;
 		CbTypes.initTypes();
 		FlxNapeSpace.init();
-		FlxNapeSpace.createWalls(0, 0, 0, 0);
+
+		// var wallMaterial = new Material()
+		var walls = FlxNapeSpace.createWalls(0, 0, 0, 0);
+		walls.cbTypes.add(CbTypes.CB_GRABBABLE);
 		FlxNapeSpace.space.gravity.setxy(0, 0);
 
 		createTestObjs();

@@ -1,5 +1,6 @@
 package objects;
 
+import shader.Outline;
 import nape.phys.Body;
 import haxe.DynamicAccess;
 import flixel.FlxObject;
@@ -50,6 +51,7 @@ class Spaceman extends FlxGroup {
 	var leftHandGrabJoint:PivotJoint = null;
 	var rightHandGrabJoint:PivotJoint = null;
 
+	var outliner = new Outline(FlxColor.PURPLE, 10, 10);
 
 	public function new(x:Int, y:Int) {
 		super();
@@ -57,9 +59,11 @@ class Spaceman extends FlxGroup {
 		controls = new BasicControls();
 
 		torso = new Torso(x, y);
+		torso.shader = outliner;
 		add(torso);
 
 		leftArmUpper = new Arm(x-20, y);
+		leftArmUpper.shader = outliner;
 		add(leftArmUpper);
 
 		leftArmLower = new Arm(x-40, y);
@@ -187,10 +191,18 @@ class Spaceman extends FlxGroup {
 	}
 
 	private function handToGrabbable(callback:InteractionCallback) {
-		handGrabbables.get(callback.int1.castShape.body).push(callback.int2.castShape.body);
+		if (callback.int2.isShape()) {
+			handGrabbables.get(callback.int1.castShape.body).push(callback.int2.castShape.body);
+		} else if (callback.int2.isBody()) {
+			handGrabbables.get(callback.int1.castShape.body).push(callback.int2.castBody);
+		}
 	}
 
 	private function handNotGrabbable(callback:InteractionCallback) {
-		handGrabbables.get(callback.int1.castShape.body).remove(callback.int2.castShape.body);
+		if (callback.int2.isShape()) {
+			handGrabbables.get(callback.int1.castShape.body).remove(callback.int2.castShape.body);
+		} else if (callback.int2.isBody()) {
+			handGrabbables.get(callback.int1.castShape.body).remove(callback.int2.castBody);
+		}
 	}
 }
