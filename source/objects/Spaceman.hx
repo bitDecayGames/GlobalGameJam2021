@@ -47,7 +47,6 @@ class Spaceman extends FlxGroup {
 	var leftHandGrabJoint:PivotJoint = null;
 	var rightHandGrabJoint:PivotJoint = null;
 
-
 	public function new(x:Int, y:Int) {
 		super();
 
@@ -110,8 +109,8 @@ class Spaceman extends FlxGroup {
 	private function initListeners() {
 		FlxNapeSpace.space.listeners.add(new InteractionListener(CbEvent.BEGIN, InteractionType.COLLISION, CbTypes.CB_HAND, CbTypes.CB_GRABBABLE,
 			handToGrabbable));
-			FlxNapeSpace.space.listeners.add(new InteractionListener(CbEvent.END, InteractionType.COLLISION, CbTypes.CB_HAND, CbTypes.CB_GRABBABLE,
-				handNotGrabbable));
+		FlxNapeSpace.space.listeners.add(new InteractionListener(CbEvent.END, InteractionType.COLLISION, CbTypes.CB_HAND, CbTypes.CB_GRABBABLE,
+			handNotGrabbable));
 	}
 
 	override public function update(elapsed:Float) {
