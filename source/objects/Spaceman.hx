@@ -224,6 +224,7 @@ class Spaceman extends FlxGroup {
 			leftHand.color = FlxColor.WHITE;
 			if (leftHandGrabJoint != null) {
 				leftHandGrabJoint.active = false;
+				FmodManager.PlaySoundOneShot(FmodSFX.Release);
 			}
 		}
 
@@ -234,6 +235,7 @@ class Spaceman extends FlxGroup {
 			rightHand.color = FlxColor.WHITE;
 			if (rightHandGrabJoint != null) {
 				rightHandGrabJoint.active = false;
+				FmodManager.PlaySoundOneShot(FmodSFX.Release);
 			}
 		}
 	}
