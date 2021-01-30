@@ -49,4 +49,4 @@
 
 - This projects uses the [haxe-formatter](https://github.com/HaxeCheckstyle/haxe-formatter) package for formatting using default settings
   - Install `formatter` by running: `haxelib install formatter`
-  - Apply formatting by running: `haxelib run formatter -s /source` from the root of the project
+  - Apply formatting by running: `haxelib run formatter -s ./source` from the root of the project

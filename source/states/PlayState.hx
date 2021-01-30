@@ -1,5 +1,6 @@
 package states;
 
+import constants.CbTypes;
 import objects.Obstacle;
 import flixel.addons.nape.FlxNapeSpace;
 import flixel.FlxG;
@@ -12,9 +13,10 @@ class PlayState extends FlxState {
 	override public function create() {
 		super.create();
 		FlxG.camera.pixelPerfectRender = true;
+		CbTypes.initTypes();
 		FlxNapeSpace.init();
 		FlxNapeSpace.createWalls(0, 0, 0, 0);
-		FlxNapeSpace.space.gravity.setxy(0, 500);
+		FlxNapeSpace.space.gravity.setxy(0, 0);
 
 		createTestObjs();
 	}
@@ -23,7 +25,7 @@ class PlayState extends FlxState {
 		var box = new Obstacle(280, FlxG.height - 50);
 		add(box);
 
-		var spaceman = new Spaceman(300, 300);
+		var spaceman = new Spaceman(300, 400);
 		add(spaceman);
 	}
 
