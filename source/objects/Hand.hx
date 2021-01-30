@@ -10,10 +10,10 @@ import nape.phys.BodyType;
 import nape.phys.Body;
 
 class Hand extends SelfAssigningFlxNapeSprite {
-	public function new(x:Int, y:Int) {
+	public function new(x:Int, y:Int, asset:String) {
 		super();
 		setPosition(x, y);
-		makeGraphic(15, 15, FlxColor.BLUE);
+		loadGraphic(asset);
 
 		var body = new Body(BodyType.DYNAMIC);
 		body.isBullet = true;

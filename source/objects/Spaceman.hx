@@ -1,5 +1,6 @@
 package objects;
 
+import nape.constraint.AngleJoint;
 import flixel.FlxSprite;
 import haxe.Json;
 import lime.utils.Assets;
@@ -26,9 +27,26 @@ import input.BasicControls;
 import nape.geom.Vec2;
 
 class Spaceman extends FlxGroup {
+
+	public static inline var HIP_FREEDOM = 0.5;
+	public static inline var KNEE_FREEDOM = 2.5;
+	public static inline var NECK_FREEDOM = 0.5;
+	public static inline var HEAD_FREEDOM = 0.5;
+
 	var controls:BasicControls;
 
+	public var head:LimbPiece;
+	public var neck:LimbPiece;
+	public var chest:LimbPiece;
+	public var cod:LimbPiece;
 	public var torso:Torso;
+
+	public var chestJoint:WeldJoint;
+	public var codJoint:WeldJoint;
+
+	public var neckBody:PivotJoint;
+	public var headNeck:PivotJoint;
+
 	public var leftShoulder:PivotJoint;
 	public var rightShoulder:PivotJoint;
 	public var leftHip:PivotJoint;
@@ -85,13 +103,12 @@ class Spaceman extends FlxGroup {
 
 		/** START LOADING BODY PARTS IN CORRECT RENDER ORDER **/
 		torso = new Torso(x, y);
-		torso.shader = outliner;
 		add(torso);
 
-		rightFoot = new Hand(x, y);
+		rightFoot = new Hand(x, y, AssetPaths.foot_R__png);
 		add(rightFoot);
 
-		leftFoot = new Hand(x, y);
+		leftFoot = new Hand(x, y, AssetPaths.foot_L__png);
 		add(leftFoot);
 
 		leftLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_L__png);
@@ -101,32 +118,37 @@ class Spaceman extends FlxGroup {
 		add(rightLegLower);
 
 		leftLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_L__png);
-		leftLegUpper.shader = outliner;
 		add(leftLegUpper);
 
 		rightLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_R__png);
-		rightLegUpper.shader = outliner;
 		add(rightLegUpper);
 
 		// Load Neck here
+		neck = new LimbPiece(x, y, AssetPaths.neck__png);
+		add(neck);
 
 		// Chest piece here
+		chest = new LimbPiece(x, y, AssetPaths.chestpiece__png);
+		add(chest);
 
 		// Load Head here
+		head = new LimbPiece(x, y, AssetPaths.head__png);
+		add(head);
 
 		// Cod piece here on top of legs
+		cod = new LimbPiece(x, y, AssetPaths.codpiece__png);
+		add(cod);
 
 		leftArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_L__png);
-		leftArmUpper.shader = outliner;
 		add(leftArmUpper);
 
 		rightArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_R__png);
 		add(rightArmUpper);
 
-		leftHand = new Hand(x, y);
+		leftHand = new Hand(x, y, AssetPaths.handL_O__png);
 		add(leftHand);
 
-		rightHand = new Hand(x, y);
+		rightHand = new Hand(x, y, AssetPaths.handR_O__png);
 		add(rightHand);
 
 		leftArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_L__png);
@@ -140,6 +162,35 @@ class Spaceman extends FlxGroup {
 		handGrabbables.set(leftHand.body, new Array<Body>());
 		handGrabbables.set(rightHand.body, new Array<Body>());
 
+		// BUILD TORSO
+
+		// attach neck to torso
+		neckBody = new PivotJoint(torso.body, neck.body, getAnchor(torso, jointData.player.torso.neck), getAnchor(neck, jointData.player.neck.body));
+		neckBody.active = true;
+		neckBody.space = FlxNapeSpace.space;
+		var neckLimiter = new AngleJoint(neck.body, torso.body, -HEAD_FREEDOM, HEAD_FREEDOM);
+		neckLimiter.active = true;
+		neckLimiter.space = FlxNapeSpace.space;
+
+		// attach head to neck
+		headNeck = new PivotJoint(head.body, neck.body, getAnchor(head, jointData.player.head), getAnchor(neck, jointData.player.neck.head));
+		headNeck.active = true;
+		headNeck.space = FlxNapeSpace.space;
+		var headLimiter = new AngleJoint(head.body, neck.body, -HEAD_FREEDOM, HEAD_FREEDOM);
+		headLimiter.active = true;
+		headLimiter.space = FlxNapeSpace.space;
+
+		// attach chest to torso
+		chestJoint = new WeldJoint(chest.body, torso.body, getAnchor(chest, jointData.player.chest), getAnchor(torso, jointData.player.torso.chest));
+		chestJoint.active = true;
+		chestJoint.space = FlxNapeSpace.space;
+
+		// attach cod to torso
+		codJoint = new WeldJoint(cod.body, torso.body, getAnchor(cod, jointData.player.codpiece), getAnchor(torso, jointData.player.torso.codpiece));
+		codJoint.active = true;
+		codJoint.space = FlxNapeSpace.space;
+
+		// Build left arm
 		leftWrist = new WeldJoint(leftHand.body, leftArmLower.body, getAnchor(leftHand, jointData.player.leftArm.hand), getAnchor(leftArmLower, jointData.player.leftArm.lower.wrist));
 		leftWrist.active = true;
 		leftWrist.space = FlxNapeSpace.space;
@@ -152,7 +203,9 @@ class Spaceman extends FlxGroup {
 		leftShoulder = new PivotJoint(torso.body, leftArmUpper.body, torsoLeftShoulderAnchor.copy(), getAnchor(leftArmUpper, jointData.player.leftArm.upper.shoulder));
 		leftShoulder.active = true;
 		leftShoulder.space = FlxNapeSpace.space;
+		// end left arm
 
+		// Build right arm
 		rightWrist = new WeldJoint(rightHand.body, rightArmLower.body, getAnchor(rightHand, jointData.player.rightArm.hand), getAnchor(rightArmLower, jointData.player.rightArm.lower.wrist));
 		rightWrist.active = true;
 		rightWrist.space = FlxNapeSpace.space;
@@ -165,7 +218,9 @@ class Spaceman extends FlxGroup {
 		rightShoulder = new PivotJoint(torso.body, rightArmUpper.body, torsoRightShoulderAnchor.copy(), getAnchor(rightArmUpper, jointData.player.rightArm.upper.shoulder));
 		rightShoulder.active = true;
 		rightShoulder.space = FlxNapeSpace.space;
+		// end right arm
 
+		// Build left leg
 		leftAnkle = new WeldJoint(leftFoot.body, leftLegLower.body, getAnchor(leftFoot, jointData.player.leftLeg.foot), getAnchor(leftLegLower, jointData.player.leftLeg.lower.ankle));
 		leftAnkle.active = true;
 		leftAnkle.space = FlxNapeSpace.space;
@@ -174,10 +229,20 @@ class Spaceman extends FlxGroup {
 		leftKnee.active = true;
 		leftKnee.space = FlxNapeSpace.space;
 
+		var leftKneeLimiter = new AngleJoint(leftLegUpper.body, leftLegLower.body, -KNEE_FREEDOM, KNEE_FREEDOM);
+		leftKneeLimiter.active = true;
+		leftKneeLimiter.space = FlxNapeSpace.space;
+
 		leftHip = new PivotJoint(torso.body, leftLegUpper.body, getAnchor(torso, jointData.player.torso.leftHip), getAnchor(leftLegUpper, jointData.player.leftLeg.upper.hip));
 		leftHip.active = true;
 		leftHip.space = FlxNapeSpace.space;
 
+		var leftHipLimiter = new AngleJoint(torso.body, leftLegUpper.body, 0, HIP_FREEDOM);
+		leftHipLimiter.active = true;
+		leftHipLimiter.space = FlxNapeSpace.space;
+		// end left leg
+
+		// Build right leg
 		rightAnkle = new WeldJoint(rightFoot.body, rightLegLower.body, getAnchor(rightFoot, jointData.player.rightLeg.foot), getAnchor(rightLegLower, jointData.player.rightLeg.lower.ankle));
 		rightAnkle.active = true;
 		rightAnkle.space = FlxNapeSpace.space;
@@ -186,9 +251,18 @@ class Spaceman extends FlxGroup {
 		rightKnee.active = true;
 		rightKnee.space = FlxNapeSpace.space;
 
+		var rightKneeLimiter = new AngleJoint(rightLegUpper.body, rightLegLower.body, -KNEE_FREEDOM, KNEE_FREEDOM);
+		rightKneeLimiter.active = true;
+		rightKneeLimiter.space = FlxNapeSpace.space;
+
 		rightHip = new PivotJoint(torso.body, rightLegUpper.body, getAnchor(torso, jointData.player.torso.rightHip), getAnchor(rightLegUpper, jointData.player.rightLeg.upper.hip));
 		rightHip.active = true;
 		rightHip.space = FlxNapeSpace.space;
+
+		var rightHipLimiter = new AngleJoint(torso.body, rightLegUpper.body, -HIP_FREEDOM, 0);
+		rightHipLimiter.active = true;
+		rightHipLimiter.space = FlxNapeSpace.space;
+		// end right leg
 
 		initListeners();
 	}
