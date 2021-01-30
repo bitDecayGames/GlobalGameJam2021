@@ -1,20 +1,21 @@
 package levels;
 
-import objects.WallSegment;
-import flixel.group.FlxSpriteGroup;
-import flixel.tile.FlxTilemap;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
+import flixel.addons.nape.FlxNapeTilemap;
 
 class Level {
 
-    public var testLayer:FlxTilemap;
-    public var walls:FlxSpriteGroup;
+    public var wallLayer:FlxNapeTilemap;
 
 	public function new(level:String) {
         var loader = new FlxOgmo3Loader(AssetPaths.levels__ogmo, level);
-        testLayer = loader.loadTilemap(AssetPaths.test__png, "walls");
+        var ogmoWallLayer = loader.loadTilemap(AssetPaths.test__png, "walls");
 
-        walls = new FlxSpriteGroup();
+        wallLayer = new FlxNapeTilemap();
+        wallLayer.loadMapFromArray(ogmoWallLayer.getData(), ogmoWallLayer.heightInTiles, ogmoWallLayer.widthInTiles, AssetPaths.test__png, 32, 32);
+        wallLayer.setupTileIndices([1, 2, 3]);
+
+
 		// loader.loadEntities((entityData) -> {
         //     /*
         //      * entityData.name
