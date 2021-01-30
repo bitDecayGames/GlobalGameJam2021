@@ -8,35 +8,28 @@ import flixel.input.actions.FlxActionManager;
 class BasicControls {
 	static var actions:FlxActionManager;
 
-	public var thruster:FlxActionAnalog;
-	public var steer:FlxActionAnalog;
-	public var grappleAdjust:FlxActionAnalog;
-	public var toggleGrapple:FlxActionDigital;
+	public var leftHand:FlxActionAnalog;
+	public var rightHand:FlxActionAnalog;
 
 	public var pause:FlxActionDigital;
 
 	public function new() {
-		thruster = new FlxActionAnalog("thruster");
-		steer = new FlxActionAnalog("steer");
-		grappleAdjust = new FlxActionAnalog("grappleAdjust");
-		toggleGrapple = new FlxActionDigital("toggleGrapple");
-		pause = new FlxActionDigital("pause");
+		leftHand = new FlxActionAnalog("leftHand");
+		rightHand = new FlxActionAnalog("rightHand");
+
+		// pause = new FlxActionDigital("pause");
 
 		if (actions == null) {
 			actions = FlxG.inputs.add(new FlxActionManager());
 		}
-		actions.addActions([thruster, steer, grappleAdjust, toggleGrapple]);
-
-		toggleGrapple.addKey(E, JUST_PRESSED);
+		actions.addActions([leftHand, rightHand]);
 
 		updateGamepadInput();
 	}
 
 	function updateGamepadInput() {
-		thruster.addGamepad(RIGHT_TRIGGER, MOVED);
-		steer.addGamepad(LEFT_ANALOG_STICK, MOVED);
-		grappleAdjust.addGamepad(RIGHT_ANALOG_STICK, MOVED);
-		toggleGrapple.addGamepad(B, JUST_PRESSED);
-		pause.addGamepad(LEFT_SHOULDER, JUST_PRESSED);
+		leftHand.addGamepad(LEFT_ANALOG_STICK, MOVED);
+		rightHand.addGamepad(RIGHT_ANALOG_STICK, MOVED);
+		// pause.addGamepad(LEFT_SHOULDER, JUST_PRESSED);
 	}
 }
