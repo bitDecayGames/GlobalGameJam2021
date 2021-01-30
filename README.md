@@ -1,6 +1,11 @@
 # Template Project for HaxeFlixel games
 
-### Template features:
+### Run the game in a browser (preferred dev environment)
+
+- `lime test html5`
+
+### Template features
+
 - Preconfigured libraries
   - FMOD Studio project with menu sound effects and a random song I wrote
   - Ready to use Bitlytics tie-ins
@@ -14,6 +19,7 @@
   - Production builds on releases
 
 ### Configuration
+
 - Set the proper Github secrets:
   - `BUTLER_API_KEY`: The Butler API key from itch.io
   - `ANALYTICS_TOKEN`: The InfluxDB access token to the bucket
@@ -27,20 +33,20 @@
 
 #### **haxelib.deps**
 
-* `haxelib.deps` - Contains all dependencies needed by the project other than haxe itself
-  * It supports two dep styles
-    * standard haxelib dependencies
-      * Formatted as: `<libName> <libVersion>`
-    * git dependencies
-      * Formatted as: `<libName> git <gitRepoLocation> <OPTIONAL: gitBranchOrTag>`
-* `init.sh` - Script that reads `haxelib.deps` file and configures `haxelib`
-  * This script will need to be run any time the dependencies change
-  * This script is run by the github actions as part of the build so local and github builds are equivalent
-  
+- `haxelib.deps` - Contains all dependencies needed by the project other than haxe itself
+  - It supports two dep styles
+    - standard haxelib dependencies
+      - Formatted as: `<libName> <libVersion>`
+    - git dependencies
+      - Formatted as: `<libName> git <gitRepoLocation> <OPTIONAL: gitBranchOrTag>`
+- `init.sh` - Script that reads `haxelib.deps` file and configures `haxelib`
+  - This script will need to be run any time the dependencies change
+  - This script is run by the github actions as part of the build so local and github builds are equivalent
+
 ### Maintenance
 
 #### **Formatting**
 
-* This projects uses the [haxe-formatter](https://github.com/HaxeCheckstyle/haxe-formatter) package for formatting using default settings
-  * Install `formatter` by running: `haxelib install formatter`
-  * Apply formatting by running: `haxelib run formatter -s /source` from the root of the project
+- This projects uses the [haxe-formatter](https://github.com/HaxeCheckstyle/haxe-formatter) package for formatting using default settings
+  - Install `formatter` by running: `haxelib install formatter`
+  - Apply formatting by running: `haxelib run formatter -s /source` from the root of the project
