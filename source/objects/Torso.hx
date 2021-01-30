@@ -12,13 +12,13 @@ class Torso extends SelfAssigningFlxNapeSprite {
 	public function new(x:Int, y:Int) {
 		super();
 		setPosition(x, y);
-		makeGraphic(30, 60, FlxColor.YELLOW);
+		loadGraphic(AssetPaths.torso__png);
+		// makeGraphic(30, 60, FlxColor.YELLOW);
 
 		var body = new Body(BodyType.DYNAMIC);
 		body.isBullet = true;
 
-		var poly = new Polygon([Vec2.get(-15, -30), Vec2.get(15, -30), Vec2.get(15, 30), Vec2.get(-15, 30)]);
-		trace(poly.localVerts);
+		var poly = new Polygon([Vec2.get(-width/2, -height/2), Vec2.get(width/2, -height/2), Vec2.get(width/2, height/2), Vec2.get(-width/2, height/2)]);
 		body.shapes.add(poly);
 
 		var shipFilter = new InteractionFilter(CGroups.BODY, ~(CGroups.BODY));
