@@ -19,5 +19,10 @@ class StartMusicAction extends Action {
 	override public function start() {
 		super.start();
 		FmodManager.PlaySong(song);
+		stop();
+	}
+
+	override function toString():String {
+		return super.toString() + '($song)';
 	}
 }

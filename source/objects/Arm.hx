@@ -21,7 +21,6 @@ class Arm extends SelfAssigningFlxNapeSprite {
 		trace(poly.localVerts);
 		body.shapes.add(poly);
 
-
 		var shipFilter = new InteractionFilter(CGroups.BODY, ~(CGroups.BODY));
 		body.setShapeFilters(shipFilter);
 

@@ -18,14 +18,12 @@ class Hand extends SelfAssigningFlxNapeSprite {
 		var body = new Body(BodyType.DYNAMIC);
 		body.isBullet = true;
 
-
 		var poly = new Circle(8);
 
 		poly.cbTypes.add(CbTypes.CB_HAND);
 		body.shapes.add(poly);
 
 		body.setShapeFilters(new InteractionFilter(CGroups.BODY, ~(CGroups.BODY)));
-
 		addPremadeBody(body);
 	}
 }

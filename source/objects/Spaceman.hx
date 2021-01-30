@@ -18,9 +18,7 @@ import flixel.FlxG;
 import flixel.addons.nape.FlxNapeSpace;
 import flixel.effects.particles.FlxEmitter;
 import flixel.group.FlxGroup;
-
 import input.BasicControls;
-
 import nape.geom.Vec2;
 
 class Spaceman extends FlxGroup {
@@ -31,7 +29,6 @@ class Spaceman extends FlxGroup {
 	public var rightShoulder:PivotJoint;
 	public var leftShoulderAnchor:Vec2;
 	public var rightShoulderAnchor:Vec2;
-
 
 	public var leftArmUpper:Arm;
 	public var leftArmLower:Arm;
@@ -62,14 +59,14 @@ class Spaceman extends FlxGroup {
 		torso.shader = outliner;
 		add(torso);
 
-		leftArmUpper = new Arm(x-20, y);
+		leftArmUpper = new Arm(x - 20, y);
 		leftArmUpper.shader = outliner;
 		add(leftArmUpper);
 
-		leftArmLower = new Arm(x-40, y);
+		leftArmLower = new Arm(x - 40, y);
 		add(leftArmLower);
 
-		leftHand = new Hand(x-60, y);
+		leftHand = new Hand(x - 60, y);
 		add(leftHand);
 
 		handGrabbables.set(leftHand.body, new Array<Body>());
@@ -87,13 +84,13 @@ class Spaceman extends FlxGroup {
 		leftShoulder.active = true;
 		leftShoulder.space = FlxNapeSpace.space;
 
-		rightArmUpper = new Arm(x+20, y);
+		rightArmUpper = new Arm(x + 20, y);
 		add(rightArmUpper);
 
-		rightArmLower = new Arm(x+40, y);
+		rightArmLower = new Arm(x + 40, y);
 		add(rightArmLower);
 
-		rightHand = new Hand(x+60, y);
+		rightHand = new Hand(x + 60, y);
 		add(rightHand);
 
 		handGrabbables.set(rightHand.body, new Array<Body>());
@@ -117,8 +114,8 @@ class Spaceman extends FlxGroup {
 	private function initListeners() {
 		FlxNapeSpace.space.listeners.add(new InteractionListener(CbEvent.BEGIN, InteractionType.COLLISION, CbTypes.CB_HAND, CbTypes.CB_GRABBABLE,
 			handToGrabbable));
-			FlxNapeSpace.space.listeners.add(new InteractionListener(CbEvent.END, InteractionType.COLLISION, CbTypes.CB_HAND, CbTypes.CB_GRABBABLE,
-				handNotGrabbable));
+		FlxNapeSpace.space.listeners.add(new InteractionListener(CbEvent.END, InteractionType.COLLISION, CbTypes.CB_HAND, CbTypes.CB_GRABBABLE,
+			handNotGrabbable));
 	}
 
 	override public function update(elapsed:Float) {

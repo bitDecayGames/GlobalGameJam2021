@@ -40,11 +40,8 @@ class LoadFmodState extends FlxState {
 			#if logan
 			FlxG.switchState(new PlayState());
 			#elseif mike
-
 			#elseif tanner
-
 			#elseif jake
-
 			#else
 			if (Macros.isDefined("SKIP_SPLASH")) {
 				FlxG.switchState(new MainMenuState());
