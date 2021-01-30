@@ -1,5 +1,13 @@
 package objects;
 
+import nape.phys.Body;
+import haxe.DynamicAccess;
+import flixel.FlxObject;
+import nape.callbacks.InteractionCallback;
+import nape.callbacks.InteractionType;
+import nape.callbacks.CbEvent;
+import nape.callbacks.InteractionListener;
+import flixel.util.FlxColor;
 import nape.constraint.WeldJoint;
 import nape.constraint.PivotJoint;
 import nape.constraint.DistanceJoint;
@@ -36,6 +44,13 @@ class Spaceman extends FlxGroup {
 	public var rightElbow:PivotJoint;
 	public var rightWrist:WeldJoint;
 
+	// map of each hand to the things it COULD grab
+	var handGrabbables = new Map<Body, Array<Body>>();
+
+	var leftHandGrabJoint:PivotJoint = null;
+	var rightHandGrabJoint:PivotJoint = null;
+
+
 	public function new(x:Int, y:Int) {
 		super();
 
@@ -52,6 +67,8 @@ class Spaceman extends FlxGroup {
 
 		leftHand = new Hand(x-60, y);
 		add(leftHand);
+
+		handGrabbables.set(leftHand.body, new Array<Body>());
 
 		leftWrist = new WeldJoint(leftHand.body, leftArmLower.body, Vec2.get(), Vec2.get(-10, 0));
 		leftWrist.active = true;
@@ -75,6 +92,8 @@ class Spaceman extends FlxGroup {
 		rightHand = new Hand(x+60, y);
 		add(rightHand);
 
+		handGrabbables.set(rightHand.body, new Array<Body>());
+
 		rightWrist = new WeldJoint(rightHand.body, rightArmLower.body, Vec2.get(), Vec2.get(10, 0));
 		rightWrist.active = true;
 		rightWrist.space = FlxNapeSpace.space;
@@ -87,6 +106,15 @@ class Spaceman extends FlxGroup {
 		rightShoulder = new PivotJoint(torso.body, rightArmUpper.body, rightShoulderAnchor, Vec2.get(-10, 0));
 		rightShoulder.active = true;
 		rightShoulder.space = FlxNapeSpace.space;
+
+		initListeners();
+	}
+
+	private function initListeners() {
+		FlxNapeSpace.space.listeners.add(new InteractionListener(CbEvent.BEGIN, InteractionType.COLLISION, CbTypes.CB_HAND, CbTypes.CB_GRABBABLE,
+			handToGrabbable));
+			FlxNapeSpace.space.listeners.add(new InteractionListener(CbEvent.END, InteractionType.COLLISION, CbTypes.CB_HAND, CbTypes.CB_GRABBABLE,
+				handNotGrabbable));
 	}
 
 	override public function update(elapsed:Float) {
@@ -112,5 +140,57 @@ class Spaceman extends FlxGroup {
 			rightHand.body.applyImpulse(handImp);
 			torso.body.applyImpulse(handImp.mul(-1), torso.body.localPointToWorld(rightShoulderAnchor));
 		}
+
+		if (controls.leftGrab.check()) {
+			leftHand.color = FlxColor.GRAY;
+			attemptGrab(leftHand.body, true);
+		} else {
+			leftHand.color = FlxColor.WHITE;
+			if (leftHandGrabJoint != null) {
+				leftHandGrabJoint.active = false;
+			}
+		}
+
+		if (controls.rightGrab.check()) {
+			rightHand.color = FlxColor.GRAY;
+			attemptGrab(rightHand.body, false);
+		} else {
+			rightHand.color = FlxColor.WHITE;
+			if (rightHandGrabJoint != null) {
+				rightHandGrabJoint.active = false;
+			}
+		}
+	}
+
+	private function attemptGrab(hand:Body, left:Bool) {
+		var joint = left ? leftHandGrabJoint : rightHandGrabJoint;
+		if (handGrabbables.get(hand).length > 0) {
+			var grabbable = handGrabbables.get(hand)[0];
+			if (joint == null) {
+				joint = new PivotJoint(hand, grabbable, Vec2.get(), grabbable.worldPointToLocal(hand.localPointToWorld(Vec2.get())));
+				joint.active = true;
+				joint.space = FlxNapeSpace.space;
+				if (left) {
+					leftHandGrabJoint = joint;
+				} else {
+					rightHandGrabJoint = joint;
+				}
+			}
+			if (!joint.active) {
+				joint.body1 = hand;
+				joint.body2 = grabbable;
+				joint.anchor1 = Vec2.get();
+				joint.anchor2 = grabbable.worldPointToLocal(hand.position);
+				joint.active = true;
+			}
+		}
+	}
+
+	private function handToGrabbable(callback:InteractionCallback) {
+		handGrabbables.get(callback.int1.castShape.body).push(callback.int2.castShape.body);
+	}
+
+	private function handNotGrabbable(callback:InteractionCallback) {
+		handGrabbables.get(callback.int1.castShape.body).remove(callback.int2.castShape.body);
 	}
 }

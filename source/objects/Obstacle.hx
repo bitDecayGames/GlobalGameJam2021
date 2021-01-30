@@ -1,5 +1,6 @@
 package objects;
 
+import constants.CbTypes;
 import flixel.util.FlxColor;
 import constants.CGroups;
 import nape.dynamics.InteractionFilter;
@@ -18,13 +19,10 @@ class Obstacle extends SelfAssigningFlxNapeSprite {
 		body.isBullet = true;
 
 		var poly = new Polygon(Polygon.box(50, 50));
-		trace(poly.localVerts);
 		body.shapes.add(poly);
 
-
-		var shipFilter = new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE));
-		body.setShapeFilters(shipFilter);
-
 		addPremadeBody(body);
+		body.setShapeFilters(new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE)));
+		poly.cbTypes.add(CbTypes.CB_GRABBABLE);
 	}
 }

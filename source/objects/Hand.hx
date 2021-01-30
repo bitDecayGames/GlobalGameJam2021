@@ -1,5 +1,7 @@
 package objects;
 
+import nape.shape.Circle;
+import constants.CbTypes;
 import flixel.util.FlxColor;
 import constants.CGroups;
 import nape.dynamics.InteractionFilter;
@@ -16,13 +18,13 @@ class Hand extends SelfAssigningFlxNapeSprite {
 		var body = new Body(BodyType.DYNAMIC);
 		body.isBullet = true;
 
-		var poly = new Polygon(Polygon.box(15, 15));
-		trace(poly.localVerts);
+
+		var poly = new Circle(8);
+
+		poly.cbTypes.add(CbTypes.CB_HAND);
 		body.shapes.add(poly);
 
-
-		var shipFilter = new InteractionFilter(CGroups.BODY, ~(CGroups.BODY));
-		body.setShapeFilters(shipFilter);
+		body.setShapeFilters(new InteractionFilter(CGroups.BODY, ~(CGroups.BODY)));
 
 		addPremadeBody(body);
 	}
