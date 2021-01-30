@@ -13,4 +13,6 @@ class FmodSFX {
     public static inline var MenuHover:String = "event:/SFX/Menu/MenuHover";
     public static inline var MenuSelect:String = "event:/SFX/Menu/MenuSelect";
     public static inline var Grab:String = "event:/SFX/Player/Grab";
+    public static inline var Hit:String = "event:/SFX/Player/Hit";
+    public static inline var Release:String = "event:/SFX/Player/Release";
 }
