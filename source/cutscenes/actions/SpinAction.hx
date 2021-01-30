@@ -34,4 +34,8 @@ class SpinAction extends WaitAction {
 		curMillis += Std.int(elapsed * 1000.0);
 		actor.angle = (curMillis / milliseconds) * totalAngleRevolutions;
 	}
+
+	override function toString():String {
+		return super.toString() + '($rpm)';
+	}
 }

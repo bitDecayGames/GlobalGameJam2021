@@ -17,17 +17,26 @@ class PlayAnimationAction extends Action {
 
 	override public function start() {
 		super.start();
-		if (waitUntilAnimationIsFinished) {
-			actor.animation.finishCallback = onAnimationFinish;
+		var hasAnimation = actor.animation.getByName(animationName) != null;
+		if (hasAnimation) {
+			if (waitUntilAnimationIsFinished) {
+				actor.animation.finishCallback = onAnimationFinish;
+			} else {
+				stop();
+			}
+			actor.animation.play(animationName);
 		} else {
 			stop();
 		}
-		actor.animation.play(animationName);
 	}
 
 	private function onAnimationFinish(animationName:String):Void {
 		if (waitUntilAnimationIsFinished && animationName == this.animationName) {
 			stop();
 		}
+	}
+
+	override function toString():String {
+		return super.toString() + '($animationName)';
 	}
 }

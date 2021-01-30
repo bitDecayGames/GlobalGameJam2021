@@ -2,6 +2,8 @@ package cutscenes;
 
 import flixel.group.FlxGroup;
 
+using Type;
+
 /**
  * A single unit of movement in a cutscene.  Any child actions will be started and stopped but not waited for.  Use ParallelAction to wait for child actions to finish.
  */
@@ -15,6 +17,7 @@ class Action extends FlxTypedGroup<Action> implements ICutsceneControl {
 
 	public function start() {
 		if (!isStarted) {
+			trace("Start " + this);
 			isStarted = true;
 			isPaused = false;
 			if (onStart != null) {
@@ -33,6 +36,7 @@ class Action extends FlxTypedGroup<Action> implements ICutsceneControl {
 			for (member in members) {
 				member.stop();
 			}
+			trace("Stop " + this);
 			if (onDone != null) {
 				onDone();
 			}
@@ -78,5 +82,9 @@ class Action extends FlxTypedGroup<Action> implements ICutsceneControl {
 		if (!isPaused && !isDone && isStarted) {
 			step(elapsed);
 		}
+	}
+
+	override function toString():String {
+		return this.getClass().getClassName();
 	}
 }

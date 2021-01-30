@@ -7,6 +7,12 @@ class CameraFollowAction extends WaitAction {
 	public var actor:FlxSprite;
 	public var offset:FlxPoint;
 
+	/**
+	 * Tell the camera to follow a given actor
+	 * @param actor the actor for the camera to follow
+	 * @param milliseconds number of milliseconds to follow, or -1 if you want it to continue following
+	 * @param offset sets the camera targetOffset
+	 */
 	public function new(actor:FlxSprite, milliseconds:Int, ?offset:FlxPoint) {
 		super(milliseconds);
 		this.actor = actor;
@@ -24,7 +30,13 @@ class CameraFollowAction extends WaitAction {
 
 	override function stop() {
 		super.stop();
-		camera.target = null;
-		camera.targetOffset.set();
+		if (milliseconds >= 0) {
+			camera.target = null;
+			camera.targetOffset.set();
+		}
+	}
+
+	override function toString():String {
+		return super.toString() + '($actor)';
 	}
 }

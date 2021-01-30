@@ -21,7 +21,6 @@ class Obstacle extends SelfAssigningFlxNapeSprite {
 		trace(poly.localVerts);
 		body.shapes.add(poly);
 
-
 		var shipFilter = new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE));
 		body.setShapeFilters(shipFilter);
 

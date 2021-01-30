@@ -4,7 +4,6 @@ import objects.Obstacle;
 import flixel.addons.nape.FlxNapeSpace;
 import flixel.FlxG;
 import flixel.FlxState;
-
 import objects.Spaceman;
 
 using extensions.FlxStateExt;

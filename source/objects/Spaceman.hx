@@ -9,9 +9,7 @@ import flixel.FlxG;
 import flixel.addons.nape.FlxNapeSpace;
 import flixel.effects.particles.FlxEmitter;
 import flixel.group.FlxGroup;
-
 import input.BasicControls;
-
 import nape.geom.Vec2;
 
 class Spaceman extends FlxGroup {
@@ -22,7 +20,6 @@ class Spaceman extends FlxGroup {
 	public var rightShoulder:PivotJoint;
 	public var leftShoulderAnchor:Vec2;
 	public var rightShoulderAnchor:Vec2;
-
 
 	public var leftArmUpper:Arm;
 	public var leftArmLower:Arm;
@@ -44,13 +41,13 @@ class Spaceman extends FlxGroup {
 		torso = new Torso(x, y);
 		add(torso);
 
-		leftArmUpper = new Arm(x-20, y);
+		leftArmUpper = new Arm(x - 20, y);
 		add(leftArmUpper);
 
-		leftArmLower = new Arm(x-40, y);
+		leftArmLower = new Arm(x - 40, y);
 		add(leftArmLower);
 
-		leftHand = new Hand(x-60, y);
+		leftHand = new Hand(x - 60, y);
 		add(leftHand);
 
 		leftWrist = new WeldJoint(leftHand.body, leftArmLower.body, Vec2.get(), Vec2.get(-10, 0));
@@ -66,13 +63,13 @@ class Spaceman extends FlxGroup {
 		leftShoulder.active = true;
 		leftShoulder.space = FlxNapeSpace.space;
 
-		rightArmUpper = new Arm(x+20, y);
+		rightArmUpper = new Arm(x + 20, y);
 		add(rightArmUpper);
 
-		rightArmLower = new Arm(x+40, y);
+		rightArmLower = new Arm(x + 40, y);
 		add(rightArmLower);
 
-		rightHand = new Hand(x+60, y);
+		rightHand = new Hand(x + 60, y);
 		add(rightHand);
 
 		rightWrist = new WeldJoint(rightHand.body, rightArmLower.body, Vec2.get(), Vec2.get(10, 0));

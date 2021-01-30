@@ -28,7 +28,6 @@ class MoveAction extends Action {
 		tween.start();
 		tween.onComplete = (_) -> {
 			if (tween != null) {
-				tween.destroy();
 				tween = null;
 			}
 			stop();
@@ -39,8 +38,11 @@ class MoveAction extends Action {
 		super.stop();
 		if (tween != null) {
 			tween.cancel();
-			tween.destroy();
 			tween = null;
 		}
+	}
+
+	override function toString():String {
+		return super.toString() + '([${startPos.x}, ${startPos.y}], [${endPos.x}, ${endPos.y}])';
 	}
 }

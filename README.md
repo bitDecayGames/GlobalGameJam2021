@@ -1,10 +1,10 @@
 # Template Project for HaxeFlixel games
 
-### Run the game in a browser (preferred dev environment)
+## Run the game in a browser (preferred dev environment)
 
-- `lime test html5`
+- `lime test html5 -debug`
 
-### Template features
+## Template features
 
 - Preconfigured libraries
   - FMOD Studio project with menu sound effects and a random song I wrote
@@ -18,7 +18,7 @@
   - Dev builds on push to master
   - Production builds on releases
 
-### Configuration
+## Configuration
 
 - Set the proper Github secrets:
   - `BUTLER_API_KEY`: The Butler API key from itch.io
@@ -29,9 +29,9 @@
 - Fill in the `itchGameName` in both workflow files
   - This should be the URL name from itch.io
 
-### Dependencies
+## Dependencies
 
-#### **haxelib.deps**
+### **haxelib.deps**
 
 - `haxelib.deps` - Contains all dependencies needed by the project other than haxe itself
   - It supports two dep styles
@@ -43,9 +43,9 @@
   - This script will need to be run any time the dependencies change
   - This script is run by the github actions as part of the build so local and github builds are equivalent
 
-### Maintenance
+## Maintenance
 
-#### **Formatting**
+## **Formatting**
 
 - This projects uses the [haxe-formatter](https://github.com/HaxeCheckstyle/haxe-formatter) package for formatting using default settings
   - Install `formatter` by running: `haxelib install formatter`
