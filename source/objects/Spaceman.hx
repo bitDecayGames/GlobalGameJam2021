@@ -316,7 +316,7 @@ class Spaceman extends FlxGroup {
 			attemptGrab(leftHand.body, true);
 		} else {
 			leftHand.color = FlxColor.WHITE;
-			if (leftHandGrabJoint != null) {
+			if (leftHandGrabJoint != null && leftHandGrabJoint.active) {
 				leftHandGrabJoint.active = false;
 				FmodManager.PlaySoundOneShot(FmodSFX.Release);
 			}
@@ -327,7 +327,7 @@ class Spaceman extends FlxGroup {
 			attemptGrab(rightHand.body, false);
 		} else {
 			rightHand.color = FlxColor.WHITE;
-			if (rightHandGrabJoint != null) {
+			if (rightHandGrabJoint != null && rightHandGrabJoint.active) {
 				rightHandGrabJoint.active = false;
 				FmodManager.PlaySoundOneShot(FmodSFX.Release);
 			}
