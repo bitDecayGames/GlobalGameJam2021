@@ -1,5 +1,6 @@
 package states;
 
+import checkpoint.CheckpointManager;
 import metrics.Trackers;
 import flixel.FlxCamera;
 import flixel.util.FlxStringUtil;
@@ -33,6 +34,10 @@ class PlayState extends FlxState {
 
 	override public function create() {
 		super.create();
+
+		CheckpointManager.setCheckpoint(0, 0);
+		CheckpointManager.checkpointNum = 0;
+		CheckpointManager.firstTime = false;
 
 		FmodManager.PlaySong(FmodSongs.Weightless);
 
