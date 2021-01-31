@@ -40,6 +40,7 @@ class LoadFmodState extends FlxState {
 			#if logan
 			FlxG.switchState(new PlayState(AssetPaths.level_1__json));
 			#elseif mike
+			FlxG.switchState(new TestCutscenesState());
 			#elseif tanner
 			#elseif jake
 			#else

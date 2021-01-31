@@ -4,6 +4,7 @@ import flixel.FlxBasic;
 import states.PlayState;
 import haxefmod.flixel.FmodFlxUtilities;
 import nape.dynamics.InteractionFilter;
+import haxe.Timer;
 import flixel.math.FlxAngle;
 import nape.constraint.AngleJoint;
 import flixel.FlxSprite;
@@ -12,8 +13,6 @@ import lime.utils.Assets;
 import config.Validator;
 import shader.Outline;
 import nape.phys.Body;
-import haxe.DynamicAccess;
-import flixel.FlxObject;
 import nape.callbacks.InteractionCallback;
 import nape.callbacks.InteractionType;
 import nape.callbacks.CbEvent;
@@ -34,6 +33,7 @@ import nape.geom.Vec2;
 class Spaceman extends FlxGroup {
 
 	public static inline var HIP_FREEDOM = 0.5;
+	public static inline var HIP_SQAUT_FREEDOM = 1;
 	public static inline var KNEE_FREEDOM = 2.5;
 	public static inline var NECK_FREEDOM = 0.2;
 	public static inline var HEAD_FREEDOM = 0.1;
@@ -87,9 +87,24 @@ class Spaceman extends FlxGroup {
 	var leftHandGrabJoint:PivotJoint = null;
 	var rightHandGrabJoint:PivotJoint = null;
 
+	var leftHipLimiter:AngleJoint = null;
+	var rightHipLimiter:AngleJoint = null;
+
+	// Things for jumping
+	var ankleDist:DistanceJoint = null;
+	var kneeDist:DistanceJoint = null;
+	static inline var JUMP_JOINT_DEFAULT_DIST = 100;
+	static inline var ANKLE_SQUAT_DIST = 0;
+	static inline var KNEE_SQUAT_DIST = 100;
+	static inline var KNEE_LAUNCH_DIST = 10;
+	static inline var SQUAT_STRENGTH = 100;
+	static inline var JUMP_STRENGTH = 3000;
+	static inline var JUMP_TIMER = 2000;
+
 	// Needed for impulses
 	var torsoLeftShoulderAnchor:Vec2 = null;
 	var torsoRightShoulderAnchor:Vec2 = null;
+	var extended:Bool = true;
 
 	var outliner = new Outline(FlxColor.PURPLE, 1, 1);
 
@@ -242,7 +257,7 @@ class Spaceman extends FlxGroup {
 		leftHip.active = true;
 		leftHip.space = FlxNapeSpace.space;
 
-		var leftHipLimiter = new AngleJoint(torso.body, leftLegUpper.body, 0, HIP_FREEDOM);
+		leftHipLimiter = new AngleJoint(torso.body, leftLegUpper.body, 0, HIP_FREEDOM);
 		leftHipLimiter.active = true;
 		leftHipLimiter.space = FlxNapeSpace.space;
 		// end left leg
@@ -264,10 +279,68 @@ class Spaceman extends FlxGroup {
 		rightHip.active = true;
 		rightHip.space = FlxNapeSpace.space;
 
-		var rightHipLimiter = new AngleJoint(torso.body, rightLegUpper.body, -HIP_FREEDOM, 0);
+		rightHipLimiter = new AngleJoint(torso.body, rightLegUpper.body, -HIP_FREEDOM, 0);
 		rightHipLimiter.active = true;
 		rightHipLimiter.space = FlxNapeSpace.space;
 		// end right leg
+
+		// Jump joints
+		ankleDist = new DistanceJoint(
+			leftFoot.body,
+			rightFoot.body,
+			Vec2.get(),
+			Vec2.get(),
+			0,
+			JUMP_JOINT_DEFAULT_DIST);
+		ankleDist.stiff = false;
+		ankleDist.maxForce = JUMP_STRENGTH;
+		ankleDist.active = true;
+		ankleDist.space = FlxNapeSpace.space;
+
+		kneeDist = new DistanceJoint(
+			leftLegUpper.body,
+			rightLegUpper.body,
+			getAnchor(leftLegUpper, jointData.player.leftLeg.upper.knee),
+			getAnchor(rightLegUpper, jointData.player.rightLeg.upper.knee),
+			0,
+			JUMP_JOINT_DEFAULT_DIST);
+		kneeDist.stiff = false;
+		kneeDist.maxForce = JUMP_STRENGTH;
+		kneeDist.active = true;
+		kneeDist.space = FlxNapeSpace.space;
+		// END jump joints
+
+		// QoL joints
+		// var armStabilizer = new DistanceJoint(
+		// 	leftArmUpper.body,
+		// 	rightArmUpper.body,
+		// 	getAnchor(leftArmUpper, jointData.player.leftArm.upper.elbow),
+		// 	getAnchor(rightArmUpper, jointData.player.rightArm.upper.elbow),
+		// 	45,
+		// 	45);
+		// armStabilizer.stiff = false;
+		// armStabilizer.maxForce = 10;
+		// armStabilizer.active = true;
+		// armStabilizer.space = FlxNapeSpace.space;
+
+		// var leftHandStabilizer = new DistanceJoint(
+		// 	torso.body,
+		// 	leftHand.body,
+		// 	getAnchor(torso, jointData.player.torso.leftShoulder),
+		// 	Vec2.get(),
+		// 	50,
+		// 	80);
+		// leftHandStabilizer.stiff = false;
+		// leftHandStabilizer.maxForce = 0.1;
+		// leftHandStabilizer.active = true;
+		// leftHandStabilizer.space = FlxNapeSpace.space;
+
+		// var leftShoulderLimiter = new AngleJoint(torso.body, leftArmUpper.body, 0, 3.14);
+		// leftShoulderLimiter.stiff = false;
+		// leftShoulderLimiter.maxForce = 100;
+		// leftShoulderLimiter.active = true;
+		// leftShoulderLimiter.space = FlxNapeSpace.space;
+
 
 		initListeners();
 	}
@@ -342,6 +415,37 @@ class Spaceman extends FlxGroup {
 				rightHandGrabJoint.active = false;
 				// rightHandGrabJoint.body2.setShapeFilters(new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE)));
 				FmodManager.PlaySoundOneShot(FmodSFX.Release);
+			}
+		}
+
+		if (controls.legs.check()) {
+			if (extended) {
+				leftHipLimiter.jointMax = HIP_SQAUT_FREEDOM;
+				rightHipLimiter.jointMin = -HIP_SQAUT_FREEDOM;
+				ankleDist.jointMin = ANKLE_SQUAT_DIST;
+				ankleDist.jointMax = ANKLE_SQUAT_DIST;
+				kneeDist.jointMin = KNEE_SQUAT_DIST;
+				kneeDist.jointMax = KNEE_SQUAT_DIST;
+				kneeDist.maxForce = SQUAT_STRENGTH;
+				extended = false;
+			} else {
+				extended = true;
+				ankleDist.jointMin = ANKLE_SQUAT_DIST;
+				ankleDist.jointMax = ANKLE_SQUAT_DIST;
+				kneeDist.jointMin = KNEE_LAUNCH_DIST;
+				kneeDist.jointMax = KNEE_LAUNCH_DIST;
+				kneeDist.maxForce = JUMP_STRENGTH;
+				Timer.delay(() -> {
+					if (extended) {
+						// after jumping, reset our legs to allow bending
+						ankleDist.jointMin = 0;
+						ankleDist.jointMax = JUMP_JOINT_DEFAULT_DIST;
+						kneeDist.jointMin = 0;
+						kneeDist.jointMax = JUMP_JOINT_DEFAULT_DIST;
+						leftHipLimiter.jointMax = HIP_FREEDOM;
+						rightHipLimiter.jointMin = -HIP_FREEDOM;
+					}
+				}, JUMP_TIMER);
 			}
 		}
 	}

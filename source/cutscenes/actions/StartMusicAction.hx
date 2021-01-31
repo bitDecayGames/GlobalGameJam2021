@@ -18,7 +18,9 @@ class StartMusicAction extends Action {
 
 	override public function start() {
 		super.start();
+		#if !mute
 		FmodManager.PlaySong(song);
+		#end
 		stop();
 	}
 
