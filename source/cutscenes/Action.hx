@@ -15,6 +15,11 @@ class Action extends FlxTypedGroup<Action> implements ICutsceneControl {
 	@:isVar public var onStart(get, set):() -> Void;
 	@:isVar public var onDone(get, set):() -> Void;
 
+	override function add(o:Action):Action {
+		super.add(o);
+		return this;
+	}
+
 	public function get_isStarted():Bool {
 		return isStarted;
 	}

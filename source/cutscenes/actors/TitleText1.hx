@@ -2,9 +2,9 @@ package cutscenes.actors;
 
 import flixel.FlxSprite;
 
-class CloseUpSpaceShip extends FlxSprite {
+class TitleText1 extends FlxSprite {
 	public function new() {
 		super();
-		loadGraphic(AssetPaths.FLStudioLogo__png);
+		loadGraphic(AssetPaths.fopundInSpace__png);
 	}
 }
