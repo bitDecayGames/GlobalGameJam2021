@@ -14,6 +14,8 @@ class BasicControls {
 	public var leftGrab:FlxActionDigital;
 	public var rightGrab:FlxActionDigital;
 
+	public var legs:FlxActionDigital;
+
 	public function new() {
 		leftHand = new FlxActionAnalog("leftHand");
 		rightHand = new FlxActionAnalog("rightHand");
@@ -21,10 +23,12 @@ class BasicControls {
 		leftGrab = new FlxActionDigital("leftGrab");
 		rightGrab = new FlxActionDigital("rightGrab");
 
+		legs = new FlxActionDigital("legs");
+
 		if (actions == null) {
 			actions = FlxG.inputs.add(new FlxActionManager());
 		}
-		actions.addActions([leftHand, rightHand, leftGrab, rightGrab]);
+		actions.addActions([leftHand, rightHand, leftGrab, rightGrab, legs]);
 
 		updateGamepadInput();
 	}
@@ -35,5 +39,7 @@ class BasicControls {
 
 		leftGrab.addGamepad(LEFT_SHOULDER, PRESSED);
 		rightGrab.addGamepad(RIGHT_SHOULDER, PRESSED);
+
+		legs.addGamepad(A, JUST_PRESSED);
 	}
 }
