@@ -28,10 +28,10 @@ class SimpleMainMenuState extends FlxUIState {
 		bgColor = FlxColor.TRANSPARENT;
 		FlxG.camera.pixelPerfectRender = true;
 
-		var bg = new FlxSprite(AssetPaths.nebulaBackground__png);
-		bg.scale.set(2, 2);
-		bg.scrollFactor.set(0, 0);
-		add(bg);
+		// var bg = new FlxSprite(AssetPaths.nebulaBackground__png);
+		// bg.scale.set(2, 2);
+		// bg.scrollFactor.set(0, 0);
+		// add(bg);
 
 		_txtTitle = new TitleText2(FlxG.width / 2, FlxG.height / 4);
 		add(_txtTitle);

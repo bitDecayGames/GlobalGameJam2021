@@ -21,10 +21,10 @@ class CameraFollowAction extends WaitAction {
 
 	override public function start() {
 		super.start();
-		camera.followLerp = 100.0;
-		camera.target = actor;
+		actor.camera.followLerp = 100.0;
+		actor.camera.target = actor;
 		if (offset != null) {
-			camera.targetOffset.set(offset.x, offset.y);
+			actor.camera.targetOffset.set(offset.x, offset.y);
 		}
 		// can modify the lerp here to make the camera ease into it a bit more
 	}
@@ -32,8 +32,8 @@ class CameraFollowAction extends WaitAction {
 	override function stop() {
 		super.stop();
 		if (milliseconds >= 0) {
-			camera.target = null;
-			camera.targetOffset.set();
+			actor.camera.target = null;
+			actor.camera.targetOffset.set();
 		}
 	}
 }

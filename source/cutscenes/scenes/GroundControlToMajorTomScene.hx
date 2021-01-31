@@ -48,20 +48,26 @@ class GroundControlToMajorTomScene extends Cutscene {
 		// var camera = FlxG.camera;
 		// var backgroundCam = new FlxCamera();
 		// backgroundCam.bgColor = FlxColor.TRANSPARENT;
+		// FlxCamera.defaultCameras = [camera];
 		// FlxG.cameras.add(backgroundCam);
-		// FlxCamera.defaultCameras = [backgroundCam];
+		// FlxCamera.defaultCameras = [camera, backgroundCam];
 		// var backdrop = new FlxSprite(0, 0, AssetPaths.nebulaBackground__png);
-		// backdrop.scale.set(2, 2);
 		// backdrop.scrollFactor.set(0, 0);
 		// backdrop.cameras = [backgroundCam];
 		// state.add(backdrop);
 
 		var majorTom = new OriginalMajorTom();
+		majorTom.cameras = [camera];
 		var teleBall = new OriginalTeleBall();
+		teleBall.cameras = [camera];
 		var levelBackground = new OriginalLevelPlatforms();
+		levelBackground.cameras = [camera];
 		var farAwaySpaceShip = new FarAwaySpaceShip();
+		farAwaySpaceShip.cameras = [camera];
 		var titleText1 = new TitleText1();
+		titleText1.cameras = [camera];
 		var titleText2 = new TitleText2();
+		titleText2.cameras = [camera];
 		state.add(levelBackground);
 		state.add(farAwaySpaceShip);
 		state.add(majorTom);
@@ -178,7 +184,9 @@ class GroundControlToMajorTomScene extends Cutscene {
 			var y = farAwaySpaceShip.y;
 			var secondsToLive = 3.0;
 			var velocity = new FlxPoint(400, 0);
-			state.add(new MovementParticle(x, rnd.float(-1, 1) * 100 + y, secondsToLive, velocity));
+			var particle = new MovementParticle(x, rnd.float(-1, 1) * 100 + y, secondsToLive, velocity);
+			particle.cameras = [camera];
+			state.add(particle);
 		}));
 		add(new WrapperAction((builder) -> {
 			var tomPos = majorTom.getPosition();
@@ -189,7 +197,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 
 			var moveOffscreen = new MoveAction(majorTom, tomPos, tomNewPos, 4000);
 			moveOffscreen.add(new MoveAction(farAwaySpaceShip, shipPos, shipNewPos, moveOffscreen.milliseconds));
-			moveOffscreen.add(new ZoomCameraAction(1, Std.int(moveOffscreen.milliseconds)));
+			moveOffscreen.add(new ZoomCameraAction(camera, 1, Std.int(moveOffscreen.milliseconds)));
 			return moveOffscreen;
 		}));
 		add(new TriggerAction(() -> {
@@ -222,7 +230,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 		}));
 		add(new WrapperAction((builder) -> {
 			var moveCameraDown = new MoveAction(majorTom, majorTom.getPosition(), majorTom.getPosition().add(0, 100), 2000);
-			moveCameraDown.add(new ZoomCameraAction(1, moveCameraDown.milliseconds));
+			moveCameraDown.add(new ZoomCameraAction(camera, 1, moveCameraDown.milliseconds));
 			return moveCameraDown;
 		}));
 	}
