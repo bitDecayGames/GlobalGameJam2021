@@ -45,11 +45,11 @@ class Spaceman extends FlxGroup {
 
 	var controls:BasicControls;
 
-	public var head:LimbPiece;
+	public var head:Head;
 	public var neck:LimbPiece;
 	public var chest:LimbPiece;
 	public var cod:LimbPiece;
-	public var torso:Torso;
+	public var torso:LimbPiece;
 
 	public var chestJoint:WeldJoint;
 	public var codJoint:WeldJoint;
@@ -131,26 +131,26 @@ class Spaceman extends FlxGroup {
 		controls = new BasicControls();
 
 		/** START LOADING BODY PARTS IN CORRECT RENDER ORDER **/
-		torso = new Torso(x, y);
+		torso = new LimbPiece(x, y, AssetPaths.torso__png, -15, -6);
 		add(torso);
 
 		rightFoot = new Foot(x, y, AssetPaths.foot_R__png);
 		add(rightFoot);
 
-		rightLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_R__png);
+		rightLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_R__png, -4);
 		add(rightLegLower);
 
-		rightLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_R__png);
+		rightLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_R__png, -4);
 		add(rightLegUpper);
 
 		leftFoot = new Foot(x, y, AssetPaths.foot_L__png);
 		add(leftFoot);
 
-		leftLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_L__png);
+		leftLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_L__png, -4);
 		add(leftLegLower);
 
 
-		leftLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_L__png);
+		leftLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_L__png, -4);
 		add(leftLegUpper);
 
 		// Load Neck here
@@ -162,29 +162,29 @@ class Spaceman extends FlxGroup {
 		add(chest);
 
 		// Load Head here
-		head = new LimbPiece(x, y, AssetPaths.head__png);
+		head = new Head(x, y, AssetPaths.head__png);
 		add(head);
 
 		// Cod piece here on top of legs
 		cod = new LimbPiece(x, y, AssetPaths.codpiece__png);
 		add(cod);
 
-		leftArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_L__png);
+		leftArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_L__png, -5);
 		add(leftArmUpper);
 
 		leftHand = new Hand(x, y, AssetPaths.handL__png);
 		add(leftHand);
 
-		leftArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_L__png);
+		leftArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_L__png, -4);
 		add(leftArmLower);
 
-		rightArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_R__png);
+		rightArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_R__png, -5);
 		add(rightArmUpper);
 
 		rightHand = new Hand(x, y, AssetPaths.handR__png);
 		add(rightHand);
 
-		rightArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_R__png);
+		rightArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_R__png, -4);
 		add(rightArmLower);
 		/** END LOADING BODY PARTS IN CORRECT RENDER ORDER **/
 
