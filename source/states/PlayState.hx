@@ -1,5 +1,10 @@
 package states;
 
+import metrics.Trackers;
+import flixel.FlxCamera;
+import flixel.util.FlxStringUtil;
+import flixel.text.FlxText;
+import misc.FlxTextFactory;
 import objects.Ball;
 import flixel.FlxG;
 import flixel.FlxCamera.FlxCameraFollowStyle;
@@ -15,6 +20,8 @@ using extensions.FlxStateExt;
 class PlayState extends FlxState {
 	var levelAssetPath:String;
 	var level:Level;
+
+	var timeDisplay:FlxText;
 
 	public function new(levelAssetPath:String) {
 		super();
@@ -38,6 +45,19 @@ class PlayState extends FlxState {
 		FlxG.camera.x = (FlxG.camera.width - ogWidth) / -2;
 		FlxG.camera.y = (FlxG.camera.height - ogHeight) / -2;
 		#end
+
+		// var defaultCam = FlxG.camera;
+		var timerCam = new FlxCamera();
+		timerCam.bgColor = FlxColor.TRANSPARENT;
+		FlxCamera.defaultCameras = [FlxG.camera];
+		FlxG.cameras.add(timerCam);
+
+		// reset our tracker timer on create
+		Trackers.attemptTimer = 0.0;
+		timeDisplay = FlxTextFactory.make("", FlxG.width / 2 - 30, 20, 18);
+		timeDisplay.scrollFactor.set(0,0);
+		timeDisplay.cameras = [timerCam];
+		add(timeDisplay);
 
 		CbTypes.initTypes();
 		FlxNapeSpace.init();
@@ -74,6 +94,9 @@ class PlayState extends FlxState {
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+
+		Trackers.attemptTimer += elapsed;
+		timeDisplay.text = FlxStringUtil.formatTime(Trackers.attemptTimer, true);
 
 		#if !nospin
 		camera.angle = -level.player.torso.angle;
