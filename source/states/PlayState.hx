@@ -23,6 +23,7 @@ class PlayState extends FlxState {
 	var levelAssetPath:String;
 	var level:Level;
 
+	var timerCam:FlxCamera;
 	var timeDisplay:FlxText;
 
 	public function new(levelAssetPath:String) {
@@ -49,7 +50,7 @@ class PlayState extends FlxState {
 		#end
 
 		// var defaultCam = FlxG.camera;
-		var timerCam = new FlxCamera();
+		timerCam = new FlxCamera();
 		timerCam.bgColor = FlxColor.TRANSPARENT;
 		FlxCamera.defaultCameras = [FlxG.camera];
 		FlxG.cameras.add(timerCam);
@@ -70,7 +71,7 @@ class PlayState extends FlxState {
 		FlxNapeSpace.space.gravity.setxy(0, 0);
 
 		var bg = new FlxSprite(AssetPaths.nebulaBackground__png);
-		bg.scale.set(2, 2);
+		// bg.scale.set(2, 2);
 		bg.scrollFactor.set(0, 0);
 		add(bg);
 

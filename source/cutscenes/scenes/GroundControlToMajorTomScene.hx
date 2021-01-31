@@ -1,5 +1,9 @@
 package cutscenes.scenes;
 
+import flixel.FlxSprite;
+import flixel.FlxCamera;
+import flixel.util.FlxColor;
+import flixel.FlxCamera;
 import flixel.addons.display.FlxBackdrop;
 import states.CreditsState;
 import flixel.FlxG;
@@ -30,6 +34,9 @@ import cutscenes.actors.MovementParticle;
 import cutscenes.actors.TitleText1;
 import cutscenes.actors.TitleText2;
 import helpers.UiHelpers;
+#if windows
+import lime.system.System;
+#end
 
 /**
  * This is a copy of the end cutscene from EventfulHorizon
@@ -39,25 +46,33 @@ class GroundControlToMajorTomScene extends Cutscene {
 
 	public function new(state:FlxState) {
 		super();
+		// var camera = FlxG.camera;
+		// var backgroundCam = new FlxCamera();
+		// backgroundCam.bgColor = FlxColor.TRANSPARENT;
+		// FlxG.cameras.add(backgroundCam);
+		// FlxCamera.defaultCameras = [backgroundCam];
+		// var backdrop = new FlxSprite(0, 0, AssetPaths.nebulaBackground__png);
+		// backdrop.scale.set(2, 2);
+		// backdrop.scrollFactor.set(0, 0);
+		// backdrop.cameras = [backgroundCam];
+		// state.add(backdrop);
 
+		
 		FmodManager.PlaySong(FmodSongs.Title);
+
 		var majorTom = new OriginalMajorTom();
 		var teleBall = new OriginalTeleBall();
 		var levelBackground = new OriginalLevelPlatforms();
 		var farAwaySpaceShip = new FarAwaySpaceShip();
 		var titleText1 = new TitleText1();
 		var titleText2 = new TitleText2();
-		var backdrop = new FlxBackdrop(AssetPaths.nebula0__png, 0, 0);
-		backdrop.x -= backdrop.width * 0.5;
-		backdrop.y -= backdrop.height * 0.5;
-		state.add(backdrop);
 		state.add(levelBackground);
 		state.add(farAwaySpaceShip);
 		state.add(majorTom);
 		state.add(teleBall);
 		state.add(titleText1);
 		state.add(titleText2);
-		var startBtn = UiHelpers.createMenuButton("Start", () -> {
+		var startBtn = UiHelpers.createMenuButton("Play", () -> {
 			FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState(AssetPaths.main_level__json));
 		});
 		startBtn.setPosition(FlxG.width / 2 - startBtn.width / 2, FlxG.height - startBtn.height - 70);
@@ -71,7 +86,16 @@ class GroundControlToMajorTomScene extends Cutscene {
 		creditsBtn.updateHitbox();
 		state.add(creditsBtn);
 
-		var startingActions = new StartMusicAction(FmodSongs.IntoNothing); // change to Space Oddity song
+		#if windows
+		var _btnExit = UiHelpers.createMenuButton("Exit", () -> {
+			System.exit(0);
+		}));
+		_btnExit.setPosition(FlxG.width / 2 - _btnExit.width / 2, FlxG.height - _btnExit.height - 10);
+		_btnExit.updateHitbox();
+		add(_btnExit);
+		#end
+
+		var startingActions = new StartMusicAction(FmodSongs.IntoNothing);
 		startingActions.add(new CameraFollowAction(majorTom, -1)); // start by following tom but don't block
 		startingActions.add(new TriggerAction(() -> {
 			// set up the starting position of the actors
@@ -207,6 +231,5 @@ class GroundControlToMajorTomScene extends Cutscene {
 			moveCameraDown.add(new ZoomCameraAction(1, moveCameraDown.milliseconds));
 			return moveCameraDown;
 		}));
-		add(new StopMusicAction());
 	}
 }
