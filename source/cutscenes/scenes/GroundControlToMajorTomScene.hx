@@ -8,6 +8,7 @@ import flixel.addons.display.FlxBackdrop;
 import states.CreditsState;
 import flixel.FlxG;
 import haxefmod.flixel.FmodFlxUtilities;
+import haxefmod.FmodManager;
 import states.PlayState;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
@@ -56,6 +57,9 @@ class GroundControlToMajorTomScene extends Cutscene {
 		// backdrop.cameras = [backgroundCam];
 		// state.add(backdrop);
 
+		
+		FmodManager.PlaySong(FmodSongs.Title);
+
 		var majorTom = new OriginalMajorTom();
 		majorTom.cameras = [camera];
 		var teleBall = new OriginalTeleBall();
@@ -97,7 +101,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 		add(_btnExit);
 		#end
 
-		var startingActions = new StartMusicAction(FmodSongs.Title);
+		var startingActions = new StartMusicAction(FmodSongs.IntoNothing);
 		startingActions.add(new CameraFollowAction(majorTom, -1)); // start by following tom but don't block
 		startingActions.add(new TriggerAction(() -> {
 			// set up the starting position of the actors
@@ -154,7 +158,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 			majorTom.visible = true;
 			majorTom.setPosition(teleBall.x, teleBall.y);
 		}));
-		add(new PlaySfxAction(FmodSFX.MenuHover)); // TODO: FX teleport ball popping
+		add(new PlaySfxAction(FmodSFX.Teleport)); // TODO: FX teleport ball popping
 		add(new PlayAnimationAction(majorTom, "teleport-in-fall", false));
 		add(new WrapperAction((builder) -> {
 			var tomPos = majorTom.getPosition();
@@ -179,6 +183,8 @@ class GroundControlToMajorTomScene extends Cutscene {
 			shipSlamIntoTomAction.add(new SpinAction(majorTom, 10, shipSlamIntoTomAction.milliseconds, false));
 			return shipSlamIntoTomAction;
 		}));
+		add(new PlaySfxAction(FmodSFX.Bang)); 
+		add(new PlaySfxAction(FmodSFX.AmibenceCutsceneShip)); 
 		add(new IntervalAction(150, 4000, () -> {
 			var x = farAwaySpaceShip.x - 150;
 			var y = farAwaySpaceShip.y;
@@ -213,6 +219,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 			titleText1.setPosition(600 - titleText1.width * .5, -titleText1.height * .5);
 			titleText2.setPosition(600 - titleText2.width * .5, -titleText2.height * .5);
 		}));
+		add(new StartMusicAction(FmodSongs.Title));
 		add(new WrapperAction((builder) -> {
 			var moveOnScreen = new MoveAction(titleText1, titleText1.getPosition(), titleText1.getPosition().add(-600, 0), 4000);
 			return moveOnScreen;
