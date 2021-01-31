@@ -6,7 +6,6 @@ import flixel.util.FlxColor;
 import nape.callbacks.CbType;
 import nape.phys.Material;
 import constants.CbTypes;
-import objects.Obstacle;
 import flixel.addons.nape.FlxNapeSpace;
 import flixel.FlxG;
 import flixel.FlxState;
@@ -16,11 +15,18 @@ using extensions.FlxStateExt;
 
 class PlayState extends FlxState {
 
+	var levelAssetPath:String;
+
 	var spaceman:Spaceman;
+
+	public function new(levelAssetPath: String) {
+		super();
+		this.levelAssetPath = levelAssetPath;
+	}
 
 	override public function create() {
 		super.create();
-		FlxG.camera.pixelPerfectRender = true;
+
 		camera.bgColor = FlxColor.GRAY;
 		CbTypes.initTypes();
 		FlxNapeSpace.init();
@@ -34,24 +40,15 @@ class PlayState extends FlxState {
 		bg.scale.set(3, 3);
 		add(bg);
 
-		// createTestObjs();
-		var level = new Level(AssetPaths.jake_test_0__json);
+		var level = new Level(levelAssetPath);
 		add(level.wallLayer);
 		add(level.objects);
-
-		// FlxG.debugger.visible = true;
-	}
-
-	function createTestObjs() {
-		var box = new Obstacle(280, 300);
-		add(box);
-
-		spaceman = new Spaceman(300, 200);
-		add(spaceman);
 
 		#if spin
 		camera.follow(spaceman.head);
 		#end
+
+		// FlxG.debugger.visible = true;
 	}
 
 	override public function update(elapsed:Float) {
