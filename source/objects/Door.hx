@@ -21,7 +21,6 @@ class Door extends SelfAssigningFlxNapeSprite implements ITriggerable {
 
 		addPremadeBody(body);
 		body.setShapeFilters(new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE)));
-		poly.cbTypes.add(CbTypes.CB_GRABBABLE);
 	}
 
 	public function trigger() {

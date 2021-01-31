@@ -36,19 +36,24 @@ class Level {
         var needsTarget = new Map<String, ITargeter>();
         var needsTargeting = new Map<String, ITriggerable>();
 		loader.loadEntities((entityData) -> {
+            var widthDelta = entityData.width != null ? Math.ceil(entityData.width / 2) : 0;
+            var heightDelta = entityData.height != null ? Math.ceil(entityData.height / 2) : 0;
+            var x = entityData.x + widthDelta;
+            var y = entityData.y + heightDelta;
+
             var obj: FlxBasic;
             switch(entityData.name) {
                 case "spawn":
-                    player = new Spaceman(entityData.x, entityData.y);
+                    player = new Spaceman(x, y);
                     obj = player;
                 case "box":
-                    obj = new Obstacle(entityData.x, entityData.y);
+                    obj = new Obstacle(x, y);
                 case "finish":
-                    obj = new Finish(entityData.x, entityData.y);
+                    obj = new Finish(x, y);
                 case "door":
-                    obj = new Door(entityData.x, entityData.y);
+                    obj = new Door(x, y);
                 case "button":
-                    obj = new Button(entityData.x, entityData.y);
+                    obj = new Button(x, y);
                 case "ball":
                     obj = new Ball(entityData.x, entityData.y);
                 default:
