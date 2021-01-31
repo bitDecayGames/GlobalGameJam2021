@@ -4,6 +4,7 @@ import flixel.group.FlxGroup;
 import flixel.FlxBasic;
 import objects.Ball;
 import objects.Button;
+import objects.Blackout;
 import objects.Checkpoint;
 import objects.Door;
 import objects.Lever;
@@ -63,6 +64,14 @@ class Level {
                     obj = new Lever(x, y);
                 case "wheel":
                     obj = new Wheel(x, y);
+                case "blackout":
+                    if (entityData.width == null) {
+                        throw "blackout missing width";
+                    }
+                    if (entityData.height == null) {
+                        throw "blackout missing height";
+                    }
+                    obj = new Blackout(entityData.x, entityData.y, entityData.width, entityData.height);
 
                 default:
                     throw entityData.name + " is not supported, please add to Level.hx";

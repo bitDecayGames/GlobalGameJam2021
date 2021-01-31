@@ -53,7 +53,7 @@ class PlayState extends FlxState {
 		camera.follow(level.player.torso);
 		#end
 
-		FlxG.debugger.visible = true;
+		// FlxG.debugger.visible = true;
 	}
 
 	override public function update(elapsed:Float) {

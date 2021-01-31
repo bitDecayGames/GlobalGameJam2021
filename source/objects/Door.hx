@@ -1,7 +1,6 @@
 package objects;
 
 import flixel.util.FlxColor;
-import constants.CbTypes;
 import constants.CGroups;
 import constants.Tiles;
 import nape.dynamics.InteractionFilter;
@@ -15,7 +14,7 @@ class Door extends SelfAssigningFlxNapeSprite implements ITriggerable {
 	public function new(x:Int, y:Int) {
 		super();
 		setPosition(x, y);
-		makeGraphic(Tiles.Size, Tiles.Size * 5, FlxColor.YELLOW);
+		makeGraphic(Tiles.Size, Tiles.Size * 3, FlxColor.YELLOW);
 
 		var body = new Body(BodyType.STATIC);
 		var poly = new Polygon(Polygon.box(width, height));

@@ -112,7 +112,7 @@
       "exportID": "05824945",
       "name": "door",
       "limit": -1,
-      "size": {"x": 49, "y": 245},
+      "size": {"x": 49, "y": 147},
       "origin": {"x": 0, "y": 0},
       "originAnchored": true,
       "shape": {
@@ -129,7 +129,7 @@
       "color": "#e5ff00ff",
       "tileX": false,
       "tileY": false,
-      "tileSize": {"x": 49, "y": 245},
+      "tileSize": {"x": 49, "y": 147},
       "resizeableX": true,
       "resizeableY": true,
       "rotatable": false,
@@ -220,6 +220,120 @@
       "tags": [],
       "values": [
         {"name": "targetValue", "definition": "String", "display": 0, "defaults": "", "maxLength": 0, "trimWhitespace": true}
+      ]
+    },
+    {
+      "exportID": "07709197",
+      "name": "blackout",
+      "limit": -1,
+      "size": {"x": 147, "y": 147},
+      "origin": {"x": 0, "y": 0},
+      "originAnchored": true,
+      "shape": {
+        "label": "Rectangle",
+        "points": [
+          {"x": -1, "y": -1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": 1}
+        ]
+      },
+      "color": "#000000ff",
+      "tileX": false,
+      "tileY": false,
+      "tileSize": {"x": 147, "y": 147},
+      "resizeableX": true,
+      "resizeableY": true,
+      "rotatable": false,
+      "rotationDegrees": 360,
+      "canFlipX": false,
+      "canFlipY": false,
+      "canSetColor": false,
+      "hasNodes": false,
+      "nodeLimit": 0,
+      "nodeDisplay": 0,
+      "nodeGhost": true,
+      "tags": [],
+      "values": [
+        {"name": "targetValue", "definition": "String", "display": 2, "defaults": "", "maxLength": 0, "trimWhitespace": true}
+      ]
+    },
+    {
+      "exportID": "07739029",
+      "name": "lever",
+      "limit": -1,
+      "size": {"x": 49, "y": 49},
+      "origin": {"x": 0, "y": 0},
+      "originAnchored": true,
+      "shape": {
+        "label": "Rectangle",
+        "points": [
+          {"x": -1, "y": -1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": 1}
+        ]
+      },
+      "color": "#9d259bff",
+      "tileX": false,
+      "tileY": false,
+      "tileSize": {"x": 49, "y": 49},
+      "resizeableX": true,
+      "resizeableY": true,
+      "rotatable": false,
+      "rotationDegrees": 360,
+      "canFlipX": false,
+      "canFlipY": false,
+      "canSetColor": false,
+      "hasNodes": false,
+      "nodeLimit": 0,
+      "nodeDisplay": 0,
+      "nodeGhost": true,
+      "tags": [],
+      "values": [
+        {"name": "targets", "definition": "String", "display": 2, "defaults": "", "maxLength": 0, "trimWhitespace": true}
+      ]
+    },
+    {
+      "exportID": "07763463",
+      "name": "wheel",
+      "limit": -1,
+      "size": {"x": 49, "y": 49},
+      "origin": {"x": 0, "y": 0},
+      "originAnchored": true,
+      "shape": {
+        "label": "Rectangle",
+        "points": [
+          {"x": -1, "y": -1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": 1}
+        ]
+      },
+      "color": "#f13aedff",
+      "tileX": false,
+      "tileY": false,
+      "tileSize": {"x": 49, "y": 49},
+      "resizeableX": true,
+      "resizeableY": true,
+      "rotatable": false,
+      "rotationDegrees": 360,
+      "canFlipX": false,
+      "canFlipY": false,
+      "canSetColor": false,
+      "hasNodes": false,
+      "nodeLimit": 0,
+      "nodeDisplay": 0,
+      "nodeGhost": true,
+      "tags": [],
+      "values": [
+        {"name": "targets", "definition": "String", "display": 0, "defaults": "", "maxLength": 0, "trimWhitespace": true}
       ]
     }
   ],

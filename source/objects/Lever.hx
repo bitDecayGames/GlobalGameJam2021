@@ -16,7 +16,7 @@ class Lever extends SelfAssigningFlxNapeSprite implements ITargeter {
 	public function new(x:Int, y:Int) {
 		super();
 		setPosition(x, y);
-		makeGraphic(Tiles.Size, Tiles.Size, FlxColor.PINK);
+		makeGraphic(Tiles.Size, Tiles.Size, FlxColor.PURPLE);
 
 		var body = new Body(BodyType.STATIC);
 		var poly = new Polygon(Polygon.box(width, height));
