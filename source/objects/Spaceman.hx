@@ -413,15 +413,10 @@ class Spaceman extends FlxGroup {
 				rightHand.animation.play(Hand.CLOSED_ANIM);
 				FmodManager.PlaySoundOneShot(FmodSFX.Grab);
 			}
-			// Should we decide to manipulate collision groups when the player grabs things, this is a very buggy start to that
-			// if (rightHandGrabJoint != null && rightHandGrabJoint.active) {
-			// 	rightHandGrabJoint.body2.setShapeFilters(new InteractionFilter(CGroups.BODY, ~(CGroups.OBSTACLE & CGroups.BODY)));
-			// }
 		} else {
 			rightHand.animation.play(Hand.OPEN_ANIM);
 			if (rightHandGrabJoint != null && rightHandGrabJoint.active) {
 				rightHandGrabJoint.active = false;
-				// rightHandGrabJoint.body2.setShapeFilters(new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE)));
 				FmodManager.PlaySoundOneShot(FmodSFX.Release);
 			}
 		}

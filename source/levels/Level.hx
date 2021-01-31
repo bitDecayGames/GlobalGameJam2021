@@ -2,6 +2,7 @@ package levels;
 
 import flixel.group.FlxGroup;
 import flixel.FlxBasic;
+import objects.Ball;
 import objects.Button;
 import objects.Door;
 import objects.Finish;
@@ -48,6 +49,8 @@ class Level {
                     obj = new Door(entityData.x, entityData.y);
                 case "button":
                     obj = new Button(entityData.x, entityData.y);
+                case "ball":
+                    obj = new Ball(entityData.x, entityData.y);
                 default:
                     throw entityData.name + " is not supported, please add to Level.hx";
             }
