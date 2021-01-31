@@ -1,10 +1,8 @@
 package objects;
 
 import constants.CbTypes;
-import flixel.util.FlxColor;
 import constants.CGroups;
 import nape.dynamics.InteractionFilter;
-import nape.geom.Vec2;
 import nape.shape.Polygon;
 import nape.phys.BodyType;
 import nape.phys.Body;

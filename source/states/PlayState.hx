@@ -33,8 +33,8 @@ class PlayState extends FlxState {
 		FlxNapeSpace.init();
 
 		// var wallMaterial = new Material()
-		var walls = FlxNapeSpace.createWalls(0, 0, 0, 0);
-		walls.cbTypes.add(CbTypes.CB_GRABBABLE);
+		// var walls = FlxNapeSpace.createWalls(0, 0, 0, 0);
+		// walls.cbTypes.add(CbTypes.CB_GRABBABLE);
 		FlxNapeSpace.space.gravity.setxy(0, 0);
 
 		var bg = new FlxSprite(AssetPaths.nebula0__png);
@@ -49,7 +49,7 @@ class PlayState extends FlxState {
 		camera.follow(spaceman.head);
 		#end
 
-		// FlxG.debugger.visible = true;
+		FlxG.debugger.visible = true;
 	}
 
 	override public function update(elapsed:Float) {

@@ -3,6 +3,7 @@ package objects;
 import flixel.util.FlxColor;
 import constants.CbTypes;
 import constants.CGroups;
+import constants.Tiles;
 import nape.dynamics.InteractionFilter;
 import nape.shape.Polygon;
 import nape.phys.BodyType;
@@ -12,7 +13,7 @@ class Finish extends SelfAssigningFlxNapeSprite {
 	public function new(x:Int, y:Int) {
 		super();
 		setPosition(x, y);
-		makeGraphic(32, 32, FlxColor.CYAN);
+		makeGraphic(Tiles.Size, Tiles.Size, FlxColor.CYAN);
 
 		var body = new Body(BodyType.STATIC);
 		var poly = new Polygon(Polygon.box(width, height));
