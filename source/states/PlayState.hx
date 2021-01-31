@@ -1,13 +1,12 @@
 package states;
 
+import flixel.FlxG;
+import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxSprite;
 import levels.Level;
 import flixel.util.FlxColor;
-import nape.callbacks.CbType;
-import nape.phys.Material;
 import constants.CbTypes;
 import flixel.addons.nape.FlxNapeSpace;
-import flixel.FlxG;
 import flixel.FlxState;
 import objects.Spaceman;
 
@@ -16,8 +15,7 @@ using extensions.FlxStateExt;
 class PlayState extends FlxState {
 
 	var levelAssetPath:String;
-
-	var spaceman:Spaceman;
+	var level:Level;
 
 	public function new(levelAssetPath: String) {
 		super();
@@ -40,12 +38,16 @@ class PlayState extends FlxState {
 		bg.scale.set(3, 3);
 		add(bg);
 
-		var level = new Level(levelAssetPath);
+		level = new Level(levelAssetPath);
 		add(level.wallLayer);
 		add(level.objects);
 
+		camera.follow(level.player.torso, FlxCameraFollowStyle.PLATFORMER);
+		camera.deadzone.y = 0;
+		camera.deadzone.height = FlxG.height;
+
 		#if spin
-		camera.follow(spaceman.head);
+		camera.follow(level.player.head);
 		#end
 
 		// FlxG.debugger.visible = true;
@@ -55,7 +57,7 @@ class PlayState extends FlxState {
 		super.update(elapsed);
 
 		#if spin
-		camera.angle = -spaceman.head.angle;
+		camera.angle = -level.player.head.angle;
 		#end
 	}
 

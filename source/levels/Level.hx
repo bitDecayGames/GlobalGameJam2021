@@ -12,6 +12,8 @@ import flixel.addons.nape.FlxNapeTilemap;
 
 class Level {
 
+    public var player:Spaceman;
+
     public var wallLayer:FlxNapeTilemap;
     public var objects: FlxGroup;
 
@@ -35,7 +37,8 @@ class Level {
             var obj: FlxBasic;
             switch(entityData.name) {
                 case "spawn":
-                    obj = new Spaceman(entityData.x, entityData.y);
+                    player = new Spaceman(entityData.x, entityData.y);
+                    obj = player;
                 case "box":
                     obj = new Obstacle(entityData.x, entityData.y);
                 case "finish":
