@@ -26,7 +26,7 @@ class MainMenuState extends FlxUIState {
 
 	override public function create():Void {
 		super.create();
-		FmodManager.PlaySong(FmodSongs.LetsGo);
+		FmodManager.PlaySong(FmodSongs.Title);
 		FlxG.log.notice("loaded scene");
 		bgColor = FlxColor.TRANSPARENT;
 		FlxG.camera.pixelPerfectRender = true;
