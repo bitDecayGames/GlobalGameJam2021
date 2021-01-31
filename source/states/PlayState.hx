@@ -24,6 +24,8 @@ class PlayState extends FlxState {
 	override public function create() {
 		super.create();
 
+		FmodManager.PlaySong(FmodSongs.Weightless);
+
 		camera.bgColor = FlxColor.GRAY;
 
 		#if !nospin

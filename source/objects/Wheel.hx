@@ -1,5 +1,6 @@
 package objects;
 
+import flixel.math.FlxAngle;
 import flixel.FlxG;
 import nape.constraint.AngleJoint;
 import flixel.FlxSprite;
@@ -28,6 +29,10 @@ class Wheel extends FlxGroup implements ITargeter {
 
 	var angle:AngleJoint;
 	var maxAngle =  Math.PI * 4;
+	var lastSqueakAngle:Float = 0;
+
+	var locked:Bool = false;
+	var lockedClickAng:Float = 0;
 
 	public function new(x:Float, y:Float) {
 		super();
@@ -61,10 +66,24 @@ class Wheel extends FlxGroup implements ITargeter {
 			angVel = grabber.body.angularVel;
 			grabber.body.applyAngularImpulse(angVel * -10);
 
-			// SFX: Wheel spinning start / volume
-		} else {
-			// SFX: Wheel spinning stop / mute
-		}
+			// SFX: Wheel spinning 
+			var currentAng = FlxAngle.TO_DEG*grabber.body.rotation;
+			if (!locked && Math.abs(currentAng-lastSqueakAngle) > 72){
+				lastSqueakAngle = currentAng;
+				FmodManager.PlaySoundOneShot(FmodSFX.Squeak);
+			}
+
+			FlxG.watch.addQuick("Current Angle: ", grabber.body.rotation);
+			FlxG.watch.addQuick("Joint Min: ", angle.jointMin);
+			FlxG.watch.addQuick("Joint Max: ", angle.jointMax);
+
+			if (locked && (grabber.body.rotation == angle.jointMin || currentAng == angle.jointMax)){
+				if (lockedClickAng != grabber.body.rotation) {
+					FmodManager.PlaySoundOneShot(FmodSFX.HandleComplete);
+					lockedClickAng = grabber.body.rotation;
+				}
+			}
+		} 
 
 		if (!triggered) {
 			var ratio = grabber.body.rotation / maxAngle;
@@ -94,8 +113,10 @@ class Wheel extends FlxGroup implements ITargeter {
 			// Lock wheel
 
 			// SFX: Wheen lock sound / door opened fully sound
+			FmodManager.PlaySoundOneShot(FmodSFX.HandleLock);
 
-			angle.jointMin = maxAngle-0.05;
+			angle.jointMin = maxAngle-0.5;
+			locked = true;
 			triggered = true;
 			for (t in this.targets) {
 				t.trigger();
