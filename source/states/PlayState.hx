@@ -16,7 +16,7 @@ class PlayState extends FlxState {
 	var levelAssetPath:String;
 	var level:Level;
 
-	public function new(levelAssetPath: String) {
+	public function new(levelAssetPath:String) {
 		super();
 		this.levelAssetPath = levelAssetPath;
 	}
@@ -49,18 +49,18 @@ class PlayState extends FlxState {
 		camera.deadzone.y = 0;
 		camera.deadzone.height = FlxG.height;
 
-		#if spin
-		camera.follow(level.player.head);
+		#if !nospin
+		camera.follow(level.player.torso);
 		#end
 
-		// FlxG.debugger.visible = true;
+		FlxG.debugger.visible = true;
 	}
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
-		#if spin
-		camera.angle = -level.player.head.angle;
+		#if !nospin
+		camera.angle = -level.player.torso.angle;
 		#end
 
 		metrics.Trackers.checkSpeed(level.player.torso.body.velocity.length);
