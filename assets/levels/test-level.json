@@ -29,8 +29,8 @@
       "gridCellsX": 14,
       "gridCellsY": 11,
       "entities": [
-        {"name": "box", "id": 0, "_eid": "04734008", "x": 196, "y": 196, "width": 49, "height": 49, "originX": 0, "originY": 0},
-        {"name": "spawn", "id": 1, "_eid": "04747128", "x": 441, "y": 196, "originX": 0, "originY": 0}
+        {"name": "spawn", "id": 1, "_eid": "04747128", "x": 441, "y": 196, "originX": 0, "originY": 0},
+        {"name": "box", "id": 2, "_eid": "04734008", "x": 173.5, "y": 179, "width": 80, "height": 80, "originX": 0, "originY": 0, "rotation": 0}
       ]
     },
     {

@@ -19,7 +19,7 @@ class Obstacle extends SelfAssigningFlxNapeSprite {
 		var poly = new Polygon(Polygon.box(width, height));
 		body.shapes.add(poly);
 
-		body.mass = 10000;
+		body.mass = 1000;
 
 		addPremadeBody(body);
 		body.setShapeFilters(new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE)));
