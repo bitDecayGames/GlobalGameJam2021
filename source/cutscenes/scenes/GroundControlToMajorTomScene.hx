@@ -39,7 +39,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 			teleBall.angle = 0;
 			levelBackground.setPosition(20, 280);
 
-			camera.zoom = 2.0;
+			camera.zoom = 3.0;
 		}));
 		add(startingActions);
 		add(new PlayAnimationAction(majorTom, "stand", false));
