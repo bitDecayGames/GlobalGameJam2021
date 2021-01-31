@@ -55,7 +55,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 		state.add(titleText1);
 		state.add(titleText2);
 		var startBtn = UiHelpers.createMenuButton("Start", () -> {
-			FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState(AssetPaths.trigger_test__json));
+			FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState(AssetPaths.main_level__json));
 		});
 		startBtn.setPosition(FlxG.width / 2 - startBtn.width / 2, FlxG.height - startBtn.height - 70);
 		startBtn.updateHitbox();

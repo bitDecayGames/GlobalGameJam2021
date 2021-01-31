@@ -69,8 +69,9 @@ class PlayState extends FlxState {
 		// walls.cbTypes.add(CbTypes.CB_GRABBABLE);
 		FlxNapeSpace.space.gravity.setxy(0, 0);
 
-		var bg = new FlxSprite(AssetPaths.nebula0__png);
-		bg.scale.set(3, 3);
+		var bg = new FlxSprite(AssetPaths.nebulaBackground__png);
+		bg.scale.set(2, 2);
+		bg.scrollFactor.set(0, 0);
 		add(bg);
 
 		level = new Level(levelAssetPath);
