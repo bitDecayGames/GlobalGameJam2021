@@ -11,7 +11,7 @@ import nape.phys.Body;
 
 class Button extends SelfAssigningFlxNapeSprite implements ITargeter {
 	public var triggered = false;
-	public var target: ITriggerable;
+	public var targets: Array<ITriggerable> = [];
 
 	public function new(x:Int, y:Int) {
 		super();
@@ -30,7 +30,9 @@ class Button extends SelfAssigningFlxNapeSprite implements ITargeter {
 	public function trigger() {
 		if (!this.triggered) {
 			triggered = true;
-			this.target.trigger();
+			for (t in this.targets) {
+				t.trigger();
+			}
 		}
 	}
 }
