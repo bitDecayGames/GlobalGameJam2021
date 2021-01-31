@@ -16,7 +16,6 @@ class GrabCircle extends SelfAssigningFlxNapeSprite {
 		loadGraphic(asset);
 
 		var body = new Body(BodyType.DYNAMIC);
-		body.isBullet = true;
 
 		var poly = new Circle(width / 2);
 
