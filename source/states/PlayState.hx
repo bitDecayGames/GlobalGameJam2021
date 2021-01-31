@@ -34,14 +34,15 @@ class PlayState extends FlxState {
 		bg.scale.set(3, 3);
 		add(bg);
 
-		createTestObjs();
+		// createTestObjs();
+		var level = new Level(AssetPaths.jake_test_0__json);
+		add(level.wallLayer);
+		add(level.objects);
+
+		// FlxG.debugger.visible = true;
 	}
 
 	function createTestObjs() {
-		var level = new Level(AssetPaths.jake_test_0__json);
-		add(level.testLayer);
-		add(level.walls);
-
 		var box = new Obstacle(280, 300);
 		add(box);
 

@@ -1,28 +1,45 @@
 package levels;
 
-import objects.WallSegment;
+import flixel.group.FlxGroup;
+import flixel.FlxBasic;
+import objects.Obstacle;
+import objects.Spaceman;
 import flixel.group.FlxSpriteGroup;
-import flixel.tile.FlxTilemap;
+import constants.CbTypes;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
+import flixel.addons.nape.FlxNapeTilemap;
 
 class Level {
 
-    public var testLayer:FlxTilemap;
-    public var walls:FlxSpriteGroup;
+    public var wallLayer:FlxNapeTilemap;
+    public var objects: FlxGroup;
 
 	public function new(level:String) {
         var loader = new FlxOgmo3Loader(AssetPaths.levels__ogmo, level);
-        testLayer = loader.loadTilemap(AssetPaths.test__png, "walls");
+        var ogmoWallLayer = loader.loadTilemap(AssetPaths.test__png, "walls");
 
-        walls = new FlxSpriteGroup();
-		// loader.loadEntities((entityData) -> {
-        //     /*
-        //      * entityData.name
-        //      * entityData.x
-        //      * entityData.y
-        //      */
-        //      var ws = new WallSegment(entityData.x, entityData.y);
-        //      walls.add(ws);
-		// }, "walls");
+        wallLayer = new FlxNapeTilemap();
+        wallLayer.loadMapFromArray(ogmoWallLayer.getData(), ogmoWallLayer.widthInTiles, ogmoWallLayer.heightInTiles, AssetPaths.test__png, 32, 32);
+        wallLayer.setupTileIndices([1, 2, 3]);
+        wallLayer.body.cbTypes.add(CbTypes.CB_GRABBABLE);
+
+        objects = new FlxGroup();
+		loader.loadEntities((entityData) -> {
+            /*
+             * entityData.name
+             * entityData.x
+             * entityData.y
+             */
+            var obj: FlxBasic;
+            switch(entityData.name) {
+                case "spawn":
+                    obj = new Spaceman(entityData.x, entityData.y);
+                case "box":
+                    obj = new Obstacle(entityData.x, entityData.y);
+                default:
+                    throw entityData.name + " is not supported, please add to Level.hx";
+            }
+            objects.add(obj);
+		}, "objects");
 	}
 }
