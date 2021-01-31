@@ -21,6 +21,8 @@ class Wheel extends FlxGroup implements ITargeter {
 	public var triggered = false;
 	public var targets: Array<ITriggerable> = [];
 
+	var increments = new Map<Body, Float>();
+
 	var base:FlxSprite;
 	var grabber:SelfAssigningFlxNapeSprite;
 
@@ -29,7 +31,6 @@ class Wheel extends FlxGroup implements ITargeter {
 
 	public function new(x:Float, y:Float) {
 		super();
-
 
 		base = new FlxSprite(x, y, AssetPaths.wheelBase__png);
 		add(base);
@@ -54,7 +55,27 @@ class Wheel extends FlxGroup implements ITargeter {
 		base.x = grabber.x + (grabber.width / 2) - (base.width / 2);
 		base.y = grabber.y + (grabber.height / 2) - (base.height / 2);
 
-		// SFX: Wheel spinning
+		var angVel = grabber.body.angularVel;
+		if (angVel > 0.1) {
+			grabber.body.applyAngularImpulse(angVel * -10);
+			angVel = grabber.body.angularVel;
+			grabber.body.applyAngularImpulse(angVel * -10);
+			// SFX: Wheel spinning
+		}
+
+		if (!triggered) {
+			var ratio = grabber.body.rotation / maxAngle;
+			for (t in this.targets) {
+				var b = t.getTriggerBody();
+				if (b != null) {
+					if (!increments.exists(b)) {
+						increments.set(b, b.position.x);
+					}
+
+					b.position.x = increments.get(b) + b.userData.data.height * ratio;
+				}
+			}
+		}
 
 		if (grabber.body.rotation >= maxAngle) {
 			handleRotationComplete();
@@ -74,5 +95,9 @@ class Wheel extends FlxGroup implements ITargeter {
 				t.trigger();
 			}
 		}
+	}
+
+	public function getTriggerBody():Body {
+		return grabber.body;
 	}
 }

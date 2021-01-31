@@ -36,4 +36,8 @@ class Button extends SelfAssigningFlxNapeSprite implements ITargeter {
 			}
 		}
 	}
+
+	public function getTriggerBody():Body {
+		return body;
+	}
 }

@@ -87,4 +87,8 @@ class Lever extends FlxGroup implements ITargeter {
 	private function getAnchor(x:Float, y:Float):Vec2 {
 		return Vec2.get(x - puller.width / 2, y - puller.height / 2);
 	}
+
+	public function getTriggerBody():Body {
+		return puller.body;
+	}
 }

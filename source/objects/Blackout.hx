@@ -1,5 +1,6 @@
 package objects;
 
+import nape.phys.Body;
 import flixel.tweens.FlxTween;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
@@ -18,5 +19,9 @@ class Blackout extends FlxSprite implements ITriggerable {
 			triggered = true;
 			FlxTween.tween(this, {alpha: 0}, 1, { onComplete: (t) -> this.kill()});
 		}
+	}
+
+	public function getTriggerBody():Body {
+		return null;
 	}
 }
