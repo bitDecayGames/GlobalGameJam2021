@@ -1,5 +1,7 @@
 package levels;
 
+import flixel.FlxSprite;
+import checkpoint.CheckpointManager;
 import flixel.tile.FlxTilemap;
 import flixel.math.FlxVector;
 import objects.SelfAssigningFlxNapeSprite;
@@ -62,7 +64,10 @@ class Level {
             var obj: FlxBasic;
             switch(entityData.name) {
                 case "spawn":
-                    player = new Spaceman(x, y);
+                    if (!CheckpointManager.firstTime) {
+                        CheckpointManager.setCheckpoint(x, y);
+                    }
+                    player = new Spaceman(CheckpointManager.getX(), CheckpointManager.getY());
                     obj = player;
                 case "box":
                     obj = new Obstacle(x, y);
