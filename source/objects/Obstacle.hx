@@ -24,5 +24,7 @@ class Obstacle extends SelfAssigningFlxNapeSprite {
 		addPremadeBody(body);
 		body.setShapeFilters(new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE)));
 		poly.cbTypes.add(CbTypes.CB_GRABBABLE);
+        poly.cbTypes.add(CbTypes.CB_BUMPER);
+
 	}
 }

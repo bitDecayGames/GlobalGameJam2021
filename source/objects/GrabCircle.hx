@@ -21,6 +21,8 @@ class GrabCircle extends SelfAssigningFlxNapeSprite {
 		var poly = new Circle(width / 2);
 
 		poly.cbTypes.add(CbTypes.CB_GRABBABLE);
+        poly.cbTypes.add(CbTypes.CB_BUMPER);
+
 		body.shapes.add(poly);
 		body.setShapeFilters(new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE)));
 		addPremadeBody(body);

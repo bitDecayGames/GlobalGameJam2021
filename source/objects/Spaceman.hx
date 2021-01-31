@@ -133,56 +133,67 @@ class Spaceman extends FlxGroup {
 		add(torso);
 
 		rightFoot = new Foot(x, y, AssetPaths.foot_R__png);
+		rightFoot.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(rightFoot);
 
 		rightLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_R__png, -4);
+		rightLegLower.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(rightLegLower);
 
 		rightLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_R__png, -4);
+		rightLegUpper.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(rightLegUpper);
 
 		leftFoot = new Foot(x, y, AssetPaths.foot_L__png);
+		leftFoot.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(leftFoot);
 
 		leftLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_L__png, -4);
+		leftLegLower.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(leftLegLower);
 
-
 		leftLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_L__png, -4);
+		rightFoot.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(leftLegUpper);
 
-		// Load Neck here
 		neck = new LimbPiece(x, y, AssetPaths.neck__png);
+		neck.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(neck);
 
-		// Chest piece here
 		chest = new LimbPiece(x, y, AssetPaths.chestpiece__png);
+		chest.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(chest);
 
-		// Load Head here
 		head = new Head(x, y, AssetPaths.head__png);
+		head.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(head);
 
-		// Cod piece here on top of legs
 		cod = new LimbPiece(x, y, AssetPaths.codpiece__png);
+		cod.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(cod);
 
 		leftArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_L__png, -5);
+		leftArmUpper.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(leftArmUpper);
 
 		leftHand = new Hand(x, y, AssetPaths.handL__png);
+		leftHand.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(leftHand);
 
 		leftArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_L__png, -4);
+		leftArmLower.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(leftArmLower);
 
 		rightArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_R__png, -5);
+		rightArmUpper.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(rightArmUpper);
 
 		rightHand = new Hand(x, y, AssetPaths.handR__png);
+		rightHand.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(rightHand);
 
 		rightArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_R__png, -4);
+		rightArmLower.body.cbTypes.add(CbTypes.CB_NAUT);
 		add(rightArmLower);
 		/** END LOADING BODY PARTS IN CORRECT RENDER ORDER **/
 
@@ -332,10 +343,15 @@ class Spaceman extends FlxGroup {
 	}
 
 	private function initListeners() {
+		// Grapple listeners
 		FlxNapeSpace.space.listeners.add(new InteractionListener(CbEvent.BEGIN, InteractionType.COLLISION, CbTypes.CB_HAND, CbTypes.CB_GRABBABLE,
 			handToGrabbable));
 		FlxNapeSpace.space.listeners.add(new InteractionListener(CbEvent.END, InteractionType.COLLISION, CbTypes.CB_HAND, CbTypes.CB_GRABBABLE,
 			handNotGrabbable));
+
+		// Misc collision events
+		FlxNapeSpace.space.listeners.add(new InteractionListener(CbEvent.BEGIN, InteractionType.COLLISION, CbTypes.CB_NAUT, CbTypes.CB_BUMPER,
+			bodyBumped));
 	}
 
 	override public function update(elapsed:Float) {
@@ -524,6 +540,20 @@ class Spaceman extends FlxGroup {
 			handGrabbables.get(callback.int1.castShape.body).remove(callback.int2.castShape.body);
 		} else if (callback.int2.isBody()) {
 			handGrabbables.get(callback.int1.castShape.body).remove(callback.int2.castBody);
+		}
+	}
+
+	private function bodyBumped(callback:InteractionCallback) {
+		var impactSpeed = 0.0;
+		if (callback.int1.isBody()) {
+			impactSpeed = callback.int1.castBody.velocity.length;
+		} else if (callback.int1.isShape()) {
+			impactSpeed = callback.int1.castShape.body.velocity.length;
+		}
+
+		// SFX: Body part bumped into something at impact speed
+		if (impactSpeed > 10) {
+			FmodManager.PlaySoundOneShot(FmodSFX.Grab);
 		}
 	}
 

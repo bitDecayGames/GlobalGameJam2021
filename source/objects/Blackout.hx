@@ -18,6 +18,8 @@ class Blackout extends FlxSprite implements ITriggerable {
 		if (!triggered) {
 			triggered = true;
 			FlxTween.tween(this, {alpha: 0}, 1, { onComplete: (t) -> this.kill()});
+
+			// SFX: "Reveal" sound effect for new room uncovered
 		}
 	}
 
