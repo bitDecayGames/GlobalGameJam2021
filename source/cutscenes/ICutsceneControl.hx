@@ -1,9 +1,9 @@
 package cutscenes;
 
 interface ICutsceneControl {
-	public var isStarted:Bool;
-	public var isDone:Bool;
-	public var isPaused:Bool;
+	@:isVar public var isStarted(get, null):Bool;
+	@:isVar public var isDone(get, null):Bool;
+	@:isVar public var isPaused(get, null):Bool;
 
 	public function start():Void;
 	public function stop():Void;
