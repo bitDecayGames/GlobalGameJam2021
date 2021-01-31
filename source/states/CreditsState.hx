@@ -104,7 +104,8 @@ class CreditsState extends FlxUIState {
 		add(_txtThankYou);
 		_allCreditElements.push(_txtThankYou);
 
-		var _txtTime = FlxTextFactory.make('Final Time: ${FlxStringUtil.formatTime(Trackers.attemptTimer, true)}', FlxG.width / 2, _txtThankYou.y + 60, 24, FlxTextAlign.CENTER);
+		var _txtTime = FlxTextFactory.make('Final Time: ${FlxStringUtil.formatTime(Trackers.attemptTimer, true)}', FlxG.width / 2, _txtThankYou.y + 60, 24,
+			FlxTextAlign.CENTER);
 		_txtTime.alignment = FlxTextAlign.CENTER;
 		_txtTime.setPosition(FlxG.width / 2 - _txtTime.width / 2, _txtTime.y);
 		add(_txtTime);
@@ -150,7 +151,7 @@ class CreditsState extends FlxUIState {
 	}
 
 	function clickMainMenu():Void {
-		FmodFlxUtilities.TransitionToState(new MainMenuState());
+		FmodFlxUtilities.TransitionToState(new SimpleMainMenuState());
 	}
 
 	override public function onFocusLost() {
