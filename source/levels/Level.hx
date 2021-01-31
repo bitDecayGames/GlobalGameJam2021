@@ -4,8 +4,8 @@ import flixel.group.FlxGroup;
 import flixel.FlxBasic;
 import objects.Ball;
 import objects.Button;
+import objects.Checkpoint;
 import objects.Door;
-import objects.Finish;
 import objects.Obstacle;
 import objects.Spaceman;
 import objects.ITriggerable;
@@ -35,6 +35,7 @@ class Level {
         objects = new FlxGroup();
         var needsTarget = new Map<String, ITargeter>();
         var needsTargeting = new Map<String, ITriggerable>();
+
 		loader.loadEntities((entityData) -> {
             var widthDelta = entityData.width != null ? Math.ceil(entityData.width / 2) : 0;
             var heightDelta = entityData.height != null ? Math.ceil(entityData.height / 2) : 0;
@@ -48,14 +49,14 @@ class Level {
                     obj = player;
                 case "box":
                     obj = new Obstacle(x, y);
-                case "finish":
-                    obj = new Finish(x, y);
                 case "door":
                     obj = new Door(x, y);
                 case "button":
                     obj = new Button(x, y);
                 case "ball":
                     obj = new Ball(entityData.x, entityData.y);
+                case "checkpoint":
+                    obj = new Checkpoint(x, y);
                 default:
                     throw entityData.name + " is not supported, please add to Level.hx";
             }
@@ -66,22 +67,25 @@ class Level {
             }
 
             // Set up triggers and targets
-            var target = entityData.values.target;
-            if (target != null) {
+            var targets = entityData.values.targets;
+            if (targets != null) {
                 var targetter = cast(obj, ITargeter);
-                if (needsTargeting.exists(target)) {
-                    targetter.target = cast(needsTargeting[target], ITriggerable);
-                } else {
-                    needsTarget[target] = targetter;
+                var targetStrList = Std.string(targets).split(",");
+                for (ts in targetStrList) {
+                    if (needsTargeting.exists(ts)) {
+                        targetter.targets.push(cast(needsTargeting.get(ts), ITriggerable));
+                    } else {
+                        needsTarget.set(ts, targetter);
+                    }
                 }
             }
             var targetValue = entityData.values.targetValue;
             if (targetValue != null) {
                 var triggerable = cast(obj, ITriggerable);
                 if (needsTarget.exists(targetValue)) {
-                    cast(needsTarget[targetValue], ITargeter).target = triggerable;
+                    cast(needsTarget.get(targetValue), ITargeter).targets.push(triggerable);
                 } else {
-                    needsTargeting[targetValue] = triggerable;
+                    needsTargeting.set(targetValue, triggerable);
                 }
             }
 		}, "objects");

@@ -30,7 +30,6 @@
       "gridCellsY": 11,
       "entities": [
         {"name": "spawn", "id": 1, "_eid": "04747128", "x": 441, "y": 196, "originX": 0, "originY": 0},
-        {"name": "finish", "id": 2, "_eid": "05033152", "x": 49, "y": 196, "originX": 0, "originY": 0},
         {
           "name": "door",
           "id": 4,
@@ -53,7 +52,19 @@
           "height": 49,
           "originX": 0,
           "originY": 0,
-          "values": {"target": "door1"}
+          "values": {"targets": "door1,checkpoint1"}
+        },
+        {
+          "name": "checkpoint",
+          "id": 6,
+          "_eid": "06725748",
+          "x": 441,
+          "y": 245,
+          "width": 49,
+          "height": 49,
+          "originX": 0,
+          "originY": 0,
+          "values": {"targetValue": "checkpoint1"}
         }
       ]
     }

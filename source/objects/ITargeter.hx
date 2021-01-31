@@ -1,5 +1,5 @@
 package objects;
 
 interface ITargeter extends ITriggerable {
-    public var target:ITriggerable;
+    public var targets:Array<ITriggerable>;
 }
