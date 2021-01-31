@@ -11,6 +11,7 @@ class FmodSongs {
 }
 
 class FmodSFX {
+    public static inline var ButtonClick:String = "event:/SFX/Button/ButtonClick";
     public static inline var HandleComplete:String = "event:/SFX/Handle/HandleComplete";
     public static inline var HandleLock:String = "event:/SFX/Handle/HandleLock";
     public static inline var Squeak:String = "event:/SFX/Handle/Squeak";
