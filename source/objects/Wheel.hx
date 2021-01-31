@@ -60,7 +60,10 @@ class Wheel extends FlxGroup implements ITargeter {
 			grabber.body.applyAngularImpulse(angVel * -10);
 			angVel = grabber.body.angularVel;
 			grabber.body.applyAngularImpulse(angVel * -10);
-			// SFX: Wheel spinning
+
+			// SFX: Wheel spinning start / volume
+		} else {
+			// SFX: Wheel spinning stop / mute
 		}
 
 		if (!triggered) {
@@ -89,6 +92,9 @@ class Wheel extends FlxGroup implements ITargeter {
 	private function handleRotationComplete() {
 		if (!this.triggered) {
 			// Lock wheel
+
+			// SFX: Wheen lock sound / door opened fully sound
+
 			angle.jointMin = maxAngle-0.05;
 			triggered = true;
 			for (t in this.targets) {

@@ -30,6 +30,8 @@ class GrabRect extends SelfAssigningFlxNapeSprite {
 		body.shapes.add(poly);
 
 		poly.cbTypes.add(CbTypes.CB_GRABBABLE);
+        poly.cbTypes.add(CbTypes.CB_BUMPER);
+
 		body.shapes.add(poly);
 		body.setShapeFilters(new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE & CGroups.TERRAIN)));
 		addPremadeBody(body);

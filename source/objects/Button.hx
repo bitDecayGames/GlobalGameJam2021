@@ -25,11 +25,16 @@ class Button extends SelfAssigningFlxNapeSprite implements ITargeter {
 		addPremadeBody(body);
 		body.setShapeFilters(new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE)));
 		poly.cbTypes.add(CbTypes.CB_GRABBABLE);
+        poly.cbTypes.add(CbTypes.CB_BUMPER);
+
 	}
 
 	public function trigger() {
 		if (!this.triggered) {
 			triggered = true;
+
+			// SFX button press
+
 			loadGraphic(AssetPaths.buttonBase__png);
 			for (t in this.targets) {
 				t.trigger();

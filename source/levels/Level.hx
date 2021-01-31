@@ -37,6 +37,7 @@ class Level {
         // First 4 tiles are empty
         wallLayer.setupTileIndices([for (i in 4...ogmoWallLayer.totalTiles - 1) i]);
         wallLayer.body.cbTypes.add(CbTypes.CB_GRABBABLE);
+        wallLayer.body.cbTypes.add(CbTypes.CB_BUMPER);
 
         objects = new FlxGroup();
         var needsTarget = new Map<String, ITargeter>();
