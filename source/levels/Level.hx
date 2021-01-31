@@ -1,5 +1,6 @@
 package levels;
 
+import flixel.tile.FlxTilemap;
 import flixel.math.FlxVector;
 import objects.SelfAssigningFlxNapeSprite;
 import flixel.FlxObject;
@@ -26,11 +27,15 @@ class Level {
     public var player:Spaceman;
 
     public var wallLayer:FlxNapeTilemap;
+    public var background1:FlxTilemap;
+    public var background2:FlxTilemap;
     public var objects: FlxGroup;
 
 	public function new(level:String) {
         var loader = new FlxOgmo3Loader(AssetPaths.levels__ogmo, level);
         var ogmoWallLayer = loader.loadTilemap(AssetPaths.interiorGreen__png, "walls");
+        background1 = loader.loadTilemap(AssetPaths.interiorGrey__png, "background");
+        background2 = loader.loadTilemap(AssetPaths.backgroundGrey__png, "background");
 
         wallLayer = new FlxNapeTilemap();
         wallLayer.loadMapFromArray(ogmoWallLayer.getData(), ogmoWallLayer.widthInTiles, ogmoWallLayer.heightInTiles, AssetPaths.interiorGreen__png, Tiles.Size, Tiles.Size);

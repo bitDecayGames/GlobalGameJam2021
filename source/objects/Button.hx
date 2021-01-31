@@ -1,9 +1,7 @@
 package objects;
 
-import flixel.util.FlxColor;
 import constants.CbTypes;
 import constants.CGroups;
-import constants.Tiles;
 import nape.dynamics.InteractionFilter;
 import nape.shape.Polygon;
 import nape.phys.BodyType;
