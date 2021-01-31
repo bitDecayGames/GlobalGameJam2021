@@ -31,10 +31,15 @@ import nape.geom.Vec2;
 class Spaceman extends FlxGroup {
 
 	public static inline var HIP_FREEDOM = 0.5;
-	public static inline var HIP_SQAUT_FREEDOM = 1;
-	public static inline var KNEE_FREEDOM = 2.5;
+	public static inline var HIP_SQUAT_FREEDOM = 1;
+	public static inline var KNEE_FREEDOM = 1.75;
+	public static inline var KNEE_SQUAT_FREEDOM = 2.5;
+	public static inline var KNEE_FLEX_OUT_RATIO = 0.33;
 	public static inline var NECK_FREEDOM = 0.2;
 	public static inline var HEAD_FREEDOM = 0.1;
+
+	public static inline var ARM_EMPTY_FORCE = 5;
+	public static inline var ARM_GRABBING_FORCE = 15;
 
 	var controls:BasicControls;
 
@@ -88,16 +93,20 @@ class Spaceman extends FlxGroup {
 	var leftHipLimiter:AngleJoint = null;
 	var rightHipLimiter:AngleJoint = null;
 
+	var leftKneeLimiter:AngleJoint = null;
+	var rightKneeLimiter:AngleJoint = null;
+
 	// Things for jumping
 	var ankleDist:DistanceJoint = null;
 	var kneeDist:DistanceJoint = null;
+	var launcherDist:DistanceJoint = null;
 	static inline var JUMP_JOINT_DEFAULT_DIST = 100;
 	static inline var ANKLE_SQUAT_DIST = 0;
 	static inline var KNEE_SQUAT_DIST = 100;
 	static inline var KNEE_LAUNCH_DIST = 10;
 	static inline var SQUAT_STRENGTH = 10;
 	static inline var JUMP_STRENGTH = 3000;
-	static inline var JUMP_TIMER = 2000;
+	static inline var JUMP_TIMER = 800;
 
 	// Needed for impulses
 	var torsoLeftShoulderAnchor:Vec2 = null;
@@ -126,20 +135,21 @@ class Spaceman extends FlxGroup {
 		rightFoot = new Foot(x, y, AssetPaths.foot_R__png);
 		add(rightFoot);
 
+		rightLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_R__png);
+		add(rightLegLower);
+
+		rightLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_R__png);
+		add(rightLegUpper);
+
 		leftFoot = new Foot(x, y, AssetPaths.foot_L__png);
 		add(leftFoot);
 
 		leftLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_L__png);
 		add(leftLegLower);
 
-		rightLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_R__png);
-		add(rightLegLower);
 
 		leftLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_L__png);
 		add(leftLegUpper);
-
-		rightLegUpper = new LimbPiece(x, y, AssetPaths.upperLeg_R__png);
-		add(rightLegUpper);
 
 		// Load Neck here
 		neck = new LimbPiece(x, y, AssetPaths.neck__png);
@@ -160,17 +170,17 @@ class Spaceman extends FlxGroup {
 		leftArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_L__png);
 		add(leftArmUpper);
 
-		rightArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_R__png);
-		add(rightArmUpper);
-
 		leftHand = new Hand(x, y, AssetPaths.handL__png);
 		add(leftHand);
 
-		rightHand = new Hand(x, y, AssetPaths.handR__png);
-		add(rightHand);
-
 		leftArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_L__png);
 		add(leftArmLower);
+
+		rightArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_R__png);
+		add(rightArmUpper);
+
+		rightHand = new Hand(x, y, AssetPaths.handR__png);
+		add(rightHand);
 
 		rightArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_R__png);
 		add(rightArmLower);
@@ -247,7 +257,7 @@ class Spaceman extends FlxGroup {
 		leftKnee.active = true;
 		leftKnee.space = FlxNapeSpace.space;
 
-		var leftKneeLimiter = new AngleJoint(leftLegUpper.body, leftLegLower.body, -KNEE_FREEDOM, KNEE_FREEDOM);
+		leftKneeLimiter = new AngleJoint(leftLegUpper.body, leftLegLower.body, -KNEE_FREEDOM, KNEE_FREEDOM * KNEE_FLEX_OUT_RATIO);
 		leftKneeLimiter.active = true;
 		leftKneeLimiter.space = FlxNapeSpace.space;
 
@@ -269,7 +279,7 @@ class Spaceman extends FlxGroup {
 		rightKnee.active = true;
 		rightKnee.space = FlxNapeSpace.space;
 
-		var rightKneeLimiter = new AngleJoint(rightLegUpper.body, rightLegLower.body, -KNEE_FREEDOM, KNEE_FREEDOM);
+		rightKneeLimiter = new AngleJoint(rightLegUpper.body, rightLegLower.body, -KNEE_FREEDOM * KNEE_FLEX_OUT_RATIO, KNEE_FREEDOM);
 		rightKneeLimiter.active = true;
 		rightKneeLimiter.space = FlxNapeSpace.space;
 
@@ -290,8 +300,6 @@ class Spaceman extends FlxGroup {
 			Vec2.get(),
 			0,
 			JUMP_JOINT_DEFAULT_DIST);
-		ankleDist.stiff = false;
-		ankleDist.maxForce = JUMP_STRENGTH;
 		ankleDist.active = true;
 		ankleDist.space = FlxNapeSpace.space;
 
@@ -303,42 +311,22 @@ class Spaceman extends FlxGroup {
 			0,
 			JUMP_JOINT_DEFAULT_DIST);
 		kneeDist.stiff = false;
-		kneeDist.maxForce = JUMP_STRENGTH;
+		kneeDist.maxForce = 10;
 		kneeDist.active = true;
 		kneeDist.space = FlxNapeSpace.space;
+
+		launcherDist = new DistanceJoint(
+			torso.body,
+			leftFoot.body,
+			getAnchor(torso, jointData.player.torso.codpiece),
+			Vec2.get(),
+			0,
+			150);
+		launcherDist.stiff = false;
+		launcherDist.maxForce = JUMP_STRENGTH;
+		launcherDist.active = true;
+		launcherDist.space = FlxNapeSpace.space;
 		// END jump joints
-
-		// QoL joints
-		// var armStabilizer = new DistanceJoint(
-		// 	leftArmUpper.body,
-		// 	rightArmUpper.body,
-		// 	getAnchor(leftArmUpper, jointData.player.leftArm.upper.elbow),
-		// 	getAnchor(rightArmUpper, jointData.player.rightArm.upper.elbow),
-		// 	45,
-		// 	45);
-		// armStabilizer.stiff = false;
-		// armStabilizer.maxForce = 10;
-		// armStabilizer.active = true;
-		// armStabilizer.space = FlxNapeSpace.space;
-
-		// var leftHandStabilizer = new DistanceJoint(
-		// 	torso.body,
-		// 	leftHand.body,
-		// 	getAnchor(torso, jointData.player.torso.leftShoulder),
-		// 	Vec2.get(),
-		// 	50,
-		// 	80);
-		// leftHandStabilizer.stiff = false;
-		// leftHandStabilizer.maxForce = 0.1;
-		// leftHandStabilizer.active = true;
-		// leftHandStabilizer.space = FlxNapeSpace.space;
-
-		// var leftShoulderLimiter = new AngleJoint(torso.body, leftArmUpper.body, 0, 3.14);
-		// leftShoulderLimiter.stiff = false;
-		// leftShoulderLimiter.maxForce = 100;
-		// leftShoulderLimiter.active = true;
-		// leftShoulderLimiter.space = FlxNapeSpace.space;
-
 
 		initListeners();
 	}
@@ -374,19 +362,37 @@ class Spaceman extends FlxGroup {
 		var handImp = Vec2.get(controls.leftHand.x, controls.leftHand.y, true);
 		handImp.rotate(-camera.angle * FlxAngle.TO_RAD);
 		if (handImp.length > 0.1) {
-			handImp = handImp.mul(30);
-			FlxG.watch.addQuick("Left Hand: ", handImp);
+			if (leftHandGrabJoint == null || !leftHandGrabJoint.active) {
+				handImp = handImp.mul(ARM_EMPTY_FORCE);
+			} else {
+				handImp = handImp.mul(ARM_GRABBING_FORCE);
+			}
 			leftHand.body.applyImpulse(handImp);
 			torso.body.applyImpulse(handImp.mul(-1), torso.body.localPointToWorld(torsoLeftShoulderAnchor));
+		} else {
+			// decay arm rotation
+			var angVel = leftArmUpper.body.angularVel;
+			leftArmUpper.body.applyAngularImpulse(angVel * -50);
+			angVel = leftArmLower.body.angularVel;
+			leftArmLower.body.applyAngularImpulse(angVel * -50);
 		}
 
 		handImp = Vec2.get(controls.rightHand.x, controls.rightHand.y, true);
 		handImp.rotate(-camera.angle * FlxAngle.TO_RAD);
 		if (handImp.length > 0.1) {
-			handImp = handImp.mul(30);
-			FlxG.watch.addQuick("Right Hand: ", handImp);
+			if (rightHandGrabJoint == null || !rightHandGrabJoint.active) {
+				handImp = handImp.mul(ARM_EMPTY_FORCE);
+			} else {
+				handImp = handImp.mul(ARM_GRABBING_FORCE);
+			}
 			rightHand.body.applyImpulse(handImp);
 			torso.body.applyImpulse(handImp.mul(-1), torso.body.localPointToWorld(torsoRightShoulderAnchor));
+		} else {
+			// decay arm rotation
+			var angVel = rightArmUpper.body.angularVel;
+			rightArmUpper.body.applyAngularImpulse(angVel * -50);
+			angVel = rightArmLower.body.angularVel;
+			rightArmLower.body.applyAngularImpulse(angVel * -50);
 		}
 
 		if (controls.leftGrab.check()) {
@@ -422,13 +428,19 @@ class Spaceman extends FlxGroup {
 
 		if (controls.legs.check()) {
 			if (extended) {
-				leftHipLimiter.jointMax = HIP_SQAUT_FREEDOM;
-				rightHipLimiter.jointMin = -HIP_SQAUT_FREEDOM;
+				leftHipLimiter.jointMax = HIP_SQUAT_FREEDOM;
+				leftKneeLimiter.jointMin = -KNEE_SQUAT_FREEDOM;
+
+				rightHipLimiter.jointMin = -HIP_SQUAT_FREEDOM;
+				rightKneeLimiter.jointMax = KNEE_SQUAT_FREEDOM;
+
 				ankleDist.jointMin = ANKLE_SQUAT_DIST;
 				ankleDist.jointMax = ANKLE_SQUAT_DIST;
 				kneeDist.jointMin = KNEE_SQUAT_DIST;
 				kneeDist.jointMax = KNEE_SQUAT_DIST;
 				kneeDist.maxForce = SQUAT_STRENGTH;
+				launcherDist.jointMin = 50;
+				launcherDist.jointMax = 50;
 				extended = false;
 			} else {
 				extended = true;
@@ -437,6 +449,8 @@ class Spaceman extends FlxGroup {
 				kneeDist.jointMin = KNEE_LAUNCH_DIST;
 				kneeDist.jointMax = KNEE_LAUNCH_DIST;
 				kneeDist.maxForce = JUMP_STRENGTH;
+				launcherDist.jointMin = 100;
+				launcherDist.jointMax = 100;
 				Timer.delay(() -> {
 					if (extended) {
 						// after jumping, reset our legs to allow bending
@@ -444,8 +458,15 @@ class Spaceman extends FlxGroup {
 						ankleDist.jointMax = JUMP_JOINT_DEFAULT_DIST;
 						kneeDist.jointMin = 0;
 						kneeDist.jointMax = JUMP_JOINT_DEFAULT_DIST;
+
 						leftHipLimiter.jointMax = HIP_FREEDOM;
+						leftKneeLimiter.jointMin = -KNEE_FREEDOM;
+
 						rightHipLimiter.jointMin = -HIP_FREEDOM;
+						rightKneeLimiter.jointMax = KNEE_FREEDOM;
+
+						launcherDist.jointMin = 0;
+						launcherDist.jointMax = 150;
 					}
 				}, JUMP_TIMER);
 			}
@@ -463,6 +484,7 @@ class Spaceman extends FlxGroup {
 			}
 			if (joint == null) {
 				joint = new PivotJoint(hand, grabbable, Vec2.get(), grabbable.worldPointToLocal(hand.localPointToWorld(Vec2.get())));
+				joint.stiff = false;
 				joint.active = true;
 				joint.space = FlxNapeSpace.space;
 				if (left) {
@@ -476,7 +498,7 @@ class Spaceman extends FlxGroup {
 				joint.body1 = hand;
 				joint.body2 = grabbable;
 				joint.anchor1 = Vec2.get();
-				joint.anchor2 = grabbable.worldPointToLocal(hand.position);
+				joint.anchor2 = grabbable.worldPointToLocal(hand.localPointToWorld(Vec2.get()));
 				joint.active = true;
 				return true;
 			}
