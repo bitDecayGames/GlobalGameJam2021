@@ -50,7 +50,6 @@ class Action extends FlxTypedGroup<Action> implements ICutsceneControl {
 
 	public function start() {
 		if (!isStarted) {
-			trace("Start " + this);
 			isStarted = true;
 			isPaused = false;
 			if (onStart != null) {
@@ -69,7 +68,6 @@ class Action extends FlxTypedGroup<Action> implements ICutsceneControl {
 			for (member in members) {
 				member.stop();
 			}
-			trace("Stop " + this);
 			if (onDone != null) {
 				onDone();
 			}
