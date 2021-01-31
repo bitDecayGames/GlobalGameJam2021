@@ -22,7 +22,7 @@ class Level {
         wallLayer = new FlxNapeTilemap();
         wallLayer.loadMapFromArray(ogmoWallLayer.getData(), ogmoWallLayer.widthInTiles, ogmoWallLayer.heightInTiles, AssetPaths.interiorGreen__png, Tiles.Size, Tiles.Size);
         // First tile is empty
-        wallLayer.setupTileIndices([for (i in 1...ogmoWallLayer.totalTiles - 1) i]);
+        wallLayer.setupTileIndices([for (i in 4...ogmoWallLayer.totalTiles - 1) i]);
         wallLayer.body.cbTypes.add(CbTypes.CB_GRABBABLE);
 
         objects = new FlxGroup();

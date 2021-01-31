@@ -48,7 +48,7 @@ class PlayState extends FlxState {
 		camera.follow(spaceman.head);
 		#end
 
-		FlxG.debugger.visible = true;
+		// FlxG.debugger.visible = true;
 	}
 
 	override public function update(elapsed:Float) {
