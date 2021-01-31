@@ -97,7 +97,7 @@ class Spaceman extends FlxGroup {
 	static inline var ANKLE_SQUAT_DIST = 0;
 	static inline var KNEE_SQUAT_DIST = 100;
 	static inline var KNEE_LAUNCH_DIST = 10;
-	static inline var SQUAT_STRENGTH = 100;
+	static inline var SQUAT_STRENGTH = 10;
 	static inline var JUMP_STRENGTH = 3000;
 	static inline var JUMP_TIMER = 2000;
 
@@ -461,7 +461,7 @@ class Spaceman extends FlxGroup {
 			// Switch levels if finish is grabbed
 			if (grabbable.userData != null && Std.is(grabbable.userData.data, Finish)) {
 				FmodFlxUtilities.TransitionToState(new PlayState(AssetPaths.level_2__json));
-				return;
+				return true;
 			}
 			if (joint == null) {
 				joint = new PivotJoint(hand, grabbable, Vec2.get(), grabbable.worldPointToLocal(hand.localPointToWorld(Vec2.get())));
