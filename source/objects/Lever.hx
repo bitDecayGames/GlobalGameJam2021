@@ -77,6 +77,7 @@ class Lever extends FlxGroup implements ITargeter {
 			angle.stiff = true;
 
 			// SFX: Play satisfying clunk of lever being engaged
+			FmodManager.PlaySoundOneShot(FmodSFX.HandleLock);
 
 			for (t in targets) {
 				t.trigger();

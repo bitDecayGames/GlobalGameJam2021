@@ -32,6 +32,7 @@ class Button extends SelfAssigningFlxNapeSprite implements ITargeter {
 			triggered = true;
 
 			// SFX button press
+			FmodManager.PlaySoundOneShot(FmodSFX.ButtonClick);
 
 			loadGraphic(AssetPaths.buttonBase__png);
 			for (t in this.targets) {

@@ -79,7 +79,7 @@
           "height": 118,
           "originX": 0,
           "originY": 0,
-          "values": {"targets": "door2"}
+          "values": {"targets": "checkpoint1,door2"}
         },
         {
           "name": "door",
@@ -104,7 +104,7 @@
           "height": 63,
           "originX": 0,
           "originY": 0,
-          "values": {"targets": "door4"}
+          "values": {"targets": "checkpoint3,door4"}
         },
         {
           "name": "door",
@@ -130,7 +130,7 @@
           "originX": 0,
           "originY": 0,
           "rotation": 4.71238898038469,
-          "values": {"targets": "door3"}
+          "values": {"targets": "checkpoint2,door3"}
         },
         {
           "name": "button",
@@ -143,7 +143,7 @@
           "originX": 0,
           "originY": 0,
           "rotation": 1.5707963267948966,
-          "values": {"targets": ""}
+          "values": {"targets": "end1"}
         },
         {"name": "box", "id": 17, "_eid": "04734008", "x": 1747.1971602361432, "y": 1467.2725663448568, "width": 80, "height": 80, "originX": 0, "originY": 0, "rotation": -0.24434609527920614},
         {"name": "box", "id": 18, "_eid": "04734008", "x": 1653.1629143137454, "y": 1230.5552467775249, "width": 80, "height": 80, "originX": 0, "originY": 0, "rotation": 0.8901179185171081},
@@ -159,7 +159,53 @@
           "originY": 0,
           "values": {"targetValue": "blackout1"}
         },
-        {"name": "box", "id": 24, "_eid": "04734008", "x": 153.5403851843699, "y": 1355.9903546923513, "width": 80, "height": 80, "originX": 0, "originY": 0, "rotation": 0}
+        {"name": "box", "id": 24, "_eid": "04734008", "x": 153.5403851843699, "y": 1355.9903546923513, "width": 80, "height": 80, "originX": 0, "originY": 0, "rotation": 0},
+        {
+          "name": "checkpoint",
+          "id": 25,
+          "_eid": "06725748",
+          "x": 1176,
+          "y": 2156,
+          "width": 49,
+          "height": 49,
+          "originX": 0,
+          "originY": 0,
+          "values": {"targetValue": "checkpoint1"}
+        },
+        {
+          "name": "checkpoint",
+          "id": 26,
+          "_eid": "06725748",
+          "x": 2401,
+          "y": 1323,
+          "width": 49,
+          "height": 49,
+          "originX": 0,
+          "originY": 0,
+          "values": {"targetValue": "checkpoint2"}
+        },
+        {
+          "name": "checkpoint",
+          "id": 27,
+          "_eid": "06725748",
+          "x": 1470,
+          "y": 980,
+          "width": 49,
+          "height": 49,
+          "originX": 0,
+          "originY": 0,
+          "values": {"targetValue": "checkpoint3"}
+        },
+        {
+          "name": "end",
+          "id": 28,
+          "_eid": "12819532",
+          "x": 1225,
+          "y": 294,
+          "originX": 0,
+          "originY": 0,
+          "values": {"targetValue": "end1"}
+        }
       ]
     },
     {
