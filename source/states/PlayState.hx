@@ -18,7 +18,7 @@ import flixel.FlxState;
 using extensions.FlxStateExt;
 
 class PlayState extends FlxState {
-	public static var stopFollow = false;
+	public static var gameOver = false;
 
 	var levelAssetPath:String;
 	var level:Level;
@@ -97,11 +97,13 @@ class PlayState extends FlxState {
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
-		Trackers.attemptTimer += elapsed;
-		timeDisplay.text = FlxStringUtil.formatTime(Trackers.attemptTimer, true);
+		if (!gameOver) {
+			Trackers.attemptTimer += elapsed;
+			timeDisplay.text = FlxStringUtil.formatTime(Trackers.attemptTimer, true);
+		}
 
 		#if !nospin
-		if (!stopFollow) {
+		if (!gameOver) {
 			camera.angle = -level.player.torso.angle;
 		}
 		#end

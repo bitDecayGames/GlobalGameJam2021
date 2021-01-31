@@ -1,5 +1,7 @@
 package states;
 
+import metrics.Trackers;
+import flixel.util.FlxStringUtil;
 import config.Configure;
 import flixel.FlxSprite;
 import haxefmod.flixel.FmodFlxUtilities;
@@ -98,8 +100,15 @@ class CreditsState extends FlxUIState {
 
 		_txtThankYou = FlxTextFactory.make("Thank you!", FlxG.width / 2, pyxelEditLogo.y + 400, 40, FlxTextAlign.CENTER);
 		_txtThankYou.alignment = FlxTextAlign.CENTER;
+		_txtThankYou.setPosition(FlxG.width / 2 - _txtThankYou.width / 2, _txtThankYou.y);
 		add(_txtThankYou);
 		_allCreditElements.push(_txtThankYou);
+
+		var _txtTime = FlxTextFactory.make('Final Time: ${FlxStringUtil.formatTime(Trackers.attemptTimer, true)}', FlxG.width / 2, _txtThankYou.y + 60, 24, FlxTextAlign.CENTER);
+		_txtTime.alignment = FlxTextAlign.CENTER;
+		_txtTime.setPosition(FlxG.width / 2 - _txtTime.width / 2, _txtTime.y);
+		add(_txtTime);
+		_allCreditElements.push(_txtTime);
 	}
 
 	private function AddSectionToCreditsTextArrays(role:String, creators:Array<String>, finalRoleArray:Array<FlxText>, finalCreatorsArray:Array<FlxText>) {
