@@ -8,14 +8,14 @@ import nape.dynamics.InteractionFilter;
 import nape.shape.Polygon;
 import nape.phys.BodyType;
 import nape.phys.Body;
-import haxefmod.flixel.FmodFlxUtilities;
-import states.PlayState;
 
-class Finish extends SelfAssigningFlxNapeSprite implements ITriggerable {
+class Button extends SelfAssigningFlxNapeSprite implements ITargeter {
+	public var target: ITriggerable;
+
 	public function new(x:Int, y:Int) {
 		super();
 		setPosition(x, y);
-		makeGraphic(Tiles.Size, Tiles.Size, FlxColor.CYAN);
+		makeGraphic(Tiles.Size, Tiles.Size, FlxColor.GREEN);
 
 		var body = new Body(BodyType.STATIC);
 		var poly = new Polygon(Polygon.box(width, height));
@@ -27,6 +27,6 @@ class Finish extends SelfAssigningFlxNapeSprite implements ITriggerable {
 	}
 
 	public function trigger() {
-		FmodFlxUtilities.TransitionToState(new PlayState(AssetPaths.level_2__json));
+		this.target.trigger();
 	}
 }

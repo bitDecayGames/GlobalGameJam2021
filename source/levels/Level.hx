@@ -2,9 +2,13 @@ package levels;
 
 import flixel.group.FlxGroup;
 import flixel.FlxBasic;
+import objects.Button;
+import objects.Door;
 import objects.Finish;
 import objects.Obstacle;
 import objects.Spaceman;
+import objects.ITriggerable;
+import objects.ITargeter;
 import constants.CbTypes;
 import constants.Tiles;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
@@ -26,12 +30,9 @@ class Level {
         wallLayer.body.cbTypes.add(CbTypes.CB_GRABBABLE);
 
         objects = new FlxGroup();
+        var needsTarget = new Map<String, ITargeter>();
+        var needsTargeting = new Map<String, ITriggerable>();
 		loader.loadEntities((entityData) -> {
-            /*
-             * entityData.name
-             * entityData.x
-             * entityData.y
-             */
             var obj: FlxBasic;
             switch(entityData.name) {
                 case "spawn":
@@ -40,10 +41,38 @@ class Level {
                     obj = new Obstacle(entityData.x, entityData.y);
                 case "finish":
                     obj = new Finish(entityData.x, entityData.y);
+                case "door":
+                    obj = new Door(entityData.x, entityData.y);
+                case "button":
+                    obj = new Button(entityData.x, entityData.y);
                 default:
                     throw entityData.name + " is not supported, please add to Level.hx";
             }
             objects.add(obj);
+
+            if (entityData.values == null) {
+                return;
+            }
+
+            // Set up triggers and targets
+            var target = entityData.values.target;
+            if (target != null) {
+                var targetter = cast(obj, ITargeter);
+                if (needsTargeting.exists(target)) {
+                    targetter.target = cast(needsTargeting[target], ITriggerable);
+                } else {
+                    needsTarget[target] = targetter;
+                }
+            }
+            var targetValue = entityData.values.targetValue;
+            if (targetValue != null) {
+                var triggerable = cast(obj, ITriggerable);
+                if (needsTarget.exists(targetValue)) {
+                    cast(needsTarget[targetValue], ITargeter).target = triggerable;
+                } else {
+                    needsTargeting[targetValue] = triggerable;
+                }
+            }
 		}, "objects");
 	}
 }
