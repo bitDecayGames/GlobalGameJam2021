@@ -18,6 +18,8 @@ import flixel.FlxState;
 using extensions.FlxStateExt;
 
 class PlayState extends FlxState {
+	public static var stopFollow = false;
+
 	var levelAssetPath:String;
 	var level:Level;
 
@@ -99,7 +101,9 @@ class PlayState extends FlxState {
 		timeDisplay.text = FlxStringUtil.formatTime(Trackers.attemptTimer, true);
 
 		#if !nospin
-		camera.angle = -level.player.torso.angle;
+		if (!stopFollow) {
+			camera.angle = -level.player.torso.angle;
+		}
 		#end
 
 		metrics.Trackers.checkSpeed(level.player.torso.body.velocity.length);
