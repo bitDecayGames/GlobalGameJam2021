@@ -472,13 +472,10 @@ class Spaceman extends FlxGroup {
 
 	private function attemptGrab(hand:Body, left:Bool):Bool {
 		var joint = left ? leftHandGrabJoint : rightHandGrabJoint;
+		var attached = false;
 		if (handGrabbables.get(hand).length > 0) {
 			var grabbable = handGrabbables.get(hand)[0];
-			// Trigger object if grabbable
-			if (grabbable.userData != null && Std.is(grabbable.userData.data, ITriggerable)) {
-				cast(grabbable.userData.data, ITriggerable).trigger();
-				return true;
-			}
+
 			if (joint == null) {
 				joint = new PivotJoint(hand, grabbable, Vec2.get(), grabbable.worldPointToLocal(hand.localPointToWorld(Vec2.get())));
 				joint.stiff = false;
@@ -489,7 +486,7 @@ class Spaceman extends FlxGroup {
 				} else {
 					rightHandGrabJoint = joint;
 				}
-				return true;
+				attached = true;
 			}
 			if (!joint.active) {
 				joint.body1 = hand;
@@ -497,10 +494,15 @@ class Spaceman extends FlxGroup {
 				joint.anchor1 = Vec2.get();
 				joint.anchor2 = grabbable.worldPointToLocal(hand.localPointToWorld(Vec2.get()));
 				joint.active = true;
-				return true;
+				attached = true;
+			}
+			// Trigger object if grabbable
+			if (grabbable.userData != null && Std.is(grabbable.userData.data, ITriggerable)) {
+				cast(grabbable.userData.data, ITriggerable).trigger();
 			}
 		}
-		return false;
+
+		return attached;
 	}
 
 	private function handToGrabbable(callback:InteractionCallback) {
