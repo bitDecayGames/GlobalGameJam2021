@@ -1,5 +1,6 @@
 package objects;
 
+import flixel.tweens.FlxTween;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 
@@ -13,7 +14,9 @@ class Blackout extends FlxSprite implements ITriggerable {
 	}
 
 	public function trigger() {
-		triggered = true;
-		this.kill();
+		if (!triggered) {
+			triggered = true;
+			FlxTween.tween(this, {alpha: 0}, 1, { onComplete: (t) -> this.kill()});
+		}
 	}
 }
