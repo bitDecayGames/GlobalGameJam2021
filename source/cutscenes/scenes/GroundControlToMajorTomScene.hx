@@ -4,6 +4,7 @@ import flixel.addons.display.FlxBackdrop;
 import states.CreditsState;
 import flixel.FlxG;
 import haxefmod.flixel.FmodFlxUtilities;
+import haxefmod.FmodManager;
 import states.PlayState;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
@@ -38,6 +39,8 @@ class GroundControlToMajorTomScene extends Cutscene {
 
 	public function new(state:FlxState) {
 		super();
+
+		FmodManager.PlaySong(FmodSongs.Title);
 		var majorTom = new OriginalMajorTom();
 		var teleBall = new OriginalTeleBall();
 		var levelBackground = new OriginalLevelPlatforms();
@@ -68,7 +71,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 		creditsBtn.updateHitbox();
 		state.add(creditsBtn);
 
-		var startingActions = new StartMusicAction(FmodSongs.LetsGo); // change to Space Oddity song
+		var startingActions = new StartMusicAction(FmodSongs.IntoNothing); // change to Space Oddity song
 		startingActions.add(new CameraFollowAction(majorTom, -1)); // start by following tom but don't block
 		startingActions.add(new TriggerAction(() -> {
 			// set up the starting position of the actors
@@ -125,7 +128,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 			majorTom.visible = true;
 			majorTom.setPosition(teleBall.x, teleBall.y);
 		}));
-		add(new PlaySfxAction(FmodSFX.MenuHover)); // TODO: FX teleport ball popping
+		add(new PlaySfxAction(FmodSFX.Teleport)); // TODO: FX teleport ball popping
 		add(new PlayAnimationAction(majorTom, "teleport-in-fall", false));
 		add(new WrapperAction((builder) -> {
 			var tomPos = majorTom.getPosition();
@@ -150,6 +153,8 @@ class GroundControlToMajorTomScene extends Cutscene {
 			shipSlamIntoTomAction.add(new SpinAction(majorTom, 10, shipSlamIntoTomAction.milliseconds, false));
 			return shipSlamIntoTomAction;
 		}));
+		add(new PlaySfxAction(FmodSFX.Bang)); 
+		add(new PlaySfxAction(FmodSFX.AmibenceCutsceneShip)); 
 		add(new IntervalAction(150, 4000, () -> {
 			var x = farAwaySpaceShip.x - 150;
 			var y = farAwaySpaceShip.y;
