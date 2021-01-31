@@ -16,7 +16,7 @@ class Button extends SelfAssigningFlxNapeSprite implements ITargeter {
 	public function new(x:Float, y:Float) {
 		super();
 		setPosition(x, y);
-		makeGraphic(Tiles.Size, Tiles.Size, FlxColor.GREEN);
+		loadGraphic(AssetPaths.buttonCombo__png);
 
 		var body = new Body(BodyType.STATIC);
 		var poly = new Polygon(Polygon.box(width, height));
@@ -30,6 +30,7 @@ class Button extends SelfAssigningFlxNapeSprite implements ITargeter {
 	public function trigger() {
 		if (!this.triggered) {
 			triggered = true;
+			loadGraphic(AssetPaths.buttonBase__png);
 			for (t in this.targets) {
 				t.trigger();
 			}

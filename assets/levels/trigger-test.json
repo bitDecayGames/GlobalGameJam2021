@@ -53,6 +53,7 @@
           "height": 49,
           "originX": 0,
           "originY": 0,
+          "rotation": 0,
           "values": {"targets": "door1,checkpoint1"}
         },
         {
