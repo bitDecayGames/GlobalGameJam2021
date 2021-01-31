@@ -27,6 +27,6 @@ jobs:
         with:
           dir: export/html5.zip
           itchUserName: bitdecaygames
-          itchGameName: ggj2021
+          itchGameName: found-in-space
           itchChannel: web-release
           butlerApiKey: ${{ secrets.BUTLER_API_KEY }}
