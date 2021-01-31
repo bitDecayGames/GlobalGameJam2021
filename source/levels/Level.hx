@@ -6,6 +6,7 @@ import objects.Finish;
 import objects.Obstacle;
 import objects.Spaceman;
 import constants.CbTypes;
+import constants.Tiles;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
 import flixel.addons.nape.FlxNapeTilemap;
 
@@ -16,11 +17,12 @@ class Level {
 
 	public function new(level:String) {
         var loader = new FlxOgmo3Loader(AssetPaths.levels__ogmo, level);
-        var ogmoWallLayer = loader.loadTilemap(AssetPaths.test__png, "walls");
+        var ogmoWallLayer = loader.loadTilemap(AssetPaths.interiorGreen__png, "walls");
 
         wallLayer = new FlxNapeTilemap();
-        wallLayer.loadMapFromArray(ogmoWallLayer.getData(), ogmoWallLayer.widthInTiles, ogmoWallLayer.heightInTiles, AssetPaths.test__png, 32, 32);
-        wallLayer.setupTileIndices([1, 2, 3]);
+        wallLayer.loadMapFromArray(ogmoWallLayer.getData(), ogmoWallLayer.widthInTiles, ogmoWallLayer.heightInTiles, AssetPaths.interiorGreen__png, Tiles.Size, Tiles.Size);
+        // First tile is empty
+        wallLayer.setupTileIndices([for (i in 4...ogmoWallLayer.totalTiles - 1) i]);
         wallLayer.body.cbTypes.add(CbTypes.CB_GRABBABLE);
 
         objects = new FlxGroup();

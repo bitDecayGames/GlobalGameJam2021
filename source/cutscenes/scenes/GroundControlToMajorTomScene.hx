@@ -4,6 +4,7 @@ import flixel.FlxState;
 import flixel.FlxSprite;
 import cutscenes.actions.WaitAction;
 import cutscenes.actions.StartMusicAction;
+import cutscenes.actions.PlaySfxAction;
 import cutscenes.actions.StopMusicAction;
 import cutscenes.actions.PlayAnimationAction;
 import cutscenes.actions.MoveAction;
@@ -80,6 +81,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 			majorTom.visible = true;
 			majorTom.setPosition(teleBall.x, teleBall.y);
 		}));
+		add(new PlaySfxAction(FmodSFX.MenuHover));
 		add(new PlayAnimationAction(majorTom, "teleport-in-fall", false));
 		add(new WrapperAction((builder) -> {
 			var tomSpinAction = new MoveAction(majorTom, majorTom.getPosition(), majorTom.getPosition().add(100, -25), 8000);
