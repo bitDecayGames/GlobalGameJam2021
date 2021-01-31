@@ -1,5 +1,10 @@
 package states;
 
+import metrics.Trackers;
+import flixel.FlxCamera;
+import flixel.util.FlxStringUtil;
+import flixel.text.FlxText;
+import misc.FlxTextFactory;
 import objects.Ball;
 import flixel.FlxG;
 import flixel.FlxCamera.FlxCameraFollowStyle;
@@ -13,8 +18,12 @@ import flixel.FlxState;
 using extensions.FlxStateExt;
 
 class PlayState extends FlxState {
+	public static var gameOver = false;
+
 	var levelAssetPath:String;
 	var level:Level;
+
+	var timeDisplay:FlxText;
 
 	public function new(levelAssetPath:String) {
 		super();
@@ -39,6 +48,19 @@ class PlayState extends FlxState {
 		FlxG.camera.y = (FlxG.camera.height - ogHeight) / -2;
 		#end
 
+		// var defaultCam = FlxG.camera;
+		var timerCam = new FlxCamera();
+		timerCam.bgColor = FlxColor.TRANSPARENT;
+		FlxCamera.defaultCameras = [FlxG.camera];
+		FlxG.cameras.add(timerCam);
+
+		// reset our tracker timer on create
+		Trackers.attemptTimer = 0.0;
+		timeDisplay = FlxTextFactory.make("", FlxG.width / 2 - 30, 20, 18);
+		timeDisplay.scrollFactor.set(0,0);
+		timeDisplay.cameras = [timerCam];
+		add(timeDisplay);
+
 		CbTypes.initTypes();
 		FlxNapeSpace.init();
 
@@ -47,8 +69,9 @@ class PlayState extends FlxState {
 		// walls.cbTypes.add(CbTypes.CB_GRABBABLE);
 		FlxNapeSpace.space.gravity.setxy(0, 0);
 
-		var bg = new FlxSprite(AssetPaths.nebula0__png);
-		bg.scale.set(3, 3);
+		var bg = new FlxSprite(AssetPaths.nebulaBackground__png);
+		bg.scale.set(2, 2);
+		bg.scrollFactor.set(0, 0);
 		add(bg);
 
 		level = new Level(levelAssetPath);
@@ -75,8 +98,15 @@ class PlayState extends FlxState {
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
+		if (!gameOver) {
+			Trackers.attemptTimer += elapsed;
+			timeDisplay.text = FlxStringUtil.formatTime(Trackers.attemptTimer, true);
+		}
+
 		#if !nospin
-		camera.angle = -level.player.torso.angle;
+		if (!gameOver) {
+			camera.angle = -level.player.torso.angle;
+		}
 		#end
 
 		metrics.Trackers.checkSpeed(level.player.torso.body.velocity.length);

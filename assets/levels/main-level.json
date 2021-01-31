@@ -29,7 +29,7 @@
       "gridCellsX": 64,
       "gridCellsY": 58,
       "entities": [
-        {"name": "spawn", "id": 1, "_eid": "04747128", "x": 294, "y": 1372, "originX": 0, "originY": 0},
+        {"name": "spawn", "id": 1, "_eid": "04747128", "x": 343, "y": 1372, "originX": 0, "originY": 0},
         {
           "name": "door",
           "id": 7,

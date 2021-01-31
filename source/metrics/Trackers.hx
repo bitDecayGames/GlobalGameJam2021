@@ -7,6 +7,8 @@ class Trackers {
 	public static var MAX_SPEED = 0;
 	private static var SPEED_BUCKET_SIZE = 20;
 
+	public static var attemptTimer = 0.0;
+
 	public static function checkSpeed(speed:Float) {
 		// save a bunch of reports and just check reasonable increments
 		var bracket = Math.floor(speed / SPEED_BUCKET_SIZE) * SPEED_BUCKET_SIZE;
