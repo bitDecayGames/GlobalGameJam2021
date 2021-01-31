@@ -27,7 +27,7 @@ class Wheel extends FlxGroup implements ITargeter {
 	var base:FlxSprite;
 	var grabber:SelfAssigningFlxNapeSprite;
 
-	var angle:AngleJoint;
+	var angleJoint:AngleJoint;
 	var maxAngle =  Math.PI * 4;
 	var lastSqueakAngle:Float = 0;
 
@@ -49,9 +49,9 @@ class Wheel extends FlxGroup implements ITargeter {
 		pivot.active = true;
 		pivot.space = FlxNapeSpace.space;
 
-		angle = new AngleJoint(FlxNapeSpace.space.world, grabber.body, 0, maxAngle);
-		angle.active = true;
-		angle.space = FlxNapeSpace.space;
+		angleJoint = new AngleJoint(FlxNapeSpace.space.world, grabber.body, 0, maxAngle);
+		angleJoint.active = true;
+		angleJoint.space = FlxNapeSpace.space;
 	}
 
 	override public function update(delta:Float) {
@@ -61,29 +61,28 @@ class Wheel extends FlxGroup implements ITargeter {
 		base.y = grabber.y + (grabber.height / 2) - (base.height / 2);
 
 		var angVel = grabber.body.angularVel;
-		if (angVel > 0.1) {
+		if (Math.abs(angVel) > 0.1) {
 			grabber.body.applyAngularImpulse(angVel * -10);
 			angVel = grabber.body.angularVel;
 			grabber.body.applyAngularImpulse(angVel * -10);
 
-			// SFX: Wheel spinning 
+			// SFX: Wheel spinning
 			var currentAng = FlxAngle.TO_DEG*grabber.body.rotation;
 			if (!locked && Math.abs(currentAng-lastSqueakAngle) > 72){
 				lastSqueakAngle = currentAng;
 				FmodManager.PlaySoundOneShot(FmodSFX.Squeak);
 			}
 
-			FlxG.watch.addQuick("Current Angle: ", grabber.body.rotation);
-			FlxG.watch.addQuick("Joint Min: ", angle.jointMin);
-			FlxG.watch.addQuick("Joint Max: ", angle.jointMax);
-
-			if (locked && (grabber.body.rotation == angle.jointMin || currentAng == angle.jointMax)){
-				if (lockedClickAng != grabber.body.rotation) {
-					FmodManager.PlaySoundOneShot(FmodSFX.HandleComplete);
-					lockedClickAng = grabber.body.rotation;
+			if (locked) {
+				if (grabber.body.rotation <= angleJoint.jointMin+0.05 || grabber.body.rotation >= angleJoint.jointMax-0.05) {
+					if (Math.abs(lockedClickAng - grabber.body.rotation) > 0.1) {
+						// only do this if we got far enough away from our last bang angle
+						FmodManager.PlaySoundOneShot(FmodSFX.HandleComplete);
+						lockedClickAng = grabber.body.rotation;
+					}
 				}
 			}
-		} 
+		}
 
 		if (!triggered) {
 			var ratio = grabber.body.rotation / maxAngle;
@@ -115,7 +114,7 @@ class Wheel extends FlxGroup implements ITargeter {
 			// SFX: Wheen lock sound / door opened fully sound
 			FmodManager.PlaySoundOneShot(FmodSFX.HandleLock);
 
-			angle.jointMin = maxAngle-0.5;
+			angleJoint.jointMin = maxAngle-0.5;
 			locked = true;
 			triggered = true;
 			for (t in this.targets) {

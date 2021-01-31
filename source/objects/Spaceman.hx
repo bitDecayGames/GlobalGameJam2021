@@ -552,7 +552,8 @@ class Spaceman extends FlxGroup {
 		}
 
 		// SFX: Body part bumped into something at impact speed
-		if (impactSpeed > 10) {
+		if (impactSpeed > 80) {
+			trace(impactSpeed);
 			FmodManager.PlaySoundOneShot(FmodSFX.Grab);
 		}
 	}
