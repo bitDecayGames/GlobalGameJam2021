@@ -1,5 +1,8 @@
 package levels;
 
+import flixel.FlxSprite;
+import checkpoint.CheckpointManager;
+import flixel.tile.FlxTilemap;
 import flixel.math.FlxVector;
 import objects.SelfAssigningFlxNapeSprite;
 import flixel.FlxObject;
@@ -10,6 +13,7 @@ import objects.Button;
 import objects.Blackout;
 import objects.Checkpoint;
 import objects.Door;
+import objects.End;
 import objects.Lever;
 import objects.Obstacle;
 import objects.Spaceman;
@@ -26,17 +30,22 @@ class Level {
     public var player:Spaceman;
 
     public var wallLayer:FlxNapeTilemap;
+    public var background1:FlxTilemap;
+    public var background2:FlxTilemap;
     public var objects: FlxGroup;
 
 	public function new(level:String) {
         var loader = new FlxOgmo3Loader(AssetPaths.levels__ogmo, level);
         var ogmoWallLayer = loader.loadTilemap(AssetPaths.interiorGreen__png, "walls");
+        background1 = loader.loadTilemap(AssetPaths.interiorGrey__png, "background");
+        background2 = loader.loadTilemap(AssetPaths.backgroundGrey__png, "background");
 
         wallLayer = new FlxNapeTilemap();
         wallLayer.loadMapFromArray(ogmoWallLayer.getData(), ogmoWallLayer.widthInTiles, ogmoWallLayer.heightInTiles, AssetPaths.interiorGreen__png, Tiles.Size, Tiles.Size);
         // First 4 tiles are empty
         wallLayer.setupTileIndices([for (i in 4...ogmoWallLayer.totalTiles - 1) i]);
         wallLayer.body.cbTypes.add(CbTypes.CB_GRABBABLE);
+        wallLayer.body.cbTypes.add(CbTypes.CB_BUMPER);
 
         objects = new FlxGroup();
         var needsTarget = new Map<String, ITargeter>();
@@ -57,7 +66,10 @@ class Level {
             var obj: FlxBasic;
             switch(entityData.name) {
                 case "spawn":
-                    player = new Spaceman(x, y);
+                    if (!CheckpointManager.firstTime) {
+                        CheckpointManager.setCheckpoint(x, y);
+                    }
+                    player = new Spaceman(CheckpointManager.getX(), CheckpointManager.getY());
                     obj = player;
                 case "box":
                     obj = new Obstacle(x, y);
@@ -81,6 +93,8 @@ class Level {
                         throw "blackout missing height";
                     }
                     obj = new Blackout(entityData.x, entityData.y, entityData.width, entityData.height);
+                case "end":
+                    obj = new End(x, y);
 
                 default:
                     throw entityData.name + " is not supported, please add to Level.hx";
@@ -104,21 +118,22 @@ class Level {
             if (targets != null) {
                 var targetter = cast(obj, ITargeter);
                 var targetStrList = Std.string(targets).split(",");
+
                 for (ts in targetStrList) {
+                    needsTarget.set(ts, targetter);
+
                     if (needsTargeting.exists(ts)) {
                         targetter.targets.push(cast(needsTargeting.get(ts), ITriggerable));
-                    } else {
-                        needsTarget.set(ts, targetter);
                     }
                 }
             }
             var targetValue = entityData.values.targetValue;
             if (targetValue != null) {
                 var triggerable = cast(obj, ITriggerable);
+                needsTargeting.set(targetValue, triggerable);
+
                 if (needsTarget.exists(targetValue)) {
                     cast(needsTarget.get(targetValue), ITargeter).targets.push(triggerable);
-                } else {
-                    needsTargeting.set(targetValue, triggerable);
                 }
             }
 		}, "objects");

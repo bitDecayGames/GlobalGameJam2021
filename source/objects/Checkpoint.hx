@@ -1,5 +1,6 @@
 package objects;
 
+import nape.phys.Body;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import constants.Tiles;
@@ -19,5 +20,9 @@ class Checkpoint extends FlxSprite implements ITriggerable {
 			this.triggered = true;
 			CheckpointManager.setCheckpoint(this.x, this.y);
 		}
+	}
+
+	public function getTriggerBody():Body {
+		return null;
 	}
 }

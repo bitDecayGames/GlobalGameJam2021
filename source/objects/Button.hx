@@ -1,9 +1,7 @@
 package objects;
 
-import flixel.util.FlxColor;
 import constants.CbTypes;
 import constants.CGroups;
-import constants.Tiles;
 import nape.dynamics.InteractionFilter;
 import nape.shape.Polygon;
 import nape.phys.BodyType;
@@ -16,7 +14,7 @@ class Button extends SelfAssigningFlxNapeSprite implements ITargeter {
 	public function new(x:Float, y:Float) {
 		super();
 		setPosition(x, y);
-		makeGraphic(Tiles.Size, Tiles.Size, FlxColor.GREEN);
+		loadGraphic(AssetPaths.buttonCombo__png);
 
 		var body = new Body(BodyType.STATIC);
 		var poly = new Polygon(Polygon.box(width, height));
@@ -25,14 +23,25 @@ class Button extends SelfAssigningFlxNapeSprite implements ITargeter {
 		addPremadeBody(body);
 		body.setShapeFilters(new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE)));
 		poly.cbTypes.add(CbTypes.CB_GRABBABLE);
+        poly.cbTypes.add(CbTypes.CB_BUMPER);
+
 	}
 
 	public function trigger() {
 		if (!this.triggered) {
 			triggered = true;
+
+			// SFX button press
+			FmodManager.PlaySoundOneShot(FmodSFX.ButtonClick);
+
+			loadGraphic(AssetPaths.buttonBase__png);
 			for (t in this.targets) {
 				t.trigger();
 			}
 		}
+	}
+
+	public function getTriggerBody():Body {
+		return body;
 	}
 }

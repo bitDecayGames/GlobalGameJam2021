@@ -13,6 +13,8 @@ import flixel.FlxState;
 using extensions.FlxStateExt;
 
 class PlayState extends FlxState {
+	public static var stopFollow = false;
+
 	var levelAssetPath:String;
 	var level:Level;
 
@@ -23,6 +25,8 @@ class PlayState extends FlxState {
 
 	override public function create() {
 		super.create();
+
+		FmodManager.PlaySong(FmodSongs.Weightless);
 
 		camera.bgColor = FlxColor.GRAY;
 
@@ -50,6 +54,8 @@ class PlayState extends FlxState {
 		add(bg);
 
 		level = new Level(levelAssetPath);
+		add(level.background1);
+		add(level.background2);
 		add(level.wallLayer);
 		add(level.objects);
 
@@ -72,7 +78,9 @@ class PlayState extends FlxState {
 		super.update(elapsed);
 
 		#if !nospin
-		camera.angle = -level.player.torso.angle;
+		if (!stopFollow) {
+			camera.angle = -level.player.torso.angle;
+		}
 		#end
 
 		metrics.Trackers.checkSpeed(level.player.torso.body.velocity.length);

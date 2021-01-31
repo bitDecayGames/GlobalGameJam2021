@@ -26,7 +26,7 @@ class MainMenuState extends FlxUIState {
 
 	override public function create():Void {
 		super.create();
-		FmodManager.PlaySong(FmodSongs.LetsGo);
+		FmodManager.PlaySong(FmodSongs.Title);
 		FlxG.log.notice("loaded scene");
 		bgColor = FlxColor.TRANSPARENT;
 		FlxG.camera.pixelPerfectRender = true;
@@ -65,7 +65,7 @@ class MainMenuState extends FlxUIState {
 	}
 
 	function clickPlay():Void {
-		FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState(AssetPaths.trigger_test__json));
+		FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState(AssetPaths.main_level__json));
 	}
 
 	function clickCredits():Void {

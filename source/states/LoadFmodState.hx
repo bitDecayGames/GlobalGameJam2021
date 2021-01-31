@@ -38,12 +38,12 @@ class LoadFmodState extends FlxState {
 			// Once FMOD is ready, and we've dispatched our startup
 
 			#if logan
-			FlxG.switchState(new PlayState(AssetPaths.level_1__json));
+			FlxG.switchState(new PlayState(AssetPaths.test_level__json));
 			#elseif mike
 			FlxG.switchState(new TestCutscenesState());
 			#elseif tanner
 			#elseif jake
-			FlxG.switchState(new PlayState(AssetPaths.trigger_test__json));
+			FlxG.switchState(new PlayState(AssetPaths.main_level__json));
 			#elseif jake2
 			FlxG.switchState(new PlayState(AssetPaths.jake_level__json));
 			#else

@@ -14,7 +14,7 @@ class Door extends SelfAssigningFlxNapeSprite implements ITriggerable {
 		setPosition(x, y);
 		loadGraphic(AssetPaths.door_C__png);
 
-		var body = new Body(BodyType.STATIC);
+		var body = new Body(BodyType.KINEMATIC);
 		var poly = new Polygon(Polygon.box(width, height));
 		body.shapes.add(poly);
 
@@ -26,5 +26,11 @@ class Door extends SelfAssigningFlxNapeSprite implements ITriggerable {
 		triggered = true;
 		this.body.space = null;
 		loadGraphic(AssetPaths.door_O__png);
+
+		// SFX: Door opening
+	}
+
+	public function getTriggerBody():Body {
+		return body;
 	}
 }
