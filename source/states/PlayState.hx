@@ -9,12 +9,10 @@ import flixel.util.FlxColor;
 import constants.CbTypes;
 import flixel.addons.nape.FlxNapeSpace;
 import flixel.FlxState;
-import objects.Spaceman;
 
 using extensions.FlxStateExt;
 
 class PlayState extends FlxState {
-
 	var levelAssetPath:String;
 	var level:Level;
 
@@ -64,6 +62,8 @@ class PlayState extends FlxState {
 		#if spin
 		camera.angle = -level.player.head.angle;
 		#end
+
+		metrics.Trackers.checkSpeed(level.player.torso.body.velocity.length);
 	}
 
 	override public function onFocusLost() {

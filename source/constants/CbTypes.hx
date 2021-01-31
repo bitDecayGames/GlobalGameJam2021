@@ -11,12 +11,8 @@ class CbTypes {
 
 	public static function initTypes() {
 		CB_NAUT = new CbType();
-		trace("CB_NAUT is " + CB_NAUT);
 		CB_HAND = new CbType();
-		trace("CB_HAND is " + CB_HAND);
 		CB_GRABBABLE = new CbType();
-		trace("CB_GRABBABLE is " + CB_GRABBABLE);
 		CB_BALL = new CbType();
-		trace("CB_BALL is " + CB_BALL);
 	}
 }
