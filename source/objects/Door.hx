@@ -1,8 +1,6 @@
 package objects;
 
-import flixel.util.FlxColor;
 import constants.CGroups;
-import constants.Tiles;
 import nape.dynamics.InteractionFilter;
 import nape.shape.Polygon;
 import nape.phys.BodyType;
@@ -14,7 +12,7 @@ class Door extends SelfAssigningFlxNapeSprite implements ITriggerable {
 	public function new(x:Int, y:Int) {
 		super();
 		setPosition(x, y);
-		makeGraphic(Tiles.Size, Tiles.Size * 3, FlxColor.YELLOW);
+		loadGraphic(AssetPaths.door_C__png);
 
 		var body = new Body(BodyType.STATIC);
 		var poly = new Polygon(Polygon.box(width, height));
@@ -26,6 +24,7 @@ class Door extends SelfAssigningFlxNapeSprite implements ITriggerable {
 
 	public function trigger() {
 		triggered = true;
-		this.kill();
+		this.body.space = null;
+		loadGraphic(AssetPaths.door_O__png);
 	}
 }
