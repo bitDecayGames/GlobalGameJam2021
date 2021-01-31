@@ -341,6 +341,7 @@ class Spaceman extends FlxGroup {
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
+		#if debug
 		if (FlxG.keys.pressed.W) {
 			torso.body.applyImpulse(Vec2.get(0, -5, true));
 		}
@@ -353,6 +354,7 @@ class Spaceman extends FlxGroup {
 		if (FlxG.keys.pressed.D) {
 			torso.body.applyImpulse(Vec2.get(5, 0, true));
 		}
+		#end
 
 		if (FlxG.mouse.justPressedRight) {
 			trace(Vec2.get(FlxG.mouse.x, FlxG.mouse.y));

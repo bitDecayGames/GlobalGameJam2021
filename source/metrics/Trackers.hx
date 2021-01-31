@@ -15,4 +15,8 @@ class Trackers {
 			Bitlytics.Instance().Queue(Metrics.MAX_SPEED, MAX_SPEED);
 		}
 	}
+
+	public static function sendCheckpoint(checkpoint: Int) {
+		Bitlytics.Instance().Queue(Metrics.CHECKPOINTS, checkpoint);
+	}
 }

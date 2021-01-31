@@ -44,6 +44,8 @@ class LoadFmodState extends FlxState {
 			#elseif tanner
 			#elseif jake
 			FlxG.switchState(new PlayState(AssetPaths.trigger_test__json));
+			#elseif jake2
+			FlxG.switchState(new PlayState(AssetPaths.jake_level__json));
 			#else
 			if (Macros.isDefined("SKIP_SPLASH")) {
 				FlxG.switchState(new MainMenuState());

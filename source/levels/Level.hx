@@ -6,8 +6,10 @@ import objects.Ball;
 import objects.Button;
 import objects.Checkpoint;
 import objects.Door;
+import objects.Lever;
 import objects.Obstacle;
 import objects.Spaceman;
+import objects.Wheel;
 import objects.ITriggerable;
 import objects.ITargeter;
 import constants.CbTypes;
@@ -28,7 +30,7 @@ class Level {
 
         wallLayer = new FlxNapeTilemap();
         wallLayer.loadMapFromArray(ogmoWallLayer.getData(), ogmoWallLayer.widthInTiles, ogmoWallLayer.heightInTiles, AssetPaths.interiorGreen__png, Tiles.Size, Tiles.Size);
-        // First tile is empty
+        // First 4 tiles are empty
         wallLayer.setupTileIndices([for (i in 4...ogmoWallLayer.totalTiles - 1) i]);
         wallLayer.body.cbTypes.add(CbTypes.CB_GRABBABLE);
 
@@ -54,9 +56,14 @@ class Level {
                 case "button":
                     obj = new Button(x, y);
                 case "ball":
-                    obj = new Ball(entityData.x, entityData.y);
+                    obj = new Ball(x, y);
                 case "checkpoint":
                     obj = new Checkpoint(x, y);
+                case "lever":
+                    obj = new Lever(x, y);
+                case "wheel":
+                    obj = new Wheel(x, y);
+
                 default:
                     throw entityData.name + " is not supported, please add to Level.hx";
             }

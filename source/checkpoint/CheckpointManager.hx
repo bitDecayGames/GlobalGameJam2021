@@ -17,5 +17,6 @@ class CheckpointManager {
         x = newX;
         y = newY;
         checkpointNum++;
+        metrics.Trackers.sendCheckpoint(checkpointNum);
     }
 }
