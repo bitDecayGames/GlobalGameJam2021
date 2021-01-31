@@ -3,6 +3,7 @@ package levels;
 import flixel.group.FlxGroup;
 import flixel.FlxBasic;
 import objects.Button;
+import objects.Checkpoint;
 import objects.Door;
 import objects.Finish;
 import objects.Obstacle;
@@ -53,6 +54,8 @@ class Level {
                     obj = new Door(x, y);
                 case "button":
                     obj = new Button(x, y);
+                case "checkpoint":
+                    obj = new Checkpoint(x, y);
                 default:
                     throw entityData.name + " is not supported, please add to Level.hx";
             }

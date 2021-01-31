@@ -10,6 +10,8 @@ import nape.phys.BodyType;
 import nape.phys.Body;
 
 class Door extends SelfAssigningFlxNapeSprite implements ITriggerable {
+	public var triggered = false;
+
 	public function new(x:Int, y:Int) {
 		super();
 		setPosition(x, y);
@@ -24,6 +26,7 @@ class Door extends SelfAssigningFlxNapeSprite implements ITriggerable {
 	}
 
 	public function trigger() {
+		triggered = true;
 		this.kill();
 	}
 }

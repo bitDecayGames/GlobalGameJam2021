@@ -12,6 +12,8 @@ import haxefmod.flixel.FmodFlxUtilities;
 import states.PlayState;
 
 class Finish extends SelfAssigningFlxNapeSprite implements ITriggerable {
+	public var triggered = false;
+
 	public function new(x:Int, y:Int) {
 		super();
 		setPosition(x, y);
@@ -27,6 +29,7 @@ class Finish extends SelfAssigningFlxNapeSprite implements ITriggerable {
 	}
 
 	public function trigger() {
+		triggered = true;
 		FmodFlxUtilities.TransitionToState(new PlayState(AssetPaths.level_2__json));
 	}
 }
