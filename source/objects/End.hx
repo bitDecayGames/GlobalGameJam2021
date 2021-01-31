@@ -1,5 +1,12 @@
 package objects;
 
+import metrics.Trackers;
+import metrics.Metrics;
+import com.bitdecay.analytics.Common;
+import com.bitdecay.analytics.Bitlytics;
+import states.CreditsState;
+import haxefmod.flixel.FmodFlxUtilities;
+import haxe.Timer;
 import states.PlayState;
 import flixel.tweens.FlxTween;
 import flixel.addons.nape.FlxNapeSpace;
@@ -24,11 +31,23 @@ class End extends FlxSprite implements ITargeter {
 			triggered = true;
 
 			// Game complete
-			PlayState.stopFollow = true;
+			Bitlytics.Instance().Queue(Common.GameCompleted, 1);
+			Bitlytics.Instance().Queue(Metrics.COMPLETE_TIME, Trackers.attemptTimer);
+
+			PlayState.gameOver = true;
 			FlxNapeSpace.space.gravity.setxy(0, 1100);
 			FlxTween.tween(FlxG.camera, {
 				angle: 0.0,
-			}, 0.5);
+			}, 0.5, {
+				onComplete: (t) -> {
+					Timer.delay(() -> {
+						FlxG.camera.fade(FlxColor.BLACK, 1, false, function()
+							{
+								FmodFlxUtilities.TransitionToState(new CreditsState());
+							});
+					}, 2000);
+				}
+			});
 		}
 	}
 
