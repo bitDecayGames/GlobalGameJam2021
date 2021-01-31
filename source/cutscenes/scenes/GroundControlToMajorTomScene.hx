@@ -44,7 +44,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 		var farAwaySpaceShip = new FarAwaySpaceShip();
 		var titleText1 = new TitleText1();
 		var titleText2 = new TitleText2();
-		var backdrop = new FlxBackdrop(AssetPaths.nebula0__png, 0, 0);
+		var backdrop = new FlxBackdrop(AssetPaths.simple_star_background__png, 0, 0);
 		backdrop.x -= backdrop.width * 0.5;
 		backdrop.y -= backdrop.height * 0.5;
 		state.add(backdrop);
@@ -55,7 +55,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 		state.add(titleText1);
 		state.add(titleText2);
 		var startBtn = UiHelpers.createMenuButton("Start", () -> {
-			FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState(AssetPaths.trigger_test__json));
+			FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState(AssetPaths.test_level__json));
 		});
 		startBtn.setPosition(FlxG.width / 2 - startBtn.width / 2, FlxG.height - startBtn.height - 70);
 		startBtn.updateHitbox();
