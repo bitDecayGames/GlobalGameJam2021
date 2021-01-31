@@ -211,6 +211,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 			titleText1.setPosition(600 - titleText1.width * .5, -titleText1.height * .5);
 			titleText2.setPosition(600 - titleText2.width * .5, -titleText2.height * .5);
 		}));
+		add(new StartMusicAction(FmodSongs.Title));
 		add(new WrapperAction((builder) -> {
 			var moveOnScreen = new MoveAction(titleText1, titleText1.getPosition(), titleText1.getPosition().add(-600, 0), 4000);
 			return moveOnScreen;
