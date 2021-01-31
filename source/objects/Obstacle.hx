@@ -8,7 +8,7 @@ import nape.phys.BodyType;
 import nape.phys.Body;
 
 class Obstacle extends SelfAssigningFlxNapeSprite {
-	public function new(x:Int, y:Int) {
+	public function new(x:Float, y:Float) {
 		super();
 		setPosition(x, y);
 		loadGraphic(AssetPaths.crate__png);

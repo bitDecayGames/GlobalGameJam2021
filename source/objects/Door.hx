@@ -9,7 +9,7 @@ import nape.phys.Body;
 class Door extends SelfAssigningFlxNapeSprite implements ITriggerable {
 	public var triggered = false;
 
-	public function new(x:Int, y:Int) {
+	public function new(x:Float, y:Float) {
 		super();
 		setPosition(x, y);
 		loadGraphic(AssetPaths.door_C__png);

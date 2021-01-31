@@ -26,6 +26,7 @@ class PlayState extends FlxState {
 
 		camera.bgColor = FlxColor.GRAY;
 
+		#if !nospin
 		var ogWidth = FlxG.width;
 		var ogHeight = FlxG.height;
 
@@ -34,6 +35,7 @@ class PlayState extends FlxState {
 		FlxG.camera.height = camera.width;
 		FlxG.camera.x = (FlxG.camera.width - ogWidth) / -2;
 		FlxG.camera.y = (FlxG.camera.height - ogHeight) / -2;
+		#end
 
 		CbTypes.initTypes();
 		FlxNapeSpace.init();

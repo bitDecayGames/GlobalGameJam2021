@@ -13,7 +13,7 @@ class Lever extends SelfAssigningFlxNapeSprite implements ITargeter {
 	public var triggered = false;
 	public var targets: Array<ITriggerable> = [];
 
-	public function new(x:Int, y:Int) {
+	public function new(x:Float, y:Float) {
 		super();
 		setPosition(x, y);
 		makeGraphic(Tiles.Size, Tiles.Size, FlxColor.PURPLE);

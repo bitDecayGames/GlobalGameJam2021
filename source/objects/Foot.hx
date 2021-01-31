@@ -10,7 +10,7 @@ import nape.phys.BodyType;
 import nape.phys.Body;
 
 class Foot extends SelfAssigningFlxNapeSprite {
-	public function new(x:Int, y:Int, asset:String) {
+	public function new(x:Float, y:Float, asset:String) {
 		super();
 		setPosition(x, y);
 		loadGraphic(asset);

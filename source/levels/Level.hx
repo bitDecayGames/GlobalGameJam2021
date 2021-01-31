@@ -1,5 +1,8 @@
 package levels;
 
+import flixel.math.FlxVector;
+import objects.SelfAssigningFlxNapeSprite;
+import flixel.FlxObject;
 import flixel.group.FlxGroup;
 import flixel.FlxBasic;
 import objects.Ball;
@@ -40,10 +43,16 @@ class Level {
         var needsTargeting = new Map<String, ITriggerable>();
 
 		loader.loadEntities((entityData) -> {
-            var widthDelta = entityData.width != null ? Math.ceil(entityData.width / 2) : 0;
-            var heightDelta = entityData.height != null ? Math.ceil(entityData.height / 2) : 0;
-            var x = entityData.x + widthDelta;
-            var y = entityData.y + heightDelta;
+            var rot = entityData.rotation != null ? entityData.rotation : 0.0;
+
+            var posDelta = new FlxVector(
+                entityData.width != null ? entityData.width / 2 : 0,
+                entityData.height != null ? entityData.height / 2 : 0
+            );
+            posDelta.rotateByRadians(rot);
+
+            var x = entityData.x + posDelta.x;
+            var y = entityData.y + posDelta.y;
 
             var obj: FlxBasic;
             switch(entityData.name) {
@@ -77,6 +86,14 @@ class Level {
                     throw entityData.name + " is not supported, please add to Level.hx";
             }
             objects.add(obj);
+
+            if (Std.is(obj, SelfAssigningFlxNapeSprite)) {
+                var fOb = cast(obj, SelfAssigningFlxNapeSprite);
+                var space = fOb.body.space;
+                fOb.body.space = null;
+                fOb.body.rotation = rot;
+                fOb.body.space = space;
+            }
 
             if (entityData.values == null) {
                 return;

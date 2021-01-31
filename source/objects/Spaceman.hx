@@ -115,7 +115,7 @@ class Spaceman extends FlxGroup {
 
 	var outliner = new Outline(FlxColor.PURPLE, 1, 1);
 
-	public function new(x:Int, y:Int) {
+	public function new(x:Float, y:Float) {
 		super();
 
 		#if !display

@@ -8,7 +8,7 @@ import checkpoint.CheckpointManager;
 class Checkpoint extends FlxSprite implements ITriggerable {
 	public var triggered = false;
 
-	public function new(x:Int, y:Int) {
+	public function new(x:Float, y:Float) {
 		super();
 		setPosition(x, y);
 		makeGraphic(Tiles.Size, Tiles.Size, FlxColor.TRANSPARENT);

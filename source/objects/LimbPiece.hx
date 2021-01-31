@@ -9,7 +9,7 @@ import nape.phys.BodyType;
 import nape.phys.Body;
 
 class LimbPiece extends SelfAssigningFlxNapeSprite {
-	public function new(x:Int, y:Int, asset:String, widthMod:Int = 0, heightMod:Int = 0) {
+	public function new(x:Float, y:Float, asset:String, widthMod:Int = 0, heightMod:Int = 0) {
 		super();
 		setPosition(x, y);
 		loadGraphic(asset);
