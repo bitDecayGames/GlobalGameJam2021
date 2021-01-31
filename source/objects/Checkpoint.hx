@@ -17,8 +17,7 @@ class Checkpoint extends FlxSprite implements ITriggerable {
 	public function trigger() {
 		if (!this.triggered) {
 			this.triggered = true;
-			CheckpointManager.x = this.x;
-			CheckpointManager.y = this.y;
+			CheckpointManager.setCheckpoint(this.x, this.y);
 		}
 	}
 }

@@ -1,9 +1,21 @@
 package checkpoint;
 
 class CheckpointManager {
-    public static var x:Float = 0;
-    public static var y:Float = 0;
+    private static var x:Float = 0;
+    private static var y:Float = 0;
+    private static var checkpointNum = 0;
 
-    // TODO incremental checkpoint value for analytics
-    // TODO multievent tigger
+    public static function getX(): Float {
+        return x;
+    }
+
+    public static function getY(): Float {
+        return y;
+    }
+
+    public static function setCheckpoint(newX: Float, newY: Float) {
+        x = newX;
+        y = newY;
+        checkpointNum++;
+    }
 }
