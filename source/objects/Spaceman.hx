@@ -1,5 +1,9 @@
 package objects;
 
+import flixel.FlxBasic;
+import states.PlayState;
+import haxefmod.flixel.FmodFlxUtilities;
+import nape.dynamics.InteractionFilter;
 import haxe.Timer;
 import flixel.math.FlxAngle;
 import nape.constraint.AngleJoint;
@@ -454,6 +458,11 @@ class Spaceman extends FlxGroup {
 		var joint = left ? leftHandGrabJoint : rightHandGrabJoint;
 		if (handGrabbables.get(hand).length > 0) {
 			var grabbable = handGrabbables.get(hand)[0];
+			// Switch levels if finish is grabbed
+			if (grabbable.userData != null && Std.is(grabbable.userData.data, Finish)) {
+				FmodFlxUtilities.TransitionToState(new PlayState(AssetPaths.level_2__json));
+				return;
+			}
 			if (joint == null) {
 				joint = new PivotJoint(hand, grabbable, Vec2.get(), grabbable.worldPointToLocal(hand.localPointToWorld(Vec2.get())));
 				joint.active = true;

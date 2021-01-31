@@ -36,8 +36,4 @@ class CameraFollowAction extends WaitAction {
 			camera.targetOffset.set();
 		}
 	}
-
-	override function toString():String {
-		return super.toString() + '($actor)';
-	}
 }

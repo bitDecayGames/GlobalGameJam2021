@@ -49,11 +49,6 @@ class MainMenuState extends FlxUIState {
 		_btnExit.updateHitbox();
 		add(_btnExit);
 		#end
-
-		trace("Hello world");
-		var scene = new GroundControlToMajorTomScene(this);
-		add(scene);
-		scene.start();
 	}
 
 	override public function update(elapsed:Float):Void {
@@ -64,7 +59,7 @@ class MainMenuState extends FlxUIState {
 	}
 
 	function clickPlay():Void {
-		FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
+		FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState(AssetPaths.level_1__json));
 	}
 
 	function clickCredits():Void {

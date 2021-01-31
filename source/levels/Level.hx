@@ -2,9 +2,9 @@ package levels;
 
 import flixel.group.FlxGroup;
 import flixel.FlxBasic;
+import objects.Finish;
 import objects.Obstacle;
 import objects.Spaceman;
-import flixel.group.FlxSpriteGroup;
 import constants.CbTypes;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
 import flixel.addons.nape.FlxNapeTilemap;
@@ -36,6 +36,8 @@ class Level {
                     obj = new Spaceman(entityData.x, entityData.y);
                 case "box":
                     obj = new Obstacle(entityData.x, entityData.y);
+                case "finish":
+                    obj = new Finish(entityData.x, entityData.y);
                 default:
                     throw entityData.name + " is not supported, please add to Level.hx";
             }
