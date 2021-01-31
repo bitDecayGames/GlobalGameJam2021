@@ -26,5 +26,7 @@ class Door extends SelfAssigningFlxNapeSprite implements ITriggerable {
 		triggered = true;
 		this.body.space = null;
 		loadGraphic(AssetPaths.door_O__png);
+
+		// SFX: Door opening
 	}
 }

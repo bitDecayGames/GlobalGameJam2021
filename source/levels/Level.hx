@@ -104,21 +104,22 @@ class Level {
             if (targets != null) {
                 var targetter = cast(obj, ITargeter);
                 var targetStrList = Std.string(targets).split(",");
+
                 for (ts in targetStrList) {
+                    needsTarget.set(ts, targetter);
+
                     if (needsTargeting.exists(ts)) {
                         targetter.targets.push(cast(needsTargeting.get(ts), ITriggerable));
-                    } else {
-                        needsTarget.set(ts, targetter);
                     }
                 }
             }
             var targetValue = entityData.values.targetValue;
             if (targetValue != null) {
                 var triggerable = cast(obj, ITriggerable);
+                needsTargeting.set(targetValue, triggerable);
+
                 if (needsTarget.exists(targetValue)) {
                     cast(needsTarget.get(targetValue), ITargeter).targets.push(triggerable);
-                } else {
-                    needsTargeting.set(targetValue, triggerable);
                 }
             }
 		}, "objects");

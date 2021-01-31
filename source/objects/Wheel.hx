@@ -54,6 +54,8 @@ class Wheel extends FlxGroup implements ITargeter {
 		base.x = grabber.x + (grabber.width / 2) - (base.width / 2);
 		base.y = grabber.y + (grabber.height / 2) - (base.height / 2);
 
+		// SFX: Wheel spinning
+
 		if (grabber.body.rotation >= maxAngle) {
 			handleRotationComplete();
 		}

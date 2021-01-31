@@ -68,18 +68,6 @@
           "values": {"targetValue": "door1"}
         },
         {
-          "name": "lever",
-          "id": 8,
-          "_eid": "07739029",
-          "x": 245,
-          "y": 343,
-          "width": 49,
-          "height": 49,
-          "originX": 0,
-          "originY": 0,
-          "values": {"targets": "door1"}
-        },
-        {
           "name": "blackout",
           "id": 10,
           "_eid": "07709197",
@@ -112,6 +100,18 @@
           "y": 187.5,
           "width": 63,
           "height": 63,
+          "originX": 0,
+          "originY": 0,
+          "values": {"targets": "door2"}
+        },
+        {
+          "name": "lever",
+          "id": 13,
+          "_eid": "07739029",
+          "x": 535,
+          "y": 323,
+          "width": 69,
+          "height": 118,
           "originX": 0,
           "originY": 0,
           "values": {"targets": "door2"}
