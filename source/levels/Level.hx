@@ -13,6 +13,7 @@ import objects.Button;
 import objects.Blackout;
 import objects.Checkpoint;
 import objects.Door;
+import objects.End;
 import objects.Lever;
 import objects.Obstacle;
 import objects.Spaceman;
@@ -92,6 +93,8 @@ class Level {
                         throw "blackout missing height";
                     }
                     obj = new Blackout(entityData.x, entityData.y, entityData.width, entityData.height);
+                case "end":
+                    obj = new End(x, y);
 
                 default:
                     throw entityData.name + " is not supported, please add to Level.hx";
