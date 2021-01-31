@@ -50,6 +50,8 @@ class PlayState extends FlxState {
 		add(bg);
 
 		level = new Level(levelAssetPath);
+		add(level.background1);
+		add(level.background2);
 		add(level.wallLayer);
 		add(level.objects);
 
