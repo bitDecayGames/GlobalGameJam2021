@@ -544,8 +544,17 @@ class Spaceman extends FlxGroup {
 	}
 
 	private function bodyBumped(callback:InteractionCallback) {
-		// SFX: Body part bumped into something
-		FmodManager.PlaySoundOneShot(FmodSFX.Grab);
+		var impactSpeed = 0.0;
+		if (callback.int1.isBody()) {
+			impactSpeed = callback.int1.castBody.velocity.length;
+		} else if (callback.int1.isShape()) {
+			impactSpeed = callback.int1.castShape.body.velocity.length;
+		}
+
+		// SFX: Body part bumped into something at impact speed
+		if (impactSpeed > 10) {
+			FmodManager.PlaySoundOneShot(FmodSFX.Grab);
+		}
 	}
 
 	private function getAnchor(spr:FlxSprite, data:Dynamic):Vec2 {
