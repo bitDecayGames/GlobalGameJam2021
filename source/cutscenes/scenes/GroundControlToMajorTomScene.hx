@@ -1,9 +1,14 @@
 package cutscenes.scenes;
 
+import flixel.FlxSprite;
+import flixel.FlxCamera;
+import flixel.util.FlxColor;
+import flixel.FlxCamera;
 import flixel.addons.display.FlxBackdrop;
 import states.CreditsState;
 import flixel.FlxG;
 import haxefmod.flixel.FmodFlxUtilities;
+import haxefmod.FmodManager;
 import states.PlayState;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
@@ -29,6 +34,9 @@ import cutscenes.actors.MovementParticle;
 import cutscenes.actors.TitleText1;
 import cutscenes.actors.TitleText2;
 import helpers.UiHelpers;
+#if windows
+import lime.system.System;
+#end
 
 /**
  * This is a copy of the end cutscene from EventfulHorizon
@@ -38,23 +46,39 @@ class GroundControlToMajorTomScene extends Cutscene {
 
 	public function new(state:FlxState) {
 		super();
+		// var camera = FlxG.camera;
+		// var backgroundCam = new FlxCamera();
+		// backgroundCam.bgColor = FlxColor.TRANSPARENT;
+		// FlxCamera.defaultCameras = [camera];
+		// FlxG.cameras.add(backgroundCam);
+		// FlxCamera.defaultCameras = [camera, backgroundCam];
+		// var backdrop = new FlxSprite(0, 0, AssetPaths.nebulaBackground__png);
+		// backdrop.scrollFactor.set(0, 0);
+		// backdrop.cameras = [backgroundCam];
+		// state.add(backdrop);
+
+		
+		FmodManager.PlaySong(FmodSongs.Title);
+
 		var majorTom = new OriginalMajorTom();
+		majorTom.cameras = [camera];
 		var teleBall = new OriginalTeleBall();
+		teleBall.cameras = [camera];
 		var levelBackground = new OriginalLevelPlatforms();
+		levelBackground.cameras = [camera];
 		var farAwaySpaceShip = new FarAwaySpaceShip();
+		farAwaySpaceShip.cameras = [camera];
 		var titleText1 = new TitleText1();
+		titleText1.cameras = [camera];
 		var titleText2 = new TitleText2();
-		var backdrop = new FlxBackdrop(AssetPaths.simple_star_background__png, 0, 0);
-		backdrop.x -= backdrop.width * 0.5;
-		backdrop.y -= backdrop.height * 0.5;
-		state.add(backdrop);
+		titleText2.cameras = [camera];
 		state.add(levelBackground);
 		state.add(farAwaySpaceShip);
 		state.add(majorTom);
 		state.add(teleBall);
 		state.add(titleText1);
 		state.add(titleText2);
-		var startBtn = UiHelpers.createMenuButton("Start", () -> {
+		var startBtn = UiHelpers.createMenuButton("Play", () -> {
 			FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState(AssetPaths.main_level__json));
 		});
 		startBtn.setPosition(FlxG.width / 2 - startBtn.width / 2, FlxG.height - startBtn.height - 70);
@@ -68,7 +92,16 @@ class GroundControlToMajorTomScene extends Cutscene {
 		creditsBtn.updateHitbox();
 		state.add(creditsBtn);
 
-		var startingActions = new StartMusicAction(FmodSongs.LetsGo); // change to Space Oddity song
+		#if windows
+		var _btnExit = UiHelpers.createMenuButton("Exit", () -> {
+			System.exit(0);
+		}));
+		_btnExit.setPosition(FlxG.width / 2 - _btnExit.width / 2, FlxG.height - _btnExit.height - 10);
+		_btnExit.updateHitbox();
+		add(_btnExit);
+		#end
+
+		var startingActions = new StartMusicAction(FmodSongs.IntoNothing);
 		startingActions.add(new CameraFollowAction(majorTom, -1)); // start by following tom but don't block
 		startingActions.add(new TriggerAction(() -> {
 			// set up the starting position of the actors
@@ -125,7 +158,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 			majorTom.visible = true;
 			majorTom.setPosition(teleBall.x, teleBall.y);
 		}));
-		add(new PlaySfxAction(FmodSFX.MenuHover)); // TODO: FX teleport ball popping
+		add(new PlaySfxAction(FmodSFX.Teleport)); // TODO: FX teleport ball popping
 		add(new PlayAnimationAction(majorTom, "teleport-in-fall", false));
 		add(new WrapperAction((builder) -> {
 			var tomPos = majorTom.getPosition();
@@ -150,12 +183,16 @@ class GroundControlToMajorTomScene extends Cutscene {
 			shipSlamIntoTomAction.add(new SpinAction(majorTom, 10, shipSlamIntoTomAction.milliseconds, false));
 			return shipSlamIntoTomAction;
 		}));
+		add(new PlaySfxAction(FmodSFX.Bang)); 
+		add(new PlaySfxAction(FmodSFX.AmibenceCutsceneShip)); 
 		add(new IntervalAction(150, 4000, () -> {
 			var x = farAwaySpaceShip.x - 150;
 			var y = farAwaySpaceShip.y;
 			var secondsToLive = 3.0;
 			var velocity = new FlxPoint(400, 0);
-			state.add(new MovementParticle(x, rnd.float(-1, 1) * 100 + y, secondsToLive, velocity));
+			var particle = new MovementParticle(x, rnd.float(-1, 1) * 100 + y, secondsToLive, velocity);
+			particle.cameras = [camera];
+			state.add(particle);
 		}));
 		add(new WrapperAction((builder) -> {
 			var tomPos = majorTom.getPosition();
@@ -166,7 +203,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 
 			var moveOffscreen = new MoveAction(majorTom, tomPos, tomNewPos, 4000);
 			moveOffscreen.add(new MoveAction(farAwaySpaceShip, shipPos, shipNewPos, moveOffscreen.milliseconds));
-			moveOffscreen.add(new ZoomCameraAction(1, Std.int(moveOffscreen.milliseconds)));
+			moveOffscreen.add(new ZoomCameraAction(camera, 1, Std.int(moveOffscreen.milliseconds)));
 			return moveOffscreen;
 		}));
 		add(new TriggerAction(() -> {
@@ -182,6 +219,7 @@ class GroundControlToMajorTomScene extends Cutscene {
 			titleText1.setPosition(600 - titleText1.width * .5, -titleText1.height * .5);
 			titleText2.setPosition(600 - titleText2.width * .5, -titleText2.height * .5);
 		}));
+		add(new StartMusicAction(FmodSongs.Title));
 		add(new WrapperAction((builder) -> {
 			var moveOnScreen = new MoveAction(titleText1, titleText1.getPosition(), titleText1.getPosition().add(-600, 0), 4000);
 			return moveOnScreen;
@@ -199,9 +237,8 @@ class GroundControlToMajorTomScene extends Cutscene {
 		}));
 		add(new WrapperAction((builder) -> {
 			var moveCameraDown = new MoveAction(majorTom, majorTom.getPosition(), majorTom.getPosition().add(0, 100), 2000);
-			moveCameraDown.add(new ZoomCameraAction(1, moveCameraDown.milliseconds));
+			moveCameraDown.add(new ZoomCameraAction(camera, 1, moveCameraDown.milliseconds));
 			return moveCameraDown;
 		}));
-		add(new StopMusicAction());
 	}
 }

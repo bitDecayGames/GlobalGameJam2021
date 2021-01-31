@@ -3,7 +3,7 @@ package checkpoint;
 class CheckpointManager {
     private static var x:Float = 0;
     private static var y:Float = 0;
-    private static var checkpointNum = 0;
+    public static var checkpointNum = 0;
     public static var firstTime = false;
 
     public static function getX(): Float {
