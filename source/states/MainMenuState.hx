@@ -1,5 +1,6 @@
 package states;
 
+import flixel.FlxCamera;
 import haxefmod.flixel.FmodFlxUtilities;
 import flixel.text.FlxText;
 import flixel.FlxG;
@@ -64,7 +65,7 @@ class MainMenuState extends FlxUIState {
 	}
 
 	function clickPlay():Void {
-		FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState(AssetPaths.level_1__json));
+		FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState(AssetPaths.trigger_test__json));
 	}
 
 	function clickCredits():Void {

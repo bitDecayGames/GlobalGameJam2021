@@ -25,6 +25,16 @@ class PlayState extends FlxState {
 		super.create();
 
 		camera.bgColor = FlxColor.GRAY;
+
+		var ogWidth = FlxG.width;
+		var ogHeight = FlxG.height;
+
+		// // make our camera fill the screen even when rotated
+		FlxG.camera.width = Std.int(Math.sqrt(Math.pow(FlxG.width, 2) + Math.pow(FlxG.height, 2)));
+		FlxG.camera.height = camera.width;
+		FlxG.camera.x = (FlxG.camera.width - ogWidth) / -2;
+		FlxG.camera.y = (FlxG.camera.height - ogHeight) / -2;
+
 		CbTypes.initTypes();
 		FlxNapeSpace.init();
 
