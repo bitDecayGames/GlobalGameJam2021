@@ -61,7 +61,7 @@ class Spaceman extends FlxGroup {
 
 	public var leftLegUpper:LimbPiece;
 	public var leftLegLower:LimbPiece;
-	public var leftFoot:Hand;
+	public var leftFoot:Foot;
 	public var leftKnee:PivotJoint;
 	public var leftAnkle:WeldJoint;
 
@@ -73,7 +73,7 @@ class Spaceman extends FlxGroup {
 
 	public var rightLegUpper:LimbPiece;
 	public var rightLegLower:LimbPiece;
-	public var rightFoot:Hand;
+	public var rightFoot:Foot;
 	public var rightKnee:PivotJoint;
 	public var rightAnkle:WeldJoint;
 
@@ -121,10 +121,10 @@ class Spaceman extends FlxGroup {
 		torso = new Torso(x, y);
 		add(torso);
 
-		rightFoot = new Hand(x, y, AssetPaths.foot_R__png);
+		rightFoot = new Foot(x, y, AssetPaths.foot_R__png);
 		add(rightFoot);
 
-		leftFoot = new Hand(x, y, AssetPaths.foot_L__png);
+		leftFoot = new Foot(x, y, AssetPaths.foot_L__png);
 		add(leftFoot);
 
 		leftLegLower = new LimbPiece(x, y, AssetPaths.lowerLeg_L__png);
@@ -161,10 +161,10 @@ class Spaceman extends FlxGroup {
 		rightArmUpper = new LimbPiece(x, y, AssetPaths.upperArm_R__png);
 		add(rightArmUpper);
 
-		leftHand = new Hand(x, y, AssetPaths.handL_O__png);
+		leftHand = new Hand(x, y, AssetPaths.handL__png);
 		add(leftHand);
 
-		rightHand = new Hand(x, y, AssetPaths.handR_O__png);
+		rightHand = new Hand(x, y, AssetPaths.handR__png);
 		add(rightHand);
 
 		leftArmLower = new LimbPiece(x, y, AssetPaths.lowerArm_L__png);
@@ -388,10 +388,12 @@ class Spaceman extends FlxGroup {
 		}
 
 		if (controls.leftGrab.check()) {
-			leftHand.color = FlxColor.GRAY;
-			attemptGrab(leftHand.body, true);
+			if (attemptGrab(leftHand.body, true)) {
+				leftHand.animation.play(Hand.CLOSED_ANIM);
+				FmodManager.PlaySoundOneShot(FmodSFX.Grab);
+			}
 		} else {
-			leftHand.color = FlxColor.WHITE;
+			leftHand.animation.play(Hand.OPEN_ANIM);
 			if (leftHandGrabJoint != null && leftHandGrabJoint.active) {
 				leftHandGrabJoint.active = false;
 				FmodManager.PlaySoundOneShot(FmodSFX.Release);
@@ -399,14 +401,16 @@ class Spaceman extends FlxGroup {
 		}
 
 		if (controls.rightGrab.check()) {
-			rightHand.color = FlxColor.GRAY;
-			attemptGrab(rightHand.body, false);
+			if (attemptGrab(rightHand.body, false)) {
+				rightHand.animation.play(Hand.CLOSED_ANIM);
+				FmodManager.PlaySoundOneShot(FmodSFX.Grab);
+			}
 			// Should we decide to manipulate collision groups when the player grabs things, this is a very buggy start to that
 			// if (rightHandGrabJoint != null && rightHandGrabJoint.active) {
 			// 	rightHandGrabJoint.body2.setShapeFilters(new InteractionFilter(CGroups.BODY, ~(CGroups.OBSTACLE & CGroups.BODY)));
 			// }
 		} else {
-			rightHand.color = FlxColor.WHITE;
+			rightHand.animation.play(Hand.OPEN_ANIM);
 			if (rightHandGrabJoint != null && rightHandGrabJoint.active) {
 				rightHandGrabJoint.active = false;
 				// rightHandGrabJoint.body2.setShapeFilters(new InteractionFilter(CGroups.OBSTACLE, ~(CGroups.OBSTACLE)));
@@ -446,13 +450,12 @@ class Spaceman extends FlxGroup {
 		}
 	}
 
-	private function attemptGrab(hand:Body, left:Bool) {
+	private function attemptGrab(hand:Body, left:Bool):Bool {
 		var joint = left ? leftHandGrabJoint : rightHandGrabJoint;
 		if (handGrabbables.get(hand).length > 0) {
 			var grabbable = handGrabbables.get(hand)[0];
 			if (joint == null) {
 				joint = new PivotJoint(hand, grabbable, Vec2.get(), grabbable.worldPointToLocal(hand.localPointToWorld(Vec2.get())));
-				FmodManager.PlaySoundOneShot(FmodSFX.Grab);
 				joint.active = true;
 				joint.space = FlxNapeSpace.space;
 				if (left) {
@@ -460,6 +463,7 @@ class Spaceman extends FlxGroup {
 				} else {
 					rightHandGrabJoint = joint;
 				}
+				return true;
 			}
 			if (!joint.active) {
 				joint.body1 = hand;
@@ -467,9 +471,10 @@ class Spaceman extends FlxGroup {
 				joint.anchor1 = Vec2.get();
 				joint.anchor2 = grabbable.worldPointToLocal(hand.position);
 				joint.active = true;
-				FmodManager.PlaySoundOneShot(FmodSFX.Grab);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	private function handToGrabbable(callback:InteractionCallback) {

@@ -20,7 +20,7 @@ class PlayState extends FlxState {
 
 	override public function create() {
 		super.create();
-		FlxG.camera.pixelPerfectRender = true;
+		// FlxG.camera.pixelPerfectRender = true;
 		camera.bgColor = FlxColor.GRAY;
 		CbTypes.initTypes();
 		FlxNapeSpace.init();
