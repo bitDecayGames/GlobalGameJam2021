@@ -2,6 +2,7 @@ package levels;
 
 import flixel.group.FlxGroup;
 import flixel.FlxBasic;
+import objects.Ball;
 import objects.Button;
 import objects.Checkpoint;
 import objects.Door;
@@ -52,6 +53,8 @@ class Level {
                     obj = new Door(x, y);
                 case "button":
                     obj = new Button(x, y);
+                case "ball":
+                    obj = new Ball(entityData.x, entityData.y);
                 case "checkpoint":
                     obj = new Checkpoint(x, y);
                 default:

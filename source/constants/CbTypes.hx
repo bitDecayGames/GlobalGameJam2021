@@ -7,6 +7,7 @@ class CbTypes {
 	public static var CB_NAUT:CbType;
 	public static var CB_HAND:CbType;
 	public static var CB_GRABBABLE:CbType;
+	public static var CB_BALL:CbType;
 
 	public static function initTypes() {
 		CB_NAUT = new CbType();
@@ -15,5 +16,7 @@ class CbTypes {
 		trace("CB_HAND is " + CB_HAND);
 		CB_GRABBABLE = new CbType();
 		trace("CB_GRABBABLE is " + CB_GRABBABLE);
+		CB_BALL = new CbType();
+		trace("CB_BALL is " + CB_BALL);
 	}
 }

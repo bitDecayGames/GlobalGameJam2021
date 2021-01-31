@@ -1,10 +1,10 @@
 {
 	"analytics": {
-		"name": "<PUT SIMPLIFIED GAME NAME HERE>",
+		"name": "found-in-space",
 		"influx": {
 			"api": "https://us-west-2-1.aws.cloud2.influxdata.com/api/v2/write",
 			"org": "13ecc65d2303c6d7",
-			"bucket": "<PUT BUCKET ID HERE>",
+			"bucket": "7e8f8b2e7bb2833f",
 			"token": "token loaded from the '-D API_KEY=<key>' compile flag so it is not committed to source control"
 		}
 	},

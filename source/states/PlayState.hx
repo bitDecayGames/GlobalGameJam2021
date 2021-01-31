@@ -1,5 +1,6 @@
 package states;
 
+import objects.Ball;
 import flixel.FlxG;
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxSprite;
@@ -41,6 +42,10 @@ class PlayState extends FlxState {
 		level = new Level(levelAssetPath);
 		add(level.wallLayer);
 		add(level.objects);
+
+		#if logan
+		add(new Ball(400, 200));
+		#end
 
 		camera.follow(level.player.torso, FlxCameraFollowStyle.PLATFORMER);
 		camera.deadzone.y = 0;
