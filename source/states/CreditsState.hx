@@ -104,12 +104,17 @@ class CreditsState extends FlxUIState {
 		add(_txtThankYou);
 		_allCreditElements.push(_txtThankYou);
 
-		var _txtTime = FlxTextFactory.make('Final Time: ${FlxStringUtil.formatTime(Trackers.attemptTimer, true)}', FlxG.width / 2, _txtThankYou.y + 60, 24,
-			FlxTextAlign.CENTER);
-		_txtTime.alignment = FlxTextAlign.CENTER;
-		_txtTime.setPosition(FlxG.width / 2 - _txtTime.width / 2, _txtTime.y);
-		add(_txtTime);
-		_allCreditElements.push(_txtTime);
+		if (Trackers.attemptTimer > 0) {
+			var _txtTime = FlxTextFactory.make('Final Time: ${FlxStringUtil.formatTime(Trackers.attemptTimer, true)}', FlxG.width / 2, _txtThankYou.y + 60,
+				24, FlxTextAlign.CENTER);
+			_txtTime.alignment = FlxTextAlign.CENTER;
+			_txtTime.setPosition(FlxG.width / 2 - _txtTime.width / 2, _txtTime.y);
+			add(_txtTime);
+			_allCreditElements.push(_txtTime);
+
+			// reset it here
+			Trackers.attemptTimer = 0.0;
+		}
 	}
 
 	private function AddSectionToCreditsTextArrays(role:String, creators:Array<String>, finalRoleArray:Array<FlxText>, finalCreatorsArray:Array<FlxText>) {

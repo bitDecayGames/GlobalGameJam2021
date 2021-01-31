@@ -36,8 +36,10 @@ class End extends FlxSprite implements ITargeter {
 
 			PlayState.gameOver = true;
 			FlxNapeSpace.space.gravity.setxy(0, 1100);
+			FlxG.camera.angle = FlxG.camera.angle % 360;
+			var targetAngle = FlxG.camera.angle > 180 ? 360.0 : 0.0;
 			FlxTween.tween(FlxG.camera, {
-				angle: 0.0,
+				angle: targetAngle,
 			}, 0.5, {
 				onComplete: (t) -> {
 					Timer.delay(() -> {
