@@ -30,8 +30,13 @@ class MainMenuState extends FlxUIState {
 		bgColor = FlxColor.TRANSPARENT;
 		FlxG.camera.pixelPerfectRender = true;
 
-		_txtTitle = FlxTextFactory.make("GGJ2021 Game Title", FlxG.width / 2, FlxG.height / 4, 40, FlxTextAlign.CENTER, FlxColor.WHITE);
+		_txtTitle = FlxTextFactory.make("Found In Space", FlxG.width / 2, FlxG.height / 4, 40, FlxTextAlign.CENTER, FlxColor.WHITE);
 		add(_txtTitle);
+
+		var subTitle = FlxTextFactory.make("Eventful Horizon II", FlxG.width / 2, _txtTitle.y + _txtTitle.height + 5, 18, FlxTextAlign.CENTER, FlxColor.WHITE);
+		add(subTitle);
+		subTitle.x = FlxG.width / 2 - subTitle.width / 2;
+
 
 		_btnPlay = UiHelpers.createMenuButton("Play", clickPlay);
 		_btnPlay.setPosition(FlxG.width / 2 - _btnPlay.width / 2, FlxG.height - _btnPlay.height - 100);
