@@ -1,25 +1,28 @@
 package cutscenes.actions;
 
+import flixel.FlxCamera;
 import flixel.math.FlxPoint;
 import flixel.FlxSprite;
 
 class ZoomCameraAction extends WaitAction {
+	public var cam:FlxCamera;
 	public var zoom:Float;
 
 	private var initialZoom:Float;
 
-	public function new(zoom:Float, milliseconds:Int) {
+	public function new(camera:FlxCamera, zoom:Float, milliseconds:Int) {
 		super(milliseconds);
+		this.cam = camera;
 		this.zoom = zoom;
 	}
 
 	override public function start() {
 		super.start();
-		initialZoom = camera.zoom;
+		initialZoom = cam.zoom;
 	}
 
 	override function step(elapsed:Float) {
 		super.step(elapsed);
-		camera.zoom = initialZoom + (curMillis / milliseconds) * (zoom - initialZoom);
+		cam.zoom = initialZoom + (curMillis / milliseconds) * (zoom - initialZoom);
 	}
 }
