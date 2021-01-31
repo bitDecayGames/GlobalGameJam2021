@@ -27,9 +27,14 @@ class SpinAction extends WaitAction {
 		}
 	}
 
+	override function reset() {
+		super.reset();
+		actor.angle = initialAngle;
+	}
+
 	override function step(elapsed:Float) {
 		super.step(elapsed);
-		actor.angle = (curMillis / milliseconds) * totalAngleRevolutions;
+		actor.angle = initialAngle + (curMillis / milliseconds) * totalAngleRevolutions;
 	}
 
 	override function toString():String {
